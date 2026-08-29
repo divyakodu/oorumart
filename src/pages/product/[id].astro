@@ -129,9 +129,9 @@ const allProducts = products;
         <div class="flex items-center space-x-4">
           <span class="text-xs font-bold text-slate-700">Quantity:</span>
           <div class="flex items-center border border-slate-300 rounded px-3 py-1.5 text-xs font-bold space-x-3 bg-white shadow-xs">
-            <button type="button" onclick="window.adjustLocalQty(-1)" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">-</button>
-            <span id="product-page-qty" class="w-6 text-center text-sm font-extrabold text-slate-900">1</span>
-            <button type="button" onclick="window.adjustLocalQty(1)" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">+</button>
+            <button type="button" onclick="const el=document.getElementById('product-qty-input'); el.value = Math.max(1, parseInt(el.value || 1) - 1);" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">-</button>
+            <input id="product-qty-input" type="text" value="1" readonly class="w-8 text-center text-sm font-extrabold text-slate-900 border-none bg-transparent outline-none select-none" />
+            <button type="button" onclick="const el=document.getElementById('product-qty-input'); el.value = parseInt(el.value || 1) + 1;" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">+</button>
           </div>
         </div>
 
@@ -155,7 +155,7 @@ const allProducts = products;
         <!-- Action Buttons -->
         <div class="space-y-3 pt-2">
           <button 
-            onclick="addCurrentProductToCart()" 
+            onclick={`addToCart('${product.id}', '${(product.name || '').replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100}, parseInt(document.getElementById('product-qty-input').value || 1))`}
             class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-widest rounded-sm flex items-center justify-center space-x-2.5 cursor-pointer shadow-md transition-all"
           >
             <span class="w-5 h-5 rounded-full bg-white text-slate-900 flex items-center justify-center font-black text-sm shadow-xs shrink-0">+</span>
@@ -341,366 +341,129 @@ const allProducts = products;
     </div>
   </footer>
 
-  <script is:inline define:vars={{ currentShopSlug: shop.slug, currentShopName: shop.name, currentShopPhone: shop.phone || '918197921458', prodId: product.id, prodName: (product.name || '').replace(/'/g, "\\'"), prodPrice: product.price, prodMrp: product.mrp || product.price, prodImage: product.image_url }}>
-    window.localQty = 1;
-    window.adjustLocalQty = function(delta) {
-      window.localQty = Math.max(1, (window.localQty || 1) + delta);
-      const elem = document.getElementById('product-page-qty');
-      if (elem) elem.innerText = window.localQty;
-    };
-
-    window.showShopToast = function(title, message, icon = '⚠️') {
-      const modal = document.getElementById('shop-toast-modal');
-      const card = document.getElementById('shop-toast-card');
-      const iconElem = document.getElementById('shop-toast-icon');
-      const titleElem = document.getElementById('shop-toast-title');
-      const msgElem = document.getElementById('shop-toast-message');
-
-      if (iconElem) iconElem.innerText = icon;
-      if (titleElem) titleElem.innerText = title;
-      if (msgElem) msgElem.innerText = message;
-
-      if (modal) modal.classList.remove('opacity-0', 'pointer-events-none');
-      if (card) { card.classList.remove('scale-95'); card.classList.add('scale-100'); }
-    };
-
-    window.closeShopToast = function() {
-      const modal = document.getElementById('shop-toast-modal');
-      const card = document.getElementById('shop-toast-card');
-      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
-      if (card) { card.classList.remove('scale-100'); card.classList.add('scale-95'); }
-    };
-
-    let cart = {};
-
-    window.toggleTrackDrawer = function(open) {
-      const overlay = document.getElementById('track-overlay');
-      const drawer = document.getElementById('track-drawer');
-      if (open) {
-        overlay?.classList.remove('opacity-0', 'pointer-events-none');
-        drawer?.classList.remove('translate-x-full');
-      } else {
-        overlay?.classList.add('opacity-0', 'pointer-events-none');
-        drawer?.classList.add('translate-x-full');
-      }
-    };
-
-    window.lookupOrderStatus = async function() {
-      const input = document.getElementById('track-input')?.value.trim();
-      const box = document.getElementById('track-status-box') || document.getElementById('track-results-box');
-      if (!box) return;
-
-      if (!input) {
-        box.innerHTML = `
-          <div class="text-center py-4 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-bold text-xs">
-            Please enter your phone number or Order ID.
-          </div>
-        `;
-        return;
-      }
-
-      let orders = [];
-      try {
-        const res = await fetch(`/api/orders?shop=${currentShopSlug}`);
-        const data = await res.json();
-        orders = (data.orders || []).filter(o => o.phone && o.phone.includes(input));
-      } catch (e) {}
-
-      if (orders.length === 0) {
-        box.innerHTML = `
-          <div class="text-center py-6 border border-dashed border-rose-300 rounded-lg space-y-2 bg-rose-50/50">
-            <div class="text-2xl">⚠️</div>
-            <div class="font-bold text-slate-800 text-xs">No Active Orders Found</div>
-            <div class="text-[11px] text-slate-500">No order matches phone number "${input}". Place an order to track live delivery!</div>
-          </div>
-        `;
-      } else {
-        box.innerHTML = orders.map(order => `
-          <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50 mb-3">
-            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-              <div>
-                <span class="font-extrabold text-slate-900 text-xs">Order #${order.order_id}</span>
-                <span class="text-[11px] text-slate-500 block">${order.customer_name || 'Customer'}</span>
-              </div>
-              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${order.status}</span>
-            </div>
-            <div class="text-[11px] text-slate-600 space-y-0.5">
-              ${Array.isArray(order.items) ? order.items.map(i => `<div>${i}</div>`).join('') : `<div>${order.items}</div>`}
-            </div>
-            <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
-              <span>Total: ₹ ${order.total}</span>
-              <span class="text-[10px] text-slate-400 font-normal">${order.timestamp || ''}</span>
-            </div>
-          </div>
-        `).join('');
-      }
-    };
-
+  <script is:inline>
     let cart = [];
 
-    window.loadCart = function() {
+    function initCart() {
       try {
-        const saved = localStorage.getItem(`yesfancy_cart`) || localStorage.getItem(`oorumart_cart_${currentShopSlug}`);
+        const saved = localStorage.getItem('yesfancy_cart') || localStorage.getItem('oorumart_cart');
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed)) {
-            cart = parsed;
-          } else {
-            cart = Object.values(parsed);
-          }
+          cart = Array.isArray(parsed) ? parsed : Object.values(parsed);
         }
       } catch (e) { cart = []; }
-      window.renderCart();
-    };
+      updateCartUI();
+    }
 
-    window.saveCart = function() {
-      try { 
-        localStorage.setItem(`yesfancy_cart`, JSON.stringify(cart));
-        localStorage.setItem(`oorumart_cart_${currentShopSlug}`, JSON.stringify(cart)); 
+    function saveCart() {
+      try {
+        localStorage.setItem('yesfancy_cart', JSON.stringify(cart));
+        localStorage.setItem('oorumart_cart', JSON.stringify(cart));
       } catch (e) {}
-      window.renderCart();
-    };
+      updateCartUI();
+    }
 
-    window.addCurrentProductToCart = function(id, name, price, mrp, image) {
-      const targetId = id || prodId;
-      const targetName = name || prodName;
-      const targetPrice = price || prodPrice;
-      const targetMrp = mrp || prodMrp;
-      const targetImage = image || prodImage;
-      const qtyToAdd = window.localQty || 1;
-
-      window.addToCartWithQty(targetId, targetName, targetPrice, targetMrp, targetImage, qtyToAdd);
-    };
-
-    window.addToCartWithQty = function(id, name, price, mrp, image, qtyToAdd) {
-      const qty = qtyToAdd || 1;
-      const existing = cart.find(item => item.id === id);
-      if (existing) {
-        existing.qty += qty;
-      } else {
-        cart.push({ id, name, price, mrp: mrp || price, image, qty });
-      }
-      window.saveCart();
-      window.toggleCartDrawer(true);
-    };
-
-    window.addToCart = function(id, name, price, mrp, image, stock) {
+    function addToCart(id, name, price, mrp, image, stock, qty = 1) {
       if (stock !== undefined && Number(stock) <= 0) {
         alert('Sorry, this product is currently out of stock!');
         return;
       }
-      window.addToCartWithQty(id, name, price, mrp, image, 1);
-    };
 
-    window.updateCartQty = function(id, delta) {
+      const qtyToAdd = Number(qty) || 1;
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += qtyToAdd;
+      } else {
+        cart.push({ id, name, price, mrp: mrp || price, image, qty: qtyToAdd });
+      }
+
+      saveCart();
+      toggleCartDrawer(true);
+    }
+
+    function updateCartQty(id, delta) {
       const item = cart.find(i => i.id === id);
       if (!item) return;
       item.qty += delta;
       if (item.qty <= 0) {
         cart = cart.filter(i => i.id !== id);
       }
-      window.saveCart();
-    };
+      saveCart();
+    }
 
-    window.renderCart = function() {
-      const itemsList = document.getElementById('cart-items-list');
+    function updateCartUI() {
       const badge = document.getElementById('cart-count-badge');
       const headerBadge = document.getElementById('cart-header-badge');
-      const totalPriceElem = document.getElementById('cart-total-price');
+      const list = document.getElementById('cart-items-list');
+      const totalEl = document.getElementById('cart-total-price');
 
-      let totalQty = 0;
-      let totalPrice = 0;
-      if (itemsList) itemsList.innerHTML = '';
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-      if (cart.length === 0) {
-        if (itemsList) {
-          itemsList.innerHTML = `
+      if (badge) badge.innerText = totalItems;
+      if (headerBadge) headerBadge.innerText = `${totalItems} ${totalItems === 1 ? 'ITEM' : 'ITEMS'}`;
+      if (totalEl) totalEl.innerText = `₹ ${totalPrice}`;
+
+      if (list) {
+        if (cart.length === 0) {
+          list.innerHTML = `
             <div class="text-center py-12 space-y-2">
               <div class="text-4xl">🛍️</div>
               <div class="font-bold text-xs text-slate-700 uppercase">Your Cart is Empty</div>
               <div class="text-[11px] text-slate-400">Explore products and add items to your cart.</div>
             </div>
           `;
-        }
-      } else {
-        cart.forEach(item => {
-          totalQty += item.qty;
-          totalPrice += item.price * item.qty;
-
-          if (itemsList) {
-            const div = document.createElement('div');
-            div.className = 'border border-slate-200 rounded-lg p-3 flex space-x-3 items-center bg-white';
-            div.innerHTML = `
-              <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-contain rounded-md border border-slate-100 bg-slate-50" />
+        } else {
+          list.innerHTML = cart.map(item => `
+            <div class="flex items-center space-x-3 p-2 border border-slate-200 rounded-lg bg-white">
+              <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-contain bg-slate-50 rounded" />
               <div class="flex-1 min-w-0">
-                <h4 class="text-xs font-bold text-slate-900 truncate">${item.name}</h4>
+                <div class="text-xs font-bold text-slate-900 truncate">${item.name}</div>
                 <div class="text-xs font-bold text-rose-600">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp}</span></div>
               </div>
-              <div class="flex items-center space-x-1.5 bg-slate-100 px-2 py-1 rounded text-xs">
+              <div class="flex items-center space-x-1.5 bg-slate-100 px-2 py-1 rounded">
                 <button onclick="updateCartQty('${item.id}', -1)" class="text-xs font-bold px-1 hover:text-rose-600 cursor-pointer">-</button>
                 <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
                 <button onclick="updateCartQty('${item.id}', 1)" class="text-xs font-bold px-1 hover:text-emerald-600 cursor-pointer">+</button>
               </div>
-            `;
-            itemsList.appendChild(div);
-          }
-        });
-      }
-
-      if (badge) badge.innerText = totalQty;
-      if (headerBadge) headerBadge.innerText = `${totalQty} ${totalQty === 1 ? 'ITEM' : 'ITEMS'}`;
-      if (totalPriceElem) totalPriceElem.innerText = `₹ ${totalPrice}`;
-    };
-
-    window.placeRealWhatsAppOrder = async function() {
-      const keys = Object.keys(cart);
-      if (keys.length === 0) {
-        window.showShopToast('Empty Cart', 'Your cart is empty! Please add products to checkout.', '🛒');
-        return;
-      }
-
-      const nameInput = document.getElementById('checkout-name')?.value.trim() || 'Valued Customer';
-      const phoneInput = document.getElementById('checkout-phone')?.value.trim();
-      const addressInput = document.getElementById('checkout-address')?.value.trim() || 'Store Pickup';
-
-      if (!phoneInput) {
-        window.showShopToast('Missing Phone Number', 'Please enter your phone number to place order & track delivery!', '📱');
-        return;
-      }
-
-      let totalPrice = 0;
-      let itemLines = [];
-      keys.forEach(id => {
-        const item = cart[id];
-        totalPrice += item.price * item.qty;
-        itemLines.push(`- ${item.name} (Qty: ${item.qty}) = Rs. ${item.price * item.qty}`);
-      });
-
-      const prefix = (currentShopSlug || 'OM').toUpperCase().slice(0, 3);
-      const orderId = `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`;
-      const newOrder = {
-        order_id: orderId,
-        shop_slug: currentShopSlug,
-        customer_name: nameInput,
-        phone: phoneInput,
-        address: addressInput,
-        items: itemLines,
-        total: totalPrice,
-        timestamp: new Date().toLocaleString(),
-        status: 'Order Placed & Processing'
-      };
-
-      try {
-        await fetch('/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newOrder)
-        });
-      } catch (e) {
-        console.error('Error posting order to API:', e);
-      }
-
-      try {
-        let orders = JSON.parse(localStorage.getItem(`oorumart_orders_${currentShopSlug}`) || '[]');
-        orders.unshift(newOrder);
-        localStorage.setItem(`oorumart_orders_${currentShopSlug}`, JSON.stringify(orders));
-      } catch (e) {}
-
-      cart = {};
-      window.saveCart();
-
-      window.toggleCartDrawer(false);
-      window.toggleTrackDrawer(true);
-      const trackInput = document.getElementById('track-input');
-      if (trackInput) trackInput.value = phoneInput;
-      window.lookupOrderStatus();
-
-      window.showShopToast(
-        '🎉 Order Placed Successfully!',
-        `Order #${orderId} (₹ ${totalPrice}) has been sent directly to ${currentShopName}. You can track your order status live right here!`,
-        '🛍️'
-      );
-    };
-
-    window.lookupOrderStatus = function() {
-      const input = document.getElementById('track-input')?.value.trim();
-      const box = document.getElementById('track-status-box');
-      if (!box) return;
-
-      if (!input) {
-        box.innerHTML = `
-          <div class="text-center py-4 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-bold text-xs">
-            Please enter your phone number or Order ID.
-          </div>
-        `;
-        return;
-      }
-
-      let orders = [];
-      try {
-        orders = JSON.parse(localStorage.getItem(`oorumart_orders_${currentShopSlug}`) || '[]');
-      } catch (e) {}
-
-      const found = orders.filter(o => o.phone === input || o.order_id === input || input.includes(o.phone));
-
-      if (found.length === 0) {
-        box.innerHTML = `
-          <div class="text-center py-6 border border-dashed border-rose-300 rounded-lg space-y-2 bg-rose-50/50">
-            <div class="text-2xl">⚠️</div>
-            <div class="font-bold text-slate-800 text-xs">No Active Orders Found</div>
-            <div class="text-[11px] text-slate-500">No order matches phone number "${input}". Place an order to track live delivery!</div>
-          </div>
-        `;
-      } else {
-        box.innerHTML = found.map(order => `
-          <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50 mb-3">
-            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-              <div>
-                <span class="font-extrabold text-slate-900 text-xs">Order #${order.order_id}</span>
-                <span class="text-[11px] text-slate-500 block">${order.customer_name || 'Customer'}</span>
-              </div>
-              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${order.status}</span>
             </div>
-            <div class="text-[11px] text-slate-600 space-y-0.5">
-              ${order.items.map(i => `<div>${i}</div>`).join('')}
-            </div>
-            <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
-              <span>Total: ₹ ${order.total}</span>
-              <span class="text-[10px] text-slate-400 font-normal">${order.timestamp}</span>
-            </div>
-          </div>
-        `).join('');
+          `).join('');
+        }
       }
-    };
+    }
 
-    window.toggleCartDrawer = function(open) {
+    function toggleCartDrawer(show) {
       const overlay = document.getElementById('cart-overlay');
       const drawer = document.getElementById('cart-drawer');
-      if (open) {
-        overlay?.classList.remove('opacity-0', 'pointer-events-none');
-        drawer?.classList.remove('translate-x-full');
-      } else {
-        overlay?.classList.add('opacity-0', 'pointer-events-none');
-        drawer?.classList.add('translate-x-full');
-      }
-    };
+      if (!overlay || !drawer) return;
 
-    window.toggleTrackDrawer = function(open) {
+      if (show) {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('translate-x-full');
+      } else {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function toggleTrackDrawer(show) {
       const overlay = document.getElementById('track-overlay');
       const drawer = document.getElementById('track-drawer');
-      if (open) {
-        overlay?.classList.remove('opacity-0', 'pointer-events-none');
-        drawer?.classList.remove('translate-x-full');
+      if (!overlay || !drawer) return;
+
+      if (show) {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('translate-x-full');
       } else {
-        overlay?.classList.add('opacity-0', 'pointer-events-none');
-        drawer?.classList.add('translate-x-full');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.add('translate-x-full');
       }
-    };
+    }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', window.loadCart);
+      document.addEventListener('DOMContentLoaded', initCart);
     } else {
-      window.loadCart();
+      initCart();
     }
   </script>
 
