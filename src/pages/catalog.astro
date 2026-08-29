@@ -186,21 +186,6 @@ const paginatedProducts = initialProducts.slice(startIndex, endIndex);
   {/* ================================================================= */}
   {!isGlobalCatalog && !isShopNotFound && (
     <div>
-      <!-- Dynamic Shop Switcher Banner -->
-      <div class="bg-slate-900 text-slate-200 text-[11px] font-medium py-1 px-4 flex items-center justify-between border-b border-slate-800">
-        <div class="flex items-center space-x-2">
-          <span class="bg-emerald-500 w-2 h-2 rounded-full animate-pulse"></span>
-          <span>Live Tenant Engine | Catalog for <strong class="text-white uppercase">{shop.name}</strong> (`{shop.slug}`)</span>
-        </div>
-        <div class="flex items-center space-x-3 text-slate-300">
-          <a href="/catalog" class="hover:text-white no-underline text-rose-400 font-bold">🌐 Oorumart Global Catalog</a>
-          <span class="hidden sm:inline">Switch Demo Shop:</span>
-          <a href={`/catalog?shop=yesfancy&category=${categoryFilter}`} class={`hover:text-white no-underline px-1.5 py-0.5 rounded ${shop.slug === 'yesfancy' ? 'bg-slate-700 text-white font-bold' : ''}`}>🎁 Yes Fancy</a>
-          <a href={`/catalog?shop=sarveshpan&category=${categoryFilter}`} class={`hover:text-white no-underline px-1.5 py-0.5 rounded ${shop.slug === 'sarveshpan' ? 'bg-slate-700 text-white font-bold' : ''}`}>🍃 Sarvesh Paan</a>
-          <a href={`/catalog?shop=visistastyle&category=${categoryFilter}`} class={`hover:text-white no-underline px-1.5 py-0.5 rounded ${shop.slug === 'visistastyle' ? 'bg-slate-700 text-white font-bold' : ''}`}>👗 Visista Boutique</a>
-        </div>
-      </div>
-
       <!-- 100% Generic Reusable Store Header Component -->
       <StoreHeader shop={shop} primaryColor={primaryColor} />
 

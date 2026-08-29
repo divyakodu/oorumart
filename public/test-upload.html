@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>File Upload POC Test</title>
+</head>
+<body style="font-family:sans-serif; padding:40px; background:#f8fafc;">
+
+  <h2>🧪 POC: File Upload Button Test</h2>
+  <p>Click each button below. If the file picker opens, it works.</p>
+  <hr />
+
+  <!-- TEST 1: Plain native input - no styling at all -->
+  <h3>Test 1: Raw native &lt;input type="file"&gt; (should always work)</h3>
+  <input type="file" accept="image/*" onchange="showResult('test1', this)" />
+  <div id="test1" style="color:green;margin-top:4px;"></div>
+
+  <hr />
+
+  <!-- TEST 2: Label for= pattern (no JS, no hidden, text directly in label) -->
+  <h3>Test 2: &lt;label for=&gt; with visible input</h3>
+  <label for="test2-input" style="display:inline-block;padding:10px 20px;background:#0f172a;color:white;border-radius:6px;cursor:pointer;font-weight:bold;">
+    🖼️ Browse Photo (label for, visible input)
+  </label>
+  <input id="test2-input" type="file" accept="image/*" onchange="showResult('test2', this)" />
+  <div id="test2" style="color:green;margin-top:4px;"></div>
+
+  <hr />
+
+  <!-- TEST 3: Label for= with clip-rect hidden input -->
+  <h3>Test 3: &lt;label for=&gt; with clip-rect hidden input</h3>
+  <label for="test3-input" style="display:inline-block;padding:10px 20px;background:#0f172a;color:white;border-radius:6px;cursor:pointer;font-weight:bold;">
+    🖼️ Browse Photo (label for, clip-rect input)
+  </label>
+  <input id="test3-input" type="file" accept="image/*" onchange="showResult('test3', this)"
+    style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" />
+  <div id="test3" style="color:green;margin-top:4px;"></div>
+
+  <hr />
+
+  <!-- TEST 4: Button onclick .click() with clip-rect hidden input -->
+  <h3>Test 4: &lt;button onclick=input.click()&gt; with clip-rect hidden input</h3>
+  <button type="button" onclick="document.getElementById('test4-input').click()"
+    style="padding:10px 20px;background:#0f172a;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">
+    🖼️ Browse Photo (button onclick, clip-rect)
+  </button>
+  <input id="test4-input" type="file" accept="image/*" onchange="showResult('test4', this)"
+    style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" />
+  <div id="test4" style="color:green;margin-top:4px;"></div>
+
+  <hr />
+
+  <!-- TEST 5: Label inside a div that starts visibility:hidden, then made visible by JS (simulates tab switch) -->
+  <h3>Test 5: Simulated tab switch — div starts <code>visibility:hidden</code>, button reveals it, then browse</h3>
+  <button type="button" onclick="revealTab()" style="padding:8px 16px;background:#334155;color:white;border:none;border-radius:6px;cursor:pointer;margin-bottom:8px;">
+    Click to "Switch Tab" (reveal hidden section)
+  </button>
+  <div id="fake-tab" style="height:0;overflow:hidden;visibility:hidden;position:absolute;pointer-events:none;opacity:0;padding:16px;background:#f1f5f9;border-radius:8px;">
+    <label for="test5-input" style="display:inline-block;padding:10px 20px;background:#0f172a;color:white;border-radius:6px;cursor:pointer;font-weight:bold;">
+      🖼️ Browse Photo (after tab switch)
+    </label>
+    <input id="test5-input" type="file" accept="image/*" onchange="showResult('test5', this)"
+      style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" />
+    <div id="test5" style="color:green;margin-top:4px;"></div>
+  </div>
+
+  <script>
+    function showResult(id, input) {
+      const file = input.files[0];
+      if (file) {
+        document.getElementById(id).textContent = '✅ File selected: ' + file.name + ' (' + Math.round(file.size/1024) + ' KB)';
+      }
+    }
+
+    function revealTab() {
+      const tab = document.getElementById('fake-tab');
+      tab.style.height = 'auto';
+      tab.style.overflow = 'visible';
+      tab.style.visibility = 'visible';
+      tab.style.position = 'static';
+      tab.style.pointerEvents = 'auto';
+      tab.style.opacity = '1';
+    }
+  </script>
+
+</body>
+</html>

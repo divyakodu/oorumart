@@ -25,6 +25,7 @@ const discountPercent = product.mrp && product.mrp > product.price ? Math.round(
         src={product.image_url} 
         alt={product.name} 
         loading="lazy" 
+        onerror="this.onerror=null; this.src='/images/offer_gift_store.jpg';"
         class={`w-full h-full object-contain p-4 sm:p-5 mix-blend-multiply group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'grayscale-[30%]' : ''}`} 
       />
     </a>

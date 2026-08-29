@@ -17,7 +17,9 @@ const host = Astro.request.headers.get('host') || '';
 const queryShop = url.searchParams.get('shop');
 
 const hostParts = host.split(':')[0].split('.');
-const subdomain = (hostParts.length > 2 && hostParts[0] !== 'www') ? hostParts[0] : null;
+const knownShopSlugs = ['yesfancy'];
+const rawSubdomain = (hostParts.length > 2 && hostParts[0] !== 'www') ? hostParts[0] : null;
+const subdomain = knownShopSlugs.includes(rawSubdomain || '') ? rawSubdomain : null;
 
 const defaultShopEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.DEFAULT_SHOP : null) || process.env.DEFAULT_SHOP;
 const targetSlug = queryShop || subdomain || defaultShopEnv || (host.includes('yesfancy') ? 'yesfancy' : null);

@@ -1,8 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
 function getSupabaseClient() {
-  const url = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.PUBLIC_SUPABASE_URL : null) || process.env.PUBLIC_SUPABASE_URL || '';
-  const key = (typeof import.meta !== 'undefined' && import.meta.env ? (import.meta.env.SUPABASE_SERVICE_ROLE_KEY || import.meta.env.PUBLIC_SUPABASE_ANON_KEY) : null) || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.PUBLIC_SUPABASE_ANON_KEY || '';
+  const url = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.PUBLIC_SUPABASE_URL : null) 
+    || (typeof process !== 'undefined' && process.env ? process.env.PUBLIC_SUPABASE_URL : null)
+    || 'https://fwrievuhudjkeffmszqf.supabase.co';
+    
+  const key = (typeof import.meta !== 'undefined' && import.meta.env ? (import.meta.env.SUPABASE_SERVICE_ROLE_KEY || import.meta.env.PUBLIC_SUPABASE_ANON_KEY) : null) 
+    || (typeof process !== 'undefined' && process.env ? (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.PUBLIC_SUPABASE_ANON_KEY) : null)
+    || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3cmlldnVodWRqa2VmZm1zenFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0Mjc1MDQsImV4cCI6MjA5MDAwMzUwNH0.NrucFfwz8vsgF8kMp2aHMK_PW-4Sf-J7cCv3dpRPw0U';
 
   if (url && key) {
     return createClient(url, key);
@@ -149,7 +154,7 @@ export async function getShopConfigAsync(slug: string) {
         features_ticker: shopRecord.features_ticker || [
           { label: "Easy Return", icon: "return" },
           { label: "Quality Assured", icon: "quality" },
-          { label: "1M+ Happy Customers", icon: "heart" },
+          { label: "Satisfied Customers", icon: "heart" },
           { label: "Express Dispatch", icon: "dispatch" }
         ],
         hero_slides: (shopRecord.hero_slides && shopRecord.hero_slides.length > 0) ? shopRecord.hero_slides : defaultOfferSlides,
@@ -162,7 +167,25 @@ export async function getShopConfigAsync(slug: string) {
         },
         tags: tagList,
         categories: tagList,
-        products: products || [],
+        products: (products || []).map((p: any, idx: number) => {
+          const stockPool = [
+            '/images/offer_gift_store.jpg',
+            '/images/mug.jpg',
+            '/images/offer_home_decor.jpg',
+            '/images/coasters.jpg',
+            '/images/offer_bags_travel.jpg',
+            '/images/keychain.jpg',
+            '/images/offer_board_games.jpg',
+            '/images/offer_action_toys.jpg',
+            '/images/offer_lunch_boxes.jpg'
+          ];
+          return {
+            ...p,
+            image_url: (!p.image_url || p.image_url.includes('/catalog_extracted/')) 
+              ? stockPool[idx % stockPool.length] 
+              : p.image_url
+          };
+        }),
         carousels: {
           hero: (shopRecord.hero_slides && shopRecord.hero_slides.length > 0) ? shopRecord.hero_slides : defaultOfferSlides
         }
@@ -223,7 +246,7 @@ export async function getAllShopsConfigAsync() {
         features_ticker: shopRecord.features_ticker || [
           { label: "Easy Return", icon: "return" },
           { label: "Quality Assured", icon: "quality" },
-          { label: "1M+ Happy Customers", icon: "heart" },
+          { label: "Satisfied Customers", icon: "heart" },
           { label: "Express Dispatch", icon: "dispatch" }
         ],
         hero_slides: (shopRecord.hero_slides && shopRecord.hero_slides.length > 0) ? shopRecord.hero_slides : defaultOfferSlides,

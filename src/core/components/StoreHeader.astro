@@ -30,7 +30,7 @@ const logoText = shop?.logo_text || shop?.name;
   <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 sm:gap-6 h-14">
     
     <!-- Brand Logo: Dynamic Icon (Lifted Up) + Stylized Playfair Display Text -->
-    <a href={`/?shop=${shop.slug}`} class="flex items-center space-x-3 shrink-0 no-underline group leading-none my-auto">
+    <a href="/" class="flex items-center space-x-3 shrink-0 no-underline group leading-none my-auto">
       {logoImg && (
         <img src={logoImg} alt={shop.name} class="h-10 sm:h-11 w-auto object-contain group-hover:scale-105 transition-transform shrink-0 -translate-y-2" />
       )}
