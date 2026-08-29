@@ -44,9 +44,10 @@ const logoText = shop?.logo_text || shop?.name;
           href={`/catalog?category=${c.id}`} 
           class={`cursor-pointer no-underline transition-colors py-1 whitespace-nowrap shrink-0 ${
             index === 0 || c.label.toLowerCase().includes('all product')
-              ? 'text-rose-600 font-extrabold hover:text-rose-700' 
-              : 'text-slate-800 hover:text-rose-600 font-bold'
+              ? 'font-extrabold' 
+              : 'text-slate-800 hover:text-purple-900 font-bold'
           }`}
+          style={index === 0 || c.label.toLowerCase().includes('all product') ? `color: ${primaryColor}` : ''}
         >
           {c.label}
         </a>
@@ -79,7 +80,7 @@ const logoText = shop?.logo_text || shop?.name;
       <!-- Cart Drawer Button -->
       <button onclick="toggleCartDrawer(true)" class="relative text-slate-800 hover:text-slate-900 cursor-pointer p-1.5 hover:bg-slate-100 rounded-full transition-colors">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-        <span id="cart-count-badge" class="absolute -top-0.5 -right-0.5 bg-rose-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        <span id="cart-count-badge" style={`background-color: ${primaryColor}`} class="absolute -top-0.5 -right-0.5 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
       </button>
     </div>
   </div>
@@ -100,22 +101,23 @@ const logoText = shop?.logo_text || shop?.name;
         class="w-full pl-9 pr-3 py-2 bg-white text-xs font-medium text-slate-900 placeholder-slate-500 rounded border border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
       />
     </div>
-    <button type="submit" class="px-4 py-2 bg-slate-900 text-white font-extrabold text-xs uppercase tracking-wider rounded shrink-0 cursor-pointer hover:bg-slate-800">
+    <button type="submit" style={`background-color: ${primaryColor}`} class="px-4 py-2 text-white font-extrabold text-xs uppercase tracking-wider rounded shrink-0 cursor-pointer hover:opacity-90">
       SEARCH
     </button>
   </form>
 </div>
 
-<!-- 4. Mobile Sticky Bottom Category Tab Section (Fixed at Bottom of Screen, Visible ONLY on Small Screens < 1024px) -->
+<!-- 4. Mobile Sticky Bottom Category Tab Section (Purple Theme Color) -->
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-300 shadow-xl px-3 py-2 overflow-x-auto whitespace-nowrap flex items-center space-x-2">
   {categories.map((c: any, index: number) => (
     <a 
       href={`/catalog?category=${c.id}`} 
       class={`cursor-pointer no-underline text-[11px] font-bold px-3 py-1.5 rounded-full transition-all shrink-0 border ${
         index === 0 || c.label.toLowerCase().includes('all product')
-          ? 'bg-rose-600 text-white border-rose-600 shadow-xs' 
-          : 'bg-slate-100 text-slate-800 border-slate-200 hover:bg-slate-900 hover:text-white'
+          ? 'text-white shadow-xs' 
+          : 'bg-slate-100 text-slate-800 border-slate-200 hover:bg-purple-900 hover:text-white'
       }`}
+      style={index === 0 || c.label.toLowerCase().includes('all product') ? `background-color: ${primaryColor}; border-color: ${primaryColor}` : ''}
     >
       {c.label}
     </a>
@@ -138,7 +140,7 @@ const logoText = shop?.logo_text || shop?.name;
 
     <div class="space-y-3">
       <input id="track-input" type="text" placeholder="Enter Phone (e.g. 8197921458)" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
-      <button onclick="lookupOrderStatus()" class="w-full py-2.5 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider rounded cursor-pointer hover:bg-slate-800">Check Status</button>
+      <button onclick="lookupOrderStatus()" style={`background-color: ${primaryColor}`} class="w-full py-2.5 text-white font-bold text-xs uppercase tracking-wider rounded cursor-pointer hover:opacity-90">Check Status</button>
     </div>
 
     <div id="track-status-box" class="pt-4 border-t border-slate-200 text-xs">
@@ -163,12 +165,12 @@ const logoText = shop?.logo_text || shop?.name;
     <div class="flex items-center space-x-2">
       <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
       <span class="font-extrabold text-sm uppercase tracking-wider text-slate-900">Your Cart</span>
-      <span id="cart-header-badge" class="bg-slate-900 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">0 ITEMS</span>
+      <span id="cart-header-badge" style={`background-color: ${primaryColor}`} class="text-white text-[11px] font-bold px-2 py-0.5 rounded-full">0 ITEMS</span>
     </div>
     <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center justify-center transition-colors cursor-pointer" title="Close Cart">✕</button>
   </div>
 
-  <div class="bg-slate-900 text-white text-xs font-semibold py-2 px-4 text-center">
+  <div style={`background-color: ${primaryColor}`} class="text-white text-xs font-semibold py-2 px-4 text-center">
     Save more on Prepaid Orders & Instant WhatsApp Checkout!
   </div>
 
@@ -194,7 +196,8 @@ const logoText = shop?.logo_text || shop?.name;
 
       <button 
         onclick="placeRealWhatsAppOrder()"
-        class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+        style={`background-color: ${primaryColor}`}
+        class="w-full py-3.5 hover:opacity-90 text-white font-extrabold text-xs uppercase tracking-wider rounded flex items-center justify-center space-x-2 cursor-pointer shadow-md"
       >
         <span>Place Order & Open WhatsApp (COD)</span>
       </button>
