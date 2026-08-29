@@ -49,7 +49,7 @@ const discountPercent = product.mrp && product.mrp > product.price ? Math.round(
       </button>
     ) : (
       <button 
-        class="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 add-btn w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-lg sm:text-xl font-bold transition-colors cursor-pointer rounded-sm shadow-md"
+        class="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-white text-slate-900 hover:bg-slate-900 hover:text-white w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-lg sm:text-xl font-bold transition-all duration-200 cursor-pointer rounded-md border border-slate-200 shadow-md z-10"
         title="Quick Add to Cart"
         onclick={`addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100})`}
       >

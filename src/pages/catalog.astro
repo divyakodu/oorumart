@@ -3,8 +3,8 @@ export const prerender = false;
 
 import '../styles/global.css';
 import ProductCard from '../components/ProductCard.astro';
-import StoreHeader from '../components/StoreHeader.astro';
-import StoreFooter from '../components/StoreFooter.astro';
+import StoreHeader from '@components/StoreHeader.astro';
+import StoreFooter from '@components/StoreFooter.astro';
 import { getShopConfigAsync, getAllShopsConfigAsync } from '../lib/getShopConfig';
 
 // Prevent serving stale deleted/hidden product lists from browser or CDN cache
@@ -21,7 +21,8 @@ const categoryFilter = tagOrCategoryFilter;
 const hostParts = host.split(':')[0].split('.');
 const subdomain = (hostParts.length > 2 && hostParts[0] !== 'www') ? hostParts[0] : null;
 
-const targetSlug = queryShop || subdomain;
+const defaultShopEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.DEFAULT_SHOP : null) || process.env.DEFAULT_SHOP;
+const targetSlug = queryShop || subdomain || defaultShopEnv || 'yesfancy';
 
 // Fetch all shops and single tenant shop
 const allShops = await getAllShopsConfigAsync();

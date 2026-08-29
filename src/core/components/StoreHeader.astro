@@ -41,7 +41,7 @@ const logoText = shop?.logo_text || shop?.name;
     <nav class="hidden lg:flex items-center space-x-3.5 xl:space-x-5 text-xs text-slate-800 my-auto whitespace-nowrap shrink-0">
       {categories.map((c: any, index: number) => (
         <a 
-          href={`/catalog?shop=${shop.slug}&category=${c.id}`} 
+          href={`/catalog?category=${c.id}`} 
           class={`cursor-pointer no-underline transition-colors py-1 whitespace-nowrap shrink-0 ${
             index === 0 || c.label.toLowerCase().includes('all product')
               ? 'text-rose-600 font-extrabold hover:text-rose-700' 
@@ -56,8 +56,7 @@ const logoText = shop?.logo_text || shop?.name;
     <!-- Right Actions: Sharp Border Search Bar + Track Order + Cart Drawer -->
     <div class="flex items-center space-x-3 sm:space-x-4 shrink-0 my-auto">
       <!-- Rectangular Header Search Input with Defined Sharp Border & Typewriter Animation -->
-      <form action={`/catalog?shop=${shop.slug}`} method="GET" class="hidden sm:flex items-center relative">
-        <input type="hidden" name="shop" value={shop.slug} />
+      <form action="/catalog" method="GET" class="hidden sm:flex items-center relative">
         <div class="relative flex items-center">
           <svg class="w-4 h-4 text-slate-800 absolute left-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />

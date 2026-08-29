@@ -41,7 +41,7 @@ const defaultOfferSlides = [
     subtitle: "Curated luxury hampers, fancy boxes & novelties for every occasion.",
     image_url: "/images/offer_gift_store.jpg",
     tag_id: "gift_store",
-    link: "/catalog?shop=yesfancy&tag=gift_store"
+    link: "/catalog?category=gift_store"
   },
   {
     id: "slide_home_decor",
@@ -49,7 +49,7 @@ const defaultOfferSlides = [
     subtitle: "Fancy minimal interiors, designer lamps & contemporary living accents.",
     image_url: "/images/offer_home_decor.jpg",
     tag_id: "home_decor",
-    link: "/catalog?shop=yesfancy&tag=home_decor"
+    link: "/catalog?category=home_decor"
   },
   {
     id: "slide_bags_travel",
@@ -57,7 +57,7 @@ const defaultOfferSlides = [
     subtitle: "Sleek designer duffels, premium backpacks & modern travel gear.",
     image_url: "/images/offer_bags_travel.jpg",
     tag_id: "bags_travel",
-    link: "/catalog?shop=yesfancy&tag=bags_travel"
+    link: "/catalog?category=bags_travel"
   },
   {
     id: "slide_board_games",
@@ -65,7 +65,7 @@ const defaultOfferSlides = [
     subtitle: "Sleek contemporary chess sets & modern tabletop board games.",
     image_url: "/images/offer_board_games.jpg",
     tag_id: "board_games",
-    link: "/catalog?shop=yesfancy&tag=board_games"
+    link: "/catalog?category=board_games"
   },
   {
     id: "slide_action_toys",
@@ -73,7 +73,7 @@ const defaultOfferSlides = [
     subtitle: "Modern action figures, sleek gaming gadgets & premium collectibles.",
     image_url: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?q=80&w=2000&auto=format&fit=crop",
     tag_id: "action_toys",
-    link: "/catalog?shop=yesfancy&tag=action_toys"
+    link: "/catalog?category=action_toys"
   },
   {
     id: "slide_lunch_boxes",
@@ -81,7 +81,7 @@ const defaultOfferSlides = [
     subtitle: "Sleek double-walled insulated vacuum bento tiffins & smart lunchware.",
     image_url: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?q=80&w=2000&auto=format&fit=crop",
     tag_id: "lunch_boxes",
-    link: "/catalog?shop=yesfancy&tag=lunch_boxes"
+    link: "/catalog?category=lunch_boxes"
   }
 ];
 

@@ -2,8 +2,8 @@
 export const prerender = false;
 
 import '../../styles/global.css';
-import StoreHeader from '../../components/StoreHeader.astro';
-import StoreFooter from '../../components/StoreFooter.astro';
+import StoreHeader from '@components/StoreHeader.astro';
+import StoreFooter from '@components/StoreFooter.astro';
 import { getShopConfigAsync } from '../../lib/getShopConfig';
 
 const { id } = Astro.params;
