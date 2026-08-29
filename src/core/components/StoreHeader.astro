@@ -124,7 +124,7 @@ const logoText = shop?.logo_text || shop?.name;
 
 <!-- Track Order Drawer Component (Rendered Everywhere StoreHeader is Included) -->
 <div id="track-overlay" onclick="toggleTrackDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
-<aside id="track-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between p-4 sm:p-6">
+<aside id="track-drawer" class="fixed top-0 right-0 bottom-0 w-[80vw] max-w-sm sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between p-4 sm:p-6">
   <div class="space-y-6">
     <div class="flex items-center justify-between border-b border-slate-200 pb-4">
       <div class="flex items-center space-x-2">
@@ -155,9 +155,9 @@ const logoText = shop?.logo_text || shop?.name;
   </div>
 </aside>
 
-<!-- Cart Drawer Component (Rendered Everywhere StoreHeader is Included) -->
+<!-- Cart Drawer Component (80vw Width on Mobile, Fixed w-96 on Desktop) -->
 <div id="cart-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
-<aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between">
+<aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-[80vw] max-w-sm sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between">
   
   <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
     <div class="flex items-center space-x-2">
@@ -260,4 +260,76 @@ const logoText = shop?.logo_text || shop?.name;
       typeEffect();
     }
   })();
+
+  // Robust Global Order Tracking Function
+  window.lookupOrderStatus = async function() {
+    const input = document.getElementById('track-input')?.value.trim();
+    const statusBox = document.getElementById('track-status-box');
+    if (!input || !statusBox) return;
+
+    statusBox.innerHTML = `
+      <div class="text-center py-6 space-y-2">
+        <div class="text-2xl animate-spin">⏳</div>
+        <div class="font-bold text-slate-800 text-xs">Checking live order status...</div>
+      </div>
+    `;
+
+    let foundOrders = [];
+
+    // 1. Check local storage first
+    try {
+      const localSaved = localStorage.getItem('yesfancy_orders') || localStorage.getItem('oorumart_orders');
+      if (localSaved) {
+        const parsed = JSON.parse(localSaved);
+        if (Array.isArray(parsed)) {
+          foundOrders = parsed.filter(o => (o.phone && o.phone.includes(input)) || (o.order_id && o.order_id.includes(input)));
+        }
+      }
+    } catch(e) {}
+
+    // 2. Fetch from API with safety fallback
+    try {
+      const res = await fetch(`/api/orders?shop=yesfancy`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.orders && Array.isArray(data.orders)) {
+          const remoteFound = data.orders.filter(o => (o.phone && o.phone.includes(input)) || (o.order_id && o.order_id.includes(input)) || (o.customer_name && o.customer_name.toLowerCase().includes(input.toLowerCase())));
+          remoteFound.forEach(ro => {
+            if (!foundOrders.some(fo => fo.order_id === ro.order_id || fo.id === ro.id)) {
+              foundOrders.push(ro);
+            }
+          });
+        }
+      }
+    } catch(e) {}
+
+    if (foundOrders.length === 0) {
+      statusBox.innerHTML = `
+        <div class="text-center py-6 border border-dashed border-rose-300 rounded-lg space-y-2 bg-rose-50/50">
+          <div class="text-2xl">⚠️</div>
+          <div class="font-bold text-slate-800 text-xs">No Active Orders Found</div>
+          <div class="text-[11px] text-slate-500">No order matches phone or Order ID "${input}".</div>
+        </div>
+      `;
+    } else {
+      statusBox.innerHTML = foundOrders.map(order => `
+        <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50 mb-3 text-left">
+          <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+            <div>
+              <span class="font-extrabold text-slate-900 text-xs">Order #${order.order_id || order.id || 'CONFIRMED'}</span>
+              <span class="text-[11px] text-slate-500 block">${order.customer_name || 'Customer'}</span>
+            </div>
+            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${order.status || 'Processing'}</span>
+          </div>
+          <div class="text-[11px] text-slate-600 space-y-0.5">
+            ${Array.isArray(order.items) ? order.items.map(i => `<div>${typeof i === 'object' ? `${i.name} (Qty: ${i.qty})` : i}</div>`).join('') : `<div>${order.items || 'Items placed via WhatsApp'}</div>`}
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
+            <span>Total: ₹ ${order.total || order.total_amount || 0}</span>
+            <span class="text-[10px] text-slate-400 font-normal">${order.timestamp || order.created_at || ''}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  };
 </script>
