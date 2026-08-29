@@ -40,35 +40,62 @@ const { products: rawProducts = [], categories = [], theme } = shop || {};
 const products = (rawProducts || []).filter((p: any) => p.is_active !== false);
 const primaryColor = theme?.primary_color || '#581C87';
 
-// Semantic & Keyword Relevance Search Scoring Algorithm
+// Flexible Keyword & Semantic Relevance Scoring Algorithm
 function computeRelevanceScore(product: any, queryStr: string): number {
   if (!queryStr) return 1;
-  const q = queryStr.toLowerCase();
-  const tokens = q.split(/\s+/).filter(Boolean);
+  const q = queryStr.toLowerCase().trim();
+  const rawTokens = q.split(/\s+/).filter(Boolean);
   
   const name = (product.name || '').toLowerCase();
   const desc = (product.description || '').toLowerCase();
   const category = (product.category_id || '').toLowerCase();
   const tags = Array.isArray(product.tags) ? product.tags.map((t: string) => t.toLowerCase()) : [];
   const tagsStr = tags.join(' ');
-  
+
   let score = 0;
 
-  if (name === q) score += 20;
-  else if (name.startsWith(q)) score += 15;
-  else if (name.includes(q)) score += 10;
+  // 1. Full Multi-Word Phrase Matches
+  if (name === q) score += 100;
+  else if (name.startsWith(q)) score += 60;
+  else if (name.includes(q)) score += 40;
+  else if (tagsStr.includes(q)) score += 30;
+  else if (desc.includes(q)) score += 20;
 
-  for (const token of tokens) {
-    if (name.includes(token)) score += 5;
-    if (tagsStr.includes(token)) score += 4;
-    if (category.includes(token)) score += 3;
-    if (desc.includes(token)) score += 2;
+  // 2. Keyword Token Matches with Stemming (Plural/Singular: "sets" -> "set", "gifts" -> "gift")
+  let matchedTokenCount = 0;
+  for (const token of rawTokens) {
+    const stem = (token.length > 3 && token.endsWith('s')) ? token.slice(0, -1) : token;
+    let tokenMatched = false;
+
+    if (name.includes(token) || name.includes(stem)) {
+      score += 15;
+      tokenMatched = true;
+    }
+    if (tagsStr.includes(token) || tagsStr.includes(stem)) {
+      score += 10;
+      tokenMatched = true;
+    }
+    if (category.includes(token) || category.includes(stem)) {
+      score += 8;
+      tokenMatched = true;
+    }
+    if (desc.includes(token) || desc.includes(stem)) {
+      score += 5;
+      tokenMatched = true;
+    }
+
+    if (tokenMatched) {
+      matchedTokenCount++;
+    }
   }
 
-  const combined = `${name} ${desc} ${category} ${tagsStr}`;
-  const matchesAllTokens = tokens.every(token => combined.includes(token));
-  
-  return matchesAllTokens ? score : 0;
+  // Bonus when product matches all tokens in multi-word search query
+  if (rawTokens.length > 1 && matchedTokenCount === rawTokens.length) {
+    score += 50;
+  }
+
+  // Include product if at least 1 keyword token matched
+  return matchedTokenCount > 0 ? score : 0;
 }
 
 const filterProductFn = (p: any) => {
