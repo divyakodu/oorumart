@@ -1,0 +1,373 @@
+---
+import '@styles/global.css';
+import { getShopConfigAsync } from '@lib/getShopConfig';
+import { getTemplateComponent } from '@lib/resolveTemplate';
+import StoreHeader from '@components/StoreHeader.astro';
+import StoreFooter from '@components/StoreFooter.astro';
+
+// Binds directly to 'yesfancy' in Supabase Cloud DB (Dedicated Standalone Storefront Entry Point)
+const shopData = await getShopConfigAsync('yesfancy');
+const shop = shopData?.shop;
+
+if (!shop) {
+  return new Response("Store configuration for 'yesfancy' not found in database.", { status: 404 });
+}
+
+const StorefrontTemplate = await getTemplateComponent(shop.template);
+const primaryColor = shop.theme?.primary_color || '#581C87';
+const secondaryColor = shop.theme?.secondary_color || '#D4AF37';
+const accentColor = shop.theme?.accent_color || '#E11D48';
+const products = (shop.products || []).filter((p: any) => p.is_active !== false);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{shop.name} | Premium Gift Store & Novelties</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <style define:vars={{ primaryColor, secondaryColor, accentColor }}>
+    .badge-dark {
+      background-color: #1D2228;
+      color: #FFFFFF;
+    }
+    .add-btn {
+      background-color: var(--primaryColor);
+      color: #FFFFFF;
+    }
+    .add-btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased min-h-screen flex flex-col font-sans select-none">
+
+  <!-- Generic Reusable Store Header Component (Bound to Yes Fancy) -->
+  <StoreHeader shop={shop} primaryColor={primaryColor} />
+
+  <!-- Dynamic Template Resolver (Mounts GiftShopTemplate1 cleanly) -->
+  {StorefrontTemplate ? (
+    <StorefrontTemplate shop={shop} products={products} />
+  ) : (
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 text-center">
+      <h2 class="text-xl font-bold text-slate-900">Template for {shop.name} not found.</h2>
+    </main>
+  )}
+
+  <!-- Generic Reusable Store Footer Component -->
+  <StoreFooter shopName={shop.name} logoUrl={shop.logo_url} primaryColor={primaryColor} />
+
+  <!-- Track Order Drawer -->
+  <div id="track-overlay" onclick="toggleTrackDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="track-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between p-4 sm:p-6">
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div class="flex items-center space-x-2">
+          <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <h3 class="font-extrabold text-sm uppercase tracking-wider text-slate-900">Track Your Order</h3>
+        </div>
+        <button onclick="toggleTrackDrawer(false)" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer" title="Close">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-600">Enter your phone number or Order ID to check real order status.</p>
+
+      <div class="space-y-3">
+        <input id="track-input" type="text" placeholder="Enter Phone (e.g. 8197921458)" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
+        <button onclick="lookupOrderStatus()" class="w-full py-2.5 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider rounded cursor-pointer hover:bg-slate-800">Check Status</button>
+      </div>
+
+      <div id="track-status-box" class="pt-4 border-t border-slate-200 text-xs">
+        <div class="text-center py-6 border border-dashed border-slate-300 rounded-lg space-y-1">
+          <div class="text-2xl">📦</div>
+          <div class="font-bold text-slate-700">No Active Order Selected</div>
+          <div class="text-[11px] text-slate-400">Enter your phone number above to view live status.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-xs text-center text-slate-500 border-t border-slate-200 pt-4">
+      Need help? Call: <a href="tel:+918197921458" class="font-bold text-slate-900">+91 8197921458</a>
+    </div>
+  </aside>
+
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between">
+    
+    <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+      <div class="flex items-center space-x-2">
+        <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span class="font-extrabold text-sm uppercase tracking-wider text-slate-900">Your Cart</span>
+        <span id="cart-header-badge" class="bg-slate-900 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">0 ITEMS</span>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center justify-center transition-colors cursor-pointer" title="Close Cart">✕</button>
+    </div>
+
+    <div class="bg-slate-900 text-white text-xs font-semibold py-2 px-4 text-center">
+      Save more on Prepaid Orders & Instant WhatsApp Checkout!
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+      <div id="cart-items-list" class="space-y-3"></div>
+
+      <div class="pt-4 border-t border-slate-200 space-y-3">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-900">Customer Delivery Info</h4>
+        
+        <div class="space-y-2">
+          <input id="cart-name" type="text" placeholder="Full Name *" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
+          <input id="cart-phone" type="tel" placeholder="WhatsApp Phone Number *" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
+          <textarea id="cart-address" rows="2" placeholder="Complete Delivery Address *" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900 resize-none"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+      <div class="flex items-center justify-between text-sm font-bold text-slate-900">
+        <span>Total Amount:</span>
+        <span id="cart-total-price" class="text-rose-600 text-base">₹ 0</span>
+      </div>
+
+      <button 
+        onclick="submitWhatsAppOrder()" 
+        class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-widest rounded flex items-center justify-center space-x-2 cursor-pointer shadow-md transition-colors"
+      >
+        <span>💬 PLACE ORDER VIA WHATSAPP COD</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Notification Toast -->
+  <div id="shop-toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-lg shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <span id="toast-icon" class="text-xl">✅</span>
+    <div>
+      <div id="toast-title" class="font-bold text-xs">Added to Cart</div>
+      <div id="toast-msg" class="text-[11px] text-slate-300">Item successfully added.</div>
+    </div>
+  </div>
+
+  <script is:inline>
+    // Cart & Order Engine State
+    let cart = [];
+
+    function initCart() {
+      try {
+        const saved = localStorage.getItem('yesfancy_cart');
+        if (saved) cart = JSON.parse(saved);
+      } catch(e) { cart = []; }
+      updateCartUI();
+    }
+
+    function saveCart() {
+      try {
+        localStorage.setItem('yesfancy_cart', JSON.stringify(cart));
+      } catch(e) {}
+      updateCartUI();
+    }
+
+    function addToCart(id, name, price, mrp, image, stock) {
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id, name, price, mrp, image, qty: 1 });
+      }
+      saveCart();
+      showShopToast('Item Added to Cart', `${name} is in your cart!`, '🛍️');
+    }
+
+    function updateCartQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== id);
+      }
+      saveCart();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-header-badge');
+      const list = document.getElementById('cart-items-list');
+      const totalEl = document.getElementById('cart-total-price');
+
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+      if (badge) badge.innerText = `${totalItems} ITEMS`;
+      if (totalEl) totalEl.innerText = `₹ ${totalPrice}`;
+
+      if (list) {
+        if (cart.length === 0) {
+          list.innerHTML = `
+            <div class="text-center py-12 space-y-2">
+              <div class="text-4xl">🛍️</div>
+              <div class="font-bold text-xs text-slate-700 uppercase">Your Cart is Empty</div>
+              <div class="text-[11px] text-slate-400">Explore products and add items to your cart.</div>
+            </div>
+          `;
+        } else {
+          list.innerHTML = cart.map(item => `
+            <div class="flex items-center space-x-3 p-2 border border-slate-200 rounded-lg bg-white">
+              <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-contain bg-slate-50 rounded" />
+              <div class="flex-1 min-w-0">
+                <div class="text-xs font-bold text-slate-900 truncate">${item.name}</div>
+                <div class="text-xs font-bold text-rose-600">₹ ${item.price}</div>
+              </div>
+              <div class="flex items-center space-x-1.5 bg-slate-100 px-2 py-1 rounded">
+                <button onclick="updateCartQty('${item.id}', -1)" class="text-xs font-bold px-1 hover:text-rose-600">-</button>
+                <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                <button onclick="updateCartQty('${item.id}', 1)" class="text-xs font-bold px-1 hover:text-emerald-600">+</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function toggleCartDrawer(show) {
+      const overlay = document.getElementById('cart-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      if (!overlay || !drawer) return;
+
+      if (show) {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('translate-x-full');
+      } else {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function toggleTrackDrawer(show) {
+      const overlay = document.getElementById('track-overlay');
+      const drawer = document.getElementById('track-drawer');
+      if (!overlay || !drawer) return;
+
+      if (show) {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('translate-x-full');
+      } else {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function showShopToast(title, msg, icon = '✅') {
+      const toast = document.getElementById('shop-toast');
+      const titleEl = document.getElementById('toast-title');
+      const msgEl = document.getElementById('toast-msg');
+      const iconEl = document.getElementById('toast-icon');
+
+      if (!toast) return;
+      if (titleEl) titleEl.innerText = title;
+      if (msgEl) msgEl.innerText = msg;
+      if (iconEl) iconEl.innerText = icon;
+
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+
+    async function submitWhatsAppOrder() {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+
+      const name = document.getElementById('cart-name')?.value.trim();
+      const phone = document.getElementById('cart-phone')?.value.trim();
+      const address = document.getElementById('cart-address')?.value.trim();
+
+      if (!name || !phone || !address) {
+        alert('Please fill out your Name, WhatsApp Phone Number, and Complete Delivery Address.');
+        return;
+      }
+
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const itemsSummary = cart.map(i => `• ${i.name} (x${i.qty}) - ₹${i.price * i.qty}`).join('\n');
+
+      const message = `🛍️ *NEW ORDER FROM YES FANCY*\n\n` +
+        `👤 *Customer Name:* ${name}\n` +
+        `📱 *Phone:* ${phone}\n` +
+        `📍 *Delivery Address:* ${address}\n\n` +
+        `📦 *Ordered Items:*\n${itemsSummary}\n\n` +
+        `💰 *Total Amount:* ₹${totalPrice}\n` +
+        `💳 *Payment Method:* Cash on Delivery (COD)\n\n` +
+        `Please confirm my order dispatch!`;
+
+      // Save order to Supabase DB asynchronously
+      try {
+        await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            shop_id: '{shop.id}',
+            customer_name: name,
+            phone: phone,
+            address: address,
+            total_amount: totalPrice,
+            items: cart,
+            status: 'PENDING'
+          })
+        });
+      } catch(e) {}
+
+      // Clear local cart
+      cart = [];
+      saveCart();
+      toggleCartDrawer(false);
+
+      // Open WhatsApp checkout link directly
+      const shopPhone = '{shop.phone || "918197921458"}';
+      const whatsappUrl = `https://wa.me/${shopPhone}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    async function lookupOrderStatus() {
+      const input = document.getElementById('track-input')?.value.trim();
+      const statusBox = document.getElementById('track-status-box');
+      if (!input || !statusBox) return;
+
+      statusBox.innerHTML = `
+        <div class="text-center py-4 space-y-1">
+          <div class="text-xl animate-spin">⏳</div>
+          <div class="font-bold text-slate-700">Searching live orders...</div>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(`/api/orders?shop_id=${shop.id}&phone=${input}`);
+        const data = await res.json();
+        if (data.orders && data.orders.length > 0) {
+          statusBox.innerHTML = data.orders.map(o => `
+            <div class="p-3 border border-slate-200 rounded-lg bg-slate-50 mb-2 text-left space-y-1">
+              <div class="flex items-center justify-between font-bold">
+                <span>Order #${o.id ? o.id.substring(0, 8) : 'ACTIVE'}</span>
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded">${o.status}</span>
+              </div>
+              <div class="text-slate-600">Total: ₹${o.total_amount}</div>
+              <div class="text-[10px] text-slate-400">${new Date(o.created_at || Date.now()).toLocaleString()}</div>
+            </div>
+          `).join('');
+        } else {
+          statusBox.innerHTML = `
+            <div class="text-center py-4 text-slate-500">
+              No orders found for <strong>${input}</strong>.
+            </div>
+          `;
+        }
+      } catch(e) {
+        statusBox.innerHTML = `<div class="text-center py-4 text-rose-600">Error fetching orders.</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCart);
+  </script>
+
+</body>
+</html>

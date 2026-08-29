@@ -1,0 +1,61 @@
+---
+/**
+ * src/components/Category2ColGridShowcase.astro
+ * 
+ * Generic Reusable 2-Column Category Image Banner Grid:
+ * - Displays 2 tall editorial lifestyle category banners side-by-side.
+ * - Overlaid crisp white rectangular tag button at bottom center.
+ * - Operates on the Unified Tag-Driven Architecture.
+ */
+
+export interface BannerItem {
+  tagId: string;
+  label: string;
+  imageUrl: string;
+}
+
+export interface Props {
+  shopSlug: string;
+  items?: BannerItem[];
+}
+
+const defaultItems: BannerItem[] = [
+  {
+    tagId: "gift-store",
+    label: "GIFT SETS",
+    imageUrl: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    tagId: "home-decor",
+    label: "HOME & DECOR",
+    imageUrl: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?q=80&w=1200&auto=format&fit=crop"
+  }
+];
+
+const { shopSlug, items = defaultItems } = Astro.props;
+---
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+    {items.slice(0, 2).map((item) => (
+      <a 
+        href={`/catalog?shop=${shopSlug}&tag=${item.tagId}`} 
+        class="group relative block aspect-[4/5] sm:aspect-[4/5] w-full overflow-hidden bg-slate-100 no-underline shadow-sm hover:shadow-md transition-shadow"
+      >
+        <!-- Lifestyle Image Banner with Subtle Zoom -->
+        <img 
+          src={item.imageUrl} 
+          alt={item.label} 
+          class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out" 
+        />
+
+        <!-- Overlaid Crisp White Rectangular Tag Title Button (Bottom Center) -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+          <div class="bg-white text-slate-900 font-extrabold text-sm sm:text-base tracking-[0.2em] px-8 sm:px-10 py-3 uppercase shadow-md group-hover:bg-slate-900 group-hover:text-white transition-colors duration-300">
+            {item.label}
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</div>

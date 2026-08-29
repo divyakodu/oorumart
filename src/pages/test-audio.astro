@@ -1,0 +1,246 @@
+---
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oorumart Audio & Realtime POC Harness</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-center p-6 font-sans">
+  
+  <main class="max-w-xl w-full bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-6">
+    <div class="border-b border-slate-700 pb-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-extrabold text-white uppercase tracking-wider">Order Audio & Socket POC</h1>
+        <p class="text-xs text-slate-400">Programmatically test order notifications & sound without placing real store orders.</p>
+      </div>
+      <a href="/admin" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded text-xs font-bold no-underline">Go to Admin &rarr;</a>
+    </div>
+
+    <!-- Status Pill -->
+    <div class="flex items-center justify-between bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs">
+      <div class="flex items-center space-x-2">
+        <span id="socket-dot" class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+        <span id="socket-status" class="font-mono text-slate-300">Connecting Realtime Socket...</span>
+      </div>
+      <span id="audio-status" class="font-mono text-amber-400 font-bold">Audio Locked 🔒</span>
+    </div>
+
+    <!-- POC Control Action Buttons -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <button 
+        onclick="unlockAudioEngine()" 
+        class="py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-lg shadow cursor-pointer transition-all flex items-center justify-center space-x-2"
+      >
+        <span>🔓 1. Unlock Audio Engine</span>
+      </button>
+
+      <button 
+        onclick="testDirectChimeSound()" 
+        class="py-3 px-4 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-lg shadow cursor-pointer transition-all flex items-center justify-center space-x-2"
+      >
+        <span>🔊 2. Play Chime Sound</span>
+      </button>
+    </div>
+
+    <!-- Main Programmatic Test Execution Button -->
+    <button 
+      onclick="triggerProgrammaticOrderPOC()" 
+      class="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white font-black text-sm uppercase tracking-widest rounded-xl shadow-lg cursor-pointer transition-all flex items-center justify-center space-x-2 border border-rose-500"
+    >
+      <span>🚀 3. Trigger Programmatic Order Push (Simulate Order)</span>
+    </button>
+
+    <!-- Real-Time Log Output Stream -->
+    <div class="space-y-2">
+      <div class="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-wider">
+        <span>Execution Log Stream</span>
+        <button onclick="clearLogStream()" class="text-[10px] text-slate-500 hover:text-slate-300">Clear</button>
+      </div>
+      <div id="log-stream" class="h-48 overflow-y-auto bg-slate-950 font-mono text-[11px] p-3 rounded-lg border border-slate-800 space-y-1 text-slate-300">
+        <div class="text-slate-500">[System Ready] Initializing Web Audio Context & Supabase Socket listener...</div>
+      </div>
+    </div>
+  </main>
+
+  <script is:inline>
+    const supabaseUrl = 'https://fwrievuhudjkeffmszqf.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3cmlldnVodWRqa2VmZm1zenFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MTMwMjUsImV4cCI6MjA3NTQ4OTAyNX0.2B_15372JdK8X7635X3X';
+    
+    let sharedAudioCtx = null;
+    let sharedAudioBuffer = null;
+    let realtimeChannel = null;
+
+    function logMsg(msg, colorClass = 'text-slate-300') {
+      const logContainer = document.getElementById('log-stream');
+      if (!logContainer) return;
+      const time = new Date().toLocaleTimeString();
+      const div = document.createElement('div');
+      div.className = colorClass;
+      div.innerText = `[${time}] ${msg}`;
+      logContainer.appendChild(div);
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    function clearLogStream() {
+      const logContainer = document.getElementById('log-stream');
+      if (logContainer) logContainer.innerHTML = '';
+    }
+
+    async function unlockAudioEngine() {
+      logMsg('🔊 Initializing & unlocking Web Audio Engine...', 'text-amber-400');
+      try {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (!sharedAudioCtx) {
+          sharedAudioCtx = new AudioCtxClass();
+        }
+        if (sharedAudioCtx.state === 'suspended') {
+          await sharedAudioCtx.resume();
+        }
+        if (!sharedAudioBuffer) {
+          logMsg('📥 Fetching /sounds/order_chime.wav...', 'text-slate-400');
+          const res = await fetch('/sounds/order_chime.wav');
+          const arrayBuf = await res.arrayBuffer();
+          sharedAudioBuffer = await sharedAudioCtx.decodeAudioData(arrayBuf);
+          logMsg('✅ WAV audio buffer decoded successfully! (105KB)', 'text-emerald-400');
+        }
+
+        const audioStatus = document.getElementById('audio-status');
+        if (audioStatus) {
+          audioStatus.innerText = 'Audio Unlocked 🔓';
+          audioStatus.className = 'font-mono text-emerald-400 font-bold';
+        }
+        logMsg(`✅ Web Audio Context active! (State: ${sharedAudioCtx.state})`, 'text-emerald-400');
+      } catch (e) {
+        logMsg(`❌ Audio unlock error: ${e.message}`, 'text-rose-400');
+      }
+    }
+
+    function testDirectChimeSound() {
+      logMsg('🎵 Testing direct chime playback...', 'text-amber-400');
+      playOrderChimeSound();
+    }
+
+    function playOrderChimeSound() {
+      if (sharedAudioCtx && sharedAudioBuffer) {
+        try {
+          if (sharedAudioCtx.state === 'suspended') {
+            sharedAudioCtx.resume();
+          }
+          const source = sharedAudioCtx.createBufferSource();
+          source.buffer = sharedAudioBuffer;
+          source.connect(sharedAudioCtx.destination);
+          source.start(0);
+          logMsg('🔔 Order chime audio played successfully via Web Audio Buffer!', 'text-emerald-400 font-bold');
+          return;
+        } catch (e) {
+          logMsg(`⚠️ Web Audio play error: ${e.message}`, 'text-rose-400');
+        }
+      }
+
+      // Fallback Synthesizer
+      try {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        const ctx = sharedAudioCtx || new AudioCtxClass();
+        if (ctx.state === 'suspended') ctx.resume();
+        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const startTime = ctx.currentTime + (idx * 0.12);
+          gain.gain.setValueAtTime(0.3, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.8);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.8);
+        });
+        logMsg('🔔 Synthesized C5-E5-G5 bell chime played!', 'text-amber-300 font-bold');
+      } catch (e) {
+        logMsg(`❌ Fallback audio error: ${e.message}`, 'text-rose-400');
+      }
+    }
+
+    async function triggerProgrammaticOrderPOC() {
+      logMsg('🚀 Programmatically sending test order payload to POST /api/orders...', 'text-rose-400 font-bold');
+      
+      const testOrderId = `POC-${Math.floor(1000 + Math.random() * 9000)}`;
+      const testPayload = {
+        order_id: testOrderId,
+        shop_slug: 'yesfancy',
+        customer_name: 'POC Tester',
+        phone: '9999999999',
+        address: 'POC Automated Test',
+        items: ['- Programmatic Audio Chime Test (Qty: 1) = Rs. 999'],
+        total: 999
+      };
+
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(testPayload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          logMsg(`✅ API Response: Order #${testOrderId} created in Supabase DB!`, 'text-emerald-400 font-bold');
+        } else {
+          logMsg(`❌ API Error: ${data.error || 'Failed to create order'}`, 'text-rose-400');
+        }
+      } catch (e) {
+        logMsg(`❌ HTTP Fetch Exception: ${e.message}`, 'text-rose-400');
+      }
+    }
+
+    // Initialize Supabase Socket Connection
+    function initSupabaseSocket() {
+      if (window.supabase && supabaseUrl) {
+        try {
+          const client = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+          realtimeChannel = client
+            .channel('poc:orders')
+            .on('postgres_changes', {
+              event: 'INSERT',
+              schema: 'public',
+              table: 'orders'
+            }, (payload) => {
+              if (payload.new && payload.new.shop_slug === 'yesfancy') {
+                logMsg(`📡 REALTIME WEBSOCKET EVENT RECEIVED: Order #${payload.new.order_id} (Rs. ${payload.new.total})`, 'text-cyan-400 font-bold');
+                playOrderChimeSound();
+              }
+            })
+            .subscribe((status) => {
+              logMsg(`📡 Realtime Socket Status: ${status}`, status === 'SUBSCRIBED' ? 'text-emerald-400' : 'text-amber-400');
+              const dot = document.getElementById('socket-dot');
+              const text = document.getElementById('socket-status');
+              if (dot) {
+                dot.className = status === 'SUBSCRIBED' ? 'w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse' : 'w-2.5 h-2.5 rounded-full bg-amber-500';
+              }
+              if (text) {
+                text.innerText = status === 'SUBSCRIBED' ? 'Supabase Realtime Socket: SUBSCRIBED ✅' : `Socket: ${status}`;
+              }
+            });
+        } catch (e) {
+          logMsg(`❌ Socket Error: ${e.message}`, 'text-rose-400');
+        }
+      }
+    }
+
+    // Pre-unlock audio on user click anywhere
+    document.addEventListener('click', () => {
+      if (!sharedAudioCtx) unlockAudioEngine();
+    }, { once: true });
+
+    window.addEventListener('load', () => {
+      initSupabaseSocket();
+    });
+  </script>
+</body>
+</html>

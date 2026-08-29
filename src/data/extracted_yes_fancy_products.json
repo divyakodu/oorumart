@@ -1,0 +1,4954 @@
+[
+  {
+    "catalog_file": "CasseroleSeries - low - Mobile 2.pdf",
+    "slug": "casseroleseries___low___mobile_2",
+    "pages_processed": 7,
+    "extracted_product_count": 7,
+    "total_clean_images": 25,
+    "pages": [
+      {
+        "page": 1,
+        "extracted_images": [
+          {
+            "xref": 272,
+            "page": 1,
+            "dimensions": "738x1041 px",
+            "size_kb": 82.3,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p1_img1_xref272.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 2,
+        "extracted_images": [
+          {
+            "xref": 4,
+            "page": 2,
+            "dimensions": "738x964 px",
+            "size_kb": 62.6,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p2_img1_xref4.jpeg"
+          },
+          {
+            "xref": 14,
+            "page": 2,
+            "dimensions": "328x229 px",
+            "size_kb": 14.2,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p2_img11_xref14.jpeg"
+          },
+          {
+            "xref": 17,
+            "page": 2,
+            "dimensions": "366x230 px",
+            "size_kb": 13.2,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p2_img14_xref17.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 3,
+        "extracted_images": [
+          {
+            "xref": 48,
+            "page": 3,
+            "dimensions": "385x135 px",
+            "size_kb": 13.5,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p3_img14_xref48.jpeg"
+          },
+          {
+            "xref": 51,
+            "page": 3,
+            "dimensions": "383x126 px",
+            "size_kb": 9.4,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p3_img17_xref51.jpeg"
+          },
+          {
+            "xref": 64,
+            "page": 3,
+            "dimensions": "852x146 px",
+            "size_kb": 5.2,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p3_img30_xref64.png"
+          },
+          {
+            "xref": 96,
+            "page": 3,
+            "dimensions": "296x178 px",
+            "size_kb": 7.9,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p3_img62_xref96.jpeg"
+          },
+          {
+            "xref": 103,
+            "page": 3,
+            "dimensions": "345x236 px",
+            "size_kb": 12.3,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p3_img69_xref103.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 4,
+        "extracted_images": [
+          {
+            "xref": 140,
+            "page": 4,
+            "dimensions": "504x211 px",
+            "size_kb": 6.7,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p4_img1_xref140.jpeg"
+          },
+          {
+            "xref": 142,
+            "page": 4,
+            "dimensions": "402x196 px",
+            "size_kb": 18.7,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p4_img3_xref142.jpeg"
+          },
+          {
+            "xref": 159,
+            "page": 4,
+            "dimensions": "356x212 px",
+            "size_kb": 12.1,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p4_img20_xref159.jpeg"
+          },
+          {
+            "xref": 163,
+            "page": 4,
+            "dimensions": "317x142 px",
+            "size_kb": 9.0,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p4_img24_xref163.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 5,
+        "extracted_images": [
+          {
+            "xref": 178,
+            "page": 5,
+            "dimensions": "739x232 px",
+            "size_kb": 24.6,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p5_img1_xref178.jpeg"
+          },
+          {
+            "xref": 179,
+            "page": 5,
+            "dimensions": "417x349 px",
+            "size_kb": 11.5,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p5_img2_xref179.jpeg"
+          },
+          {
+            "xref": 186,
+            "page": 5,
+            "dimensions": "243x122 px",
+            "size_kb": 7.7,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p5_img9_xref186.jpeg"
+          },
+          {
+            "xref": 220,
+            "page": 5,
+            "dimensions": "408x137 px",
+            "size_kb": 9.9,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p5_img43_xref220.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 6,
+        "extracted_images": [
+          {
+            "xref": 242,
+            "page": 6,
+            "dimensions": "405x234 px",
+            "size_kb": 17.8,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p6_img10_xref242.jpeg"
+          },
+          {
+            "xref": 244,
+            "page": 6,
+            "dimensions": "372x128 px",
+            "size_kb": 9.6,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p6_img12_xref244.jpeg"
+          },
+          {
+            "xref": 246,
+            "page": 6,
+            "dimensions": "261x166 px",
+            "size_kb": 8.3,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p6_img14_xref246.jpeg"
+          },
+          {
+            "xref": 249,
+            "page": 6,
+            "dimensions": "232x166 px",
+            "size_kb": 9.3,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p6_img17_xref249.jpeg"
+          },
+          {
+            "xref": 252,
+            "page": 6,
+            "dimensions": "323x167 px",
+            "size_kb": 14.9,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p6_img20_xref252.jpeg"
+          },
+          {
+            "xref": 254,
+            "page": 6,
+            "dimensions": "292x162 px",
+            "size_kb": 8.0,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p6_img22_xref254.jpeg"
+          },
+          {
+            "xref": 256,
+            "page": 6,
+            "dimensions": "225x161 px",
+            "size_kb": 7.6,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p6_img24_xref256.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 7,
+        "extracted_images": [
+          {
+            "xref": 261,
+            "page": 7,
+            "dimensions": "776x1079 px",
+            "size_kb": 150.9,
+            "image_url": "/images/catalog_extracted/casseroleseries___low___mobile_2/p7_img1_xref261.jpeg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "catalog_file": "HASBRO CARD.pdf",
+    "slug": "hasbro_card",
+    "pages_processed": 24,
+    "extracted_product_count": 24,
+    "total_clean_images": 37,
+    "pages": [
+      {
+        "page": 1,
+        "extracted_images": [
+          {
+            "xref": 300,
+            "page": 1,
+            "dimensions": "900x390 px",
+            "size_kb": 26.7,
+            "image_url": "/images/catalog_extracted/hasbro_card/p1_img2_xref300.png"
+          },
+          {
+            "xref": 301,
+            "page": 1,
+            "dimensions": "699x699 px",
+            "size_kb": 48.2,
+            "image_url": "/images/catalog_extracted/hasbro_card/p1_img3_xref301.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 2,
+        "extracted_images": [
+          {
+            "xref": 4,
+            "page": 2,
+            "dimensions": "1000x1000 px",
+            "size_kb": 129.4,
+            "image_url": "/images/catalog_extracted/hasbro_card/p2_img1_xref4.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 3,
+        "extracted_images": [
+          {
+            "xref": 8,
+            "page": 3,
+            "dimensions": "1000x1000 px",
+            "size_kb": 112.9,
+            "image_url": "/images/catalog_extracted/hasbro_card/p3_img1_xref8.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 4,
+        "extracted_images": [
+          {
+            "xref": 12,
+            "page": 4,
+            "dimensions": "1000x1000 px",
+            "size_kb": 150.9,
+            "image_url": "/images/catalog_extracted/hasbro_card/p4_img1_xref12.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 5,
+        "extracted_images": [
+          {
+            "xref": 16,
+            "page": 5,
+            "dimensions": "400x400 px",
+            "size_kb": 27.7,
+            "image_url": "/images/catalog_extracted/hasbro_card/p5_img1_xref16.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 6,
+        "extracted_images": [
+          {
+            "xref": 20,
+            "page": 6,
+            "dimensions": "828x828 px",
+            "size_kb": 95.6,
+            "image_url": "/images/catalog_extracted/hasbro_card/p6_img1_xref20.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 7,
+        "extracted_images": [
+          {
+            "xref": 24,
+            "page": 7,
+            "dimensions": "473x593 px",
+            "size_kb": 39.6,
+            "image_url": "/images/catalog_extracted/hasbro_card/p7_img1_xref24.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 8,
+        "extracted_images": [
+          {
+            "xref": 28,
+            "page": 8,
+            "dimensions": "1000x1000 px",
+            "size_kb": 115.0,
+            "image_url": "/images/catalog_extracted/hasbro_card/p8_img1_xref28.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 9,
+        "extracted_images": [
+          {
+            "xref": 32,
+            "page": 9,
+            "dimensions": "1143x1500 px",
+            "size_kb": 182.1,
+            "image_url": "/images/catalog_extracted/hasbro_card/p9_img1_xref32.jpeg"
+          },
+          {
+            "xref": 33,
+            "page": 9,
+            "dimensions": "1499x1500 px",
+            "size_kb": 280.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p9_img2_xref33.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 10,
+        "extracted_images": [
+          {
+            "xref": 37,
+            "page": 10,
+            "dimensions": "1024x576 px",
+            "size_kb": 44.7,
+            "image_url": "/images/catalog_extracted/hasbro_card/p10_img1_xref37.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 11,
+        "extracted_images": [
+          {
+            "xref": 42,
+            "page": 11,
+            "dimensions": "760x329 px",
+            "size_kb": 27.4,
+            "image_url": "/images/catalog_extracted/hasbro_card/p11_img2_xref42.png"
+          }
+        ]
+      },
+      {
+        "page": 12,
+        "extracted_images": [
+          {
+            "xref": 47,
+            "page": 12,
+            "dimensions": "1000x1000 px",
+            "size_kb": 142.6,
+            "image_url": "/images/catalog_extracted/hasbro_card/p12_img1_xref47.jpeg"
+          },
+          {
+            "xref": 48,
+            "page": 12,
+            "dimensions": "748x329 px",
+            "size_kb": 23.2,
+            "image_url": "/images/catalog_extracted/hasbro_card/p12_img2_xref48.png"
+          }
+        ]
+      },
+      {
+        "page": 13,
+        "extracted_images": [
+          {
+            "xref": 53,
+            "page": 13,
+            "dimensions": "665x1000 px",
+            "size_kb": 128.6,
+            "image_url": "/images/catalog_extracted/hasbro_card/p13_img1_xref53.jpeg"
+          },
+          {
+            "xref": 54,
+            "page": 13,
+            "dimensions": "677x293 px",
+            "size_kb": 23.7,
+            "image_url": "/images/catalog_extracted/hasbro_card/p13_img2_xref54.png"
+          }
+        ]
+      },
+      {
+        "page": 14,
+        "extracted_images": [
+          {
+            "xref": 59,
+            "page": 14,
+            "dimensions": "758x1000 px",
+            "size_kb": 53.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p14_img1_xref59.jpeg"
+          },
+          {
+            "xref": 60,
+            "page": 14,
+            "dimensions": "677x293 px",
+            "size_kb": 23.9,
+            "image_url": "/images/catalog_extracted/hasbro_card/p14_img2_xref60.png"
+          }
+        ]
+      },
+      {
+        "page": 15,
+        "extracted_images": [
+          {
+            "xref": 65,
+            "page": 15,
+            "dimensions": "757x1000 px",
+            "size_kb": 67.9,
+            "image_url": "/images/catalog_extracted/hasbro_card/p15_img1_xref65.jpeg"
+          },
+          {
+            "xref": 66,
+            "page": 15,
+            "dimensions": "760x329 px",
+            "size_kb": 27.4,
+            "image_url": "/images/catalog_extracted/hasbro_card/p15_img2_xref66.png"
+          }
+        ]
+      },
+      {
+        "page": 16,
+        "extracted_images": [
+          {
+            "xref": 71,
+            "page": 16,
+            "dimensions": "828x828 px",
+            "size_kb": 78.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p16_img1_xref71.jpeg"
+          },
+          {
+            "xref": 72,
+            "page": 16,
+            "dimensions": "760x329 px",
+            "size_kb": 27.2,
+            "image_url": "/images/catalog_extracted/hasbro_card/p16_img2_xref72.png"
+          }
+        ]
+      },
+      {
+        "page": 17,
+        "extracted_images": [
+          {
+            "xref": 77,
+            "page": 17,
+            "dimensions": "1001x1001 px",
+            "size_kb": 114.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p17_img1_xref77.jpeg"
+          },
+          {
+            "xref": 78,
+            "page": 17,
+            "dimensions": "760x329 px",
+            "size_kb": 27.3,
+            "image_url": "/images/catalog_extracted/hasbro_card/p17_img2_xref78.png"
+          }
+        ]
+      },
+      {
+        "page": 18,
+        "extracted_images": [
+          {
+            "xref": 83,
+            "page": 18,
+            "dimensions": "688x1000 px",
+            "size_kb": 125.9,
+            "image_url": "/images/catalog_extracted/hasbro_card/p18_img1_xref83.jpeg"
+          },
+          {
+            "xref": 84,
+            "page": 18,
+            "dimensions": "760x329 px",
+            "size_kb": 27.4,
+            "image_url": "/images/catalog_extracted/hasbro_card/p18_img2_xref84.png"
+          }
+        ]
+      },
+      {
+        "page": 19,
+        "extracted_images": [
+          {
+            "xref": 89,
+            "page": 19,
+            "dimensions": "832x945 px",
+            "size_kb": 62.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p19_img1_xref89.jpeg"
+          },
+          {
+            "xref": 90,
+            "page": 19,
+            "dimensions": "760x329 px",
+            "size_kb": 27.3,
+            "image_url": "/images/catalog_extracted/hasbro_card/p19_img2_xref90.png"
+          }
+        ]
+      },
+      {
+        "page": 20,
+        "extracted_images": [
+          {
+            "xref": 95,
+            "page": 20,
+            "dimensions": "1117x1400 px",
+            "size_kb": 151.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p20_img1_xref95.jpeg"
+          },
+          {
+            "xref": 96,
+            "page": 20,
+            "dimensions": "760x329 px",
+            "size_kb": 27.3,
+            "image_url": "/images/catalog_extracted/hasbro_card/p20_img2_xref96.png"
+          }
+        ]
+      },
+      {
+        "page": 21,
+        "extracted_images": [
+          {
+            "xref": 101,
+            "page": 21,
+            "dimensions": "1500x1500 px",
+            "size_kb": 168.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p21_img1_xref101.jpeg"
+          },
+          {
+            "xref": 102,
+            "page": 21,
+            "dimensions": "760x329 px",
+            "size_kb": 27.3,
+            "image_url": "/images/catalog_extracted/hasbro_card/p21_img2_xref102.png"
+          }
+        ]
+      },
+      {
+        "page": 22,
+        "extracted_images": [
+          {
+            "xref": 107,
+            "page": 22,
+            "dimensions": "1000x1000 px",
+            "size_kb": 94.8,
+            "image_url": "/images/catalog_extracted/hasbro_card/p22_img1_xref107.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 23,
+        "extracted_images": [
+          {
+            "xref": 111,
+            "page": 23,
+            "dimensions": "1000x1000 px",
+            "size_kb": 110.6,
+            "image_url": "/images/catalog_extracted/hasbro_card/p23_img1_xref111.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 24,
+        "extracted_images": [
+          {
+            "xref": 115,
+            "page": 24,
+            "dimensions": "1080x1423 px",
+            "size_kb": 136.1,
+            "image_url": "/images/catalog_extracted/hasbro_card/p24_img1_xref115.jpeg"
+          },
+          {
+            "xref": 116,
+            "page": 24,
+            "dimensions": "1500x1412 px",
+            "size_kb": 138.1,
+            "image_url": "/images/catalog_extracted/hasbro_card/p24_img2_xref116.jpeg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "catalog_file": "LUNCHBOX - low - Mobile 1.pdf",
+    "slug": "lunchbox___low___mobile_1",
+    "pages_processed": 38,
+    "extracted_product_count": 0,
+    "total_clean_images": 0,
+    "pages": []
+  },
+  {
+    "catalog_file": "NERF1805.pdf",
+    "slug": "nerf1805",
+    "pages_processed": 50,
+    "extracted_product_count": 46,
+    "total_clean_images": 48,
+    "pages": [
+      {
+        "page": 2,
+        "extracted_images": [
+          {
+            "xref": 4,
+            "page": 2,
+            "dimensions": "1000x1000 px",
+            "size_kb": 143.5,
+            "image_url": "/images/catalog_extracted/nerf1805/p2_img1_xref4.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 3,
+        "extracted_images": [
+          {
+            "xref": 338,
+            "page": 3,
+            "dimensions": "1500x1320 px",
+            "size_kb": 237.5,
+            "image_url": "/images/catalog_extracted/nerf1805/p3_img1_xref338.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 4,
+        "extracted_images": [
+          {
+            "xref": 23,
+            "page": 4,
+            "dimensions": "500x500 px",
+            "size_kb": 30.7,
+            "image_url": "/images/catalog_extracted/nerf1805/p4_img1_xref23.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 5,
+        "extracted_images": [
+          {
+            "xref": 27,
+            "page": 5,
+            "dimensions": "1500x1500 px",
+            "size_kb": 157.4,
+            "image_url": "/images/catalog_extracted/nerf1805/p5_img1_xref27.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 7,
+        "extracted_images": [
+          {
+            "xref": 42,
+            "page": 7,
+            "dimensions": "1500x1500 px",
+            "size_kb": 241.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p7_img1_xref42.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 8,
+        "extracted_images": [
+          {
+            "xref": 48,
+            "page": 8,
+            "dimensions": "1000x1000 px",
+            "size_kb": 93.0,
+            "image_url": "/images/catalog_extracted/nerf1805/p8_img1_xref48.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 9,
+        "extracted_images": [
+          {
+            "xref": 54,
+            "page": 9,
+            "dimensions": "750x522 px",
+            "size_kb": 64.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p9_img1_xref54.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 10,
+        "extracted_images": [
+          {
+            "xref": 338,
+            "page": 10,
+            "dimensions": "1500x1320 px",
+            "size_kb": 237.5,
+            "image_url": "/images/catalog_extracted/nerf1805/p10_img1_xref338.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 11,
+        "extracted_images": [
+          {
+            "xref": 65,
+            "page": 11,
+            "dimensions": "500x500 px",
+            "size_kb": 64.9,
+            "image_url": "/images/catalog_extracted/nerf1805/p11_img1_xref65.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 12,
+        "extracted_images": [
+          {
+            "xref": 71,
+            "page": 12,
+            "dimensions": "1500x1500 px",
+            "size_kb": 347.6,
+            "image_url": "/images/catalog_extracted/nerf1805/p12_img1_xref71.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 13,
+        "extracted_images": [
+          {
+            "xref": 77,
+            "page": 13,
+            "dimensions": "1000x1000 px",
+            "size_kb": 149.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p13_img1_xref77.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 14,
+        "extracted_images": [
+          {
+            "xref": 87,
+            "page": 14,
+            "dimensions": "700x849 px",
+            "size_kb": 80.3,
+            "image_url": "/images/catalog_extracted/nerf1805/p14_img1_xref87.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 15,
+        "extracted_images": [
+          {
+            "xref": 93,
+            "page": 15,
+            "dimensions": "1381x1121 px",
+            "size_kb": 181.9,
+            "image_url": "/images/catalog_extracted/nerf1805/p15_img1_xref93.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 16,
+        "extracted_images": [
+          {
+            "xref": 99,
+            "page": 16,
+            "dimensions": "1500x1500 px",
+            "size_kb": 197.6,
+            "image_url": "/images/catalog_extracted/nerf1805/p16_img1_xref99.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 17,
+        "extracted_images": [
+          {
+            "xref": 107,
+            "page": 17,
+            "dimensions": "1500x1500 px",
+            "size_kb": 387.0,
+            "image_url": "/images/catalog_extracted/nerf1805/p17_img1_xref107.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 18,
+        "extracted_images": [
+          {
+            "xref": 113,
+            "page": 18,
+            "dimensions": "1200x1120 px",
+            "size_kb": 113.9,
+            "image_url": "/images/catalog_extracted/nerf1805/p18_img1_xref113.jpeg"
+          },
+          {
+            "xref": 114,
+            "page": 18,
+            "dimensions": "800x800 px",
+            "size_kb": 62.5,
+            "image_url": "/images/catalog_extracted/nerf1805/p18_img2_xref114.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 19,
+        "extracted_images": [
+          {
+            "xref": 120,
+            "page": 19,
+            "dimensions": "1500x1500 px",
+            "size_kb": 234.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p19_img1_xref120.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 20,
+        "extracted_images": [
+          {
+            "xref": 127,
+            "page": 20,
+            "dimensions": "416x196 px",
+            "size_kb": 23.0,
+            "image_url": "/images/catalog_extracted/nerf1805/p20_img1_xref127.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 21,
+        "extracted_images": [
+          {
+            "xref": 133,
+            "page": 21,
+            "dimensions": "1000x1000 px",
+            "size_kb": 112.6,
+            "image_url": "/images/catalog_extracted/nerf1805/p21_img1_xref133.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 22,
+        "extracted_images": [
+          {
+            "xref": 141,
+            "page": 22,
+            "dimensions": "400x336 px",
+            "size_kb": 23.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p22_img1_xref141.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 23,
+        "extracted_images": [
+          {
+            "xref": 147,
+            "page": 23,
+            "dimensions": "1200x1120 px",
+            "size_kb": 146.0,
+            "image_url": "/images/catalog_extracted/nerf1805/p23_img1_xref147.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 24,
+        "extracted_images": [
+          {
+            "xref": 153,
+            "page": 24,
+            "dimensions": "1200x1120 px",
+            "size_kb": 187.5,
+            "image_url": "/images/catalog_extracted/nerf1805/p24_img1_xref153.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 25,
+        "extracted_images": [
+          {
+            "xref": 159,
+            "page": 25,
+            "dimensions": "512x512 px",
+            "size_kb": 31.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p25_img1_xref159.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 26,
+        "extracted_images": [
+          {
+            "xref": 165,
+            "page": 26,
+            "dimensions": "850x995 px",
+            "size_kb": 79.6,
+            "image_url": "/images/catalog_extracted/nerf1805/p26_img1_xref165.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 27,
+        "extracted_images": [
+          {
+            "xref": 171,
+            "page": 27,
+            "dimensions": "1000x1000 px",
+            "size_kb": 82.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p27_img1_xref171.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 28,
+        "extracted_images": [
+          {
+            "xref": 177,
+            "page": 28,
+            "dimensions": "1496x1322 px",
+            "size_kb": 276.9,
+            "image_url": "/images/catalog_extracted/nerf1805/p28_img1_xref177.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 29,
+        "extracted_images": [
+          {
+            "xref": 183,
+            "page": 29,
+            "dimensions": "416x266 px",
+            "size_kb": 30.7,
+            "image_url": "/images/catalog_extracted/nerf1805/p29_img1_xref183.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 30,
+        "extracted_images": [
+          {
+            "xref": 189,
+            "page": 30,
+            "dimensions": "1000x536 px",
+            "size_kb": 110.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p30_img1_xref189.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 31,
+        "extracted_images": [
+          {
+            "xref": 195,
+            "page": 31,
+            "dimensions": "416x319 px",
+            "size_kb": 29.5,
+            "image_url": "/images/catalog_extracted/nerf1805/p31_img1_xref195.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 33,
+        "extracted_images": [
+          {
+            "xref": 209,
+            "page": 33,
+            "dimensions": "588x441 px",
+            "size_kb": 66.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p33_img1_xref209.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 34,
+        "extracted_images": [
+          {
+            "xref": 217,
+            "page": 34,
+            "dimensions": "1500x1500 px",
+            "size_kb": 237.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p34_img1_xref217.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 35,
+        "extracted_images": [
+          {
+            "xref": 223,
+            "page": 35,
+            "dimensions": "925x1121 px",
+            "size_kb": 111.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p35_img1_xref223.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 36,
+        "extracted_images": [
+          {
+            "xref": 231,
+            "page": 36,
+            "dimensions": "978x360 px",
+            "size_kb": 62.4,
+            "image_url": "/images/catalog_extracted/nerf1805/p36_img1_xref231.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 37,
+        "extracted_images": [
+          {
+            "xref": 237,
+            "page": 37,
+            "dimensions": "416x339 px",
+            "size_kb": 31.4,
+            "image_url": "/images/catalog_extracted/nerf1805/p37_img1_xref237.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 38,
+        "extracted_images": [
+          {
+            "xref": 247,
+            "page": 38,
+            "dimensions": "512x512 px",
+            "size_kb": 29.3,
+            "image_url": "/images/catalog_extracted/nerf1805/p38_img1_xref247.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 39,
+        "extracted_images": [
+          {
+            "xref": 253,
+            "page": 39,
+            "dimensions": "1000x574 px",
+            "size_kb": 88.9,
+            "image_url": "/images/catalog_extracted/nerf1805/p39_img1_xref253.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 40,
+        "extracted_images": [
+          {
+            "xref": 259,
+            "page": 40,
+            "dimensions": "800x800 px",
+            "size_kb": 88.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p40_img1_xref259.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 41,
+        "extracted_images": [
+          {
+            "xref": 267,
+            "page": 41,
+            "dimensions": "1500x1500 px",
+            "size_kb": 279.0,
+            "image_url": "/images/catalog_extracted/nerf1805/p41_img1_xref267.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 42,
+        "extracted_images": [
+          {
+            "xref": 273,
+            "page": 42,
+            "dimensions": "500x312 px",
+            "size_kb": 35.4,
+            "image_url": "/images/catalog_extracted/nerf1805/p42_img1_xref273.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 43,
+        "extracted_images": [
+          {
+            "xref": 279,
+            "page": 43,
+            "dimensions": "1000x1000 px",
+            "size_kb": 136.6,
+            "image_url": "/images/catalog_extracted/nerf1805/p43_img1_xref279.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 44,
+        "extracted_images": [
+          {
+            "xref": 287,
+            "page": 44,
+            "dimensions": "700x700 px",
+            "size_kb": 43.0,
+            "image_url": "/images/catalog_extracted/nerf1805/p44_img1_xref287.jpeg"
+          },
+          {
+            "xref": 288,
+            "page": 44,
+            "dimensions": "1500x850 px",
+            "size_kb": 196.9,
+            "image_url": "/images/catalog_extracted/nerf1805/p44_img2_xref288.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 45,
+        "extracted_images": [
+          {
+            "xref": 294,
+            "page": 45,
+            "dimensions": "1500x1500 px",
+            "size_kb": 188.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p45_img1_xref294.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 46,
+        "extracted_images": [
+          {
+            "xref": 302,
+            "page": 46,
+            "dimensions": "500x500 px",
+            "size_kb": 32.4,
+            "image_url": "/images/catalog_extracted/nerf1805/p46_img1_xref302.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 47,
+        "extracted_images": [
+          {
+            "xref": 310,
+            "page": 47,
+            "dimensions": "283x416 px",
+            "size_kb": 29.2,
+            "image_url": "/images/catalog_extracted/nerf1805/p47_img1_xref310.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 48,
+        "extracted_images": [
+          {
+            "xref": 318,
+            "page": 48,
+            "dimensions": "700x700 px",
+            "size_kb": 82.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p48_img1_xref318.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 49,
+        "extracted_images": [
+          {
+            "xref": 330,
+            "page": 49,
+            "dimensions": "354x354 px",
+            "size_kb": 17.8,
+            "image_url": "/images/catalog_extracted/nerf1805/p49_img1_xref330.jpeg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "catalog_file": "STEEL DRINKWARE CATALOGUE NEW MRP MAY 2026.pdf",
+    "slug": "steel_drinkware_catalogue_new_mrp_may_2026",
+    "pages_processed": 46,
+    "extracted_product_count": 36,
+    "total_clean_images": 382,
+    "pages": [
+      {
+        "page": 3,
+        "extracted_images": [
+          {
+            "xref": 15,
+            "page": 3,
+            "dimensions": "1048x238 px",
+            "size_kb": 162.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p3_img1_xref15.png"
+          },
+          {
+            "xref": 16,
+            "page": 3,
+            "dimensions": "991x1006 px",
+            "size_kb": 827.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p3_img2_xref16.png"
+          }
+        ]
+      },
+      {
+        "page": 4,
+        "extracted_images": [
+          {
+            "xref": 23,
+            "page": 4,
+            "dimensions": "439x1301 px",
+            "size_kb": 356.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p4_img1_xref23.png"
+          },
+          {
+            "xref": 24,
+            "page": 4,
+            "dimensions": "186x186 px",
+            "size_kb": 17.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p4_img2_xref24.png"
+          }
+        ]
+      },
+      {
+        "page": 6,
+        "extracted_images": [
+          {
+            "xref": 37,
+            "page": 6,
+            "dimensions": "1414x722 px",
+            "size_kb": 1533.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img1_xref37.png"
+          },
+          {
+            "xref": 39,
+            "page": 6,
+            "dimensions": "123x512 px",
+            "size_kb": 48.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img3_xref39.png"
+          },
+          {
+            "xref": 41,
+            "page": 6,
+            "dimensions": "122x467 px",
+            "size_kb": 52.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img5_xref41.png"
+          },
+          {
+            "xref": 45,
+            "page": 6,
+            "dimensions": "140x333 px",
+            "size_kb": 39.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img9_xref45.png"
+          },
+          {
+            "xref": 46,
+            "page": 6,
+            "dimensions": "140x465 px",
+            "size_kb": 38.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img10_xref46.png"
+          },
+          {
+            "xref": 48,
+            "page": 6,
+            "dimensions": "140x391 px",
+            "size_kb": 33.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img12_xref48.png"
+          },
+          {
+            "xref": 50,
+            "page": 6,
+            "dimensions": "143x439 px",
+            "size_kb": 33.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img14_xref50.png"
+          },
+          {
+            "xref": 52,
+            "page": 6,
+            "dimensions": "143x364 px",
+            "size_kb": 37.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img16_xref52.png"
+          },
+          {
+            "xref": 54,
+            "page": 6,
+            "dimensions": "138x425 px",
+            "size_kb": 22.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img18_xref54.png"
+          },
+          {
+            "xref": 55,
+            "page": 6,
+            "dimensions": "143x364 px",
+            "size_kb": 26.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img19_xref55.png"
+          },
+          {
+            "xref": 57,
+            "page": 6,
+            "dimensions": "143x309 px",
+            "size_kb": 32.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img21_xref57.png"
+          },
+          {
+            "xref": 59,
+            "page": 6,
+            "dimensions": "127x472 px",
+            "size_kb": 70.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img23_xref59.png"
+          },
+          {
+            "xref": 61,
+            "page": 6,
+            "dimensions": "120x447 px",
+            "size_kb": 52.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p6_img25_xref61.png"
+          }
+        ]
+      },
+      {
+        "page": 7,
+        "extracted_images": [
+          {
+            "xref": 123,
+            "page": 7,
+            "dimensions": "181x699 px",
+            "size_kb": 65.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img4_xref123.png"
+          },
+          {
+            "xref": 125,
+            "page": 7,
+            "dimensions": "136x517 px",
+            "size_kb": 34.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img6_xref125.png"
+          },
+          {
+            "xref": 127,
+            "page": 7,
+            "dimensions": "159x606 px",
+            "size_kb": 60.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img8_xref127.png"
+          },
+          {
+            "xref": 128,
+            "page": 7,
+            "dimensions": "169x434 px",
+            "size_kb": 53.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img9_xref128.png"
+          },
+          {
+            "xref": 129,
+            "page": 7,
+            "dimensions": "166x472 px",
+            "size_kb": 55.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img10_xref129.png"
+          },
+          {
+            "xref": 131,
+            "page": 7,
+            "dimensions": "156x443 px",
+            "size_kb": 40.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img12_xref131.png"
+          },
+          {
+            "xref": 137,
+            "page": 7,
+            "dimensions": "143x163 px",
+            "size_kb": 31.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img18_xref137.png"
+          },
+          {
+            "xref": 139,
+            "page": 7,
+            "dimensions": "184x399 px",
+            "size_kb": 94.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img20_xref139.png"
+          },
+          {
+            "xref": 141,
+            "page": 7,
+            "dimensions": "186x424 px",
+            "size_kb": 51.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img22_xref141.png"
+          },
+          {
+            "xref": 143,
+            "page": 7,
+            "dimensions": "137x463 px",
+            "size_kb": 57.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img24_xref143.png"
+          },
+          {
+            "xref": 148,
+            "page": 7,
+            "dimensions": "135x476 px",
+            "size_kb": 76.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p7_img29_xref148.png"
+          }
+        ]
+      },
+      {
+        "page": 8,
+        "extracted_images": [
+          {
+            "xref": 207,
+            "page": 8,
+            "dimensions": "131x354 px",
+            "size_kb": 30.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img3_xref207.png"
+          },
+          {
+            "xref": 209,
+            "page": 8,
+            "dimensions": "131x487 px",
+            "size_kb": 59.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img5_xref209.png"
+          },
+          {
+            "xref": 210,
+            "page": 8,
+            "dimensions": "131x411 px",
+            "size_kb": 68.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img6_xref210.png"
+          },
+          {
+            "xref": 211,
+            "page": 8,
+            "dimensions": "131x546 px",
+            "size_kb": 90.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img7_xref211.png"
+          },
+          {
+            "xref": 213,
+            "page": 8,
+            "dimensions": "130x435 px",
+            "size_kb": 36.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img9_xref213.png"
+          },
+          {
+            "xref": 215,
+            "page": 8,
+            "dimensions": "140x504 px",
+            "size_kb": 27.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img11_xref215.png"
+          },
+          {
+            "xref": 216,
+            "page": 8,
+            "dimensions": "140x504 px",
+            "size_kb": 38.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img12_xref216.png"
+          },
+          {
+            "xref": 232,
+            "page": 8,
+            "dimensions": "146x343 px",
+            "size_kb": 37.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p8_img28_xref232.png"
+          }
+        ]
+      },
+      {
+        "page": 9,
+        "extracted_images": [
+          {
+            "xref": 305,
+            "page": 9,
+            "dimensions": "364x364 px",
+            "size_kb": 207.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img1_xref305.png"
+          },
+          {
+            "xref": 308,
+            "page": 9,
+            "dimensions": "284x601 px",
+            "size_kb": 36.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img2_xref308.png"
+          },
+          {
+            "xref": 309,
+            "page": 9,
+            "dimensions": "1027x703 px",
+            "size_kb": 167.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img3_xref309.png"
+          },
+          {
+            "xref": 310,
+            "page": 9,
+            "dimensions": "170x375 px",
+            "size_kb": 24.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img4_xref310.png"
+          },
+          {
+            "xref": 311,
+            "page": 9,
+            "dimensions": "187x375 px",
+            "size_kb": 21.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img5_xref311.png"
+          },
+          {
+            "xref": 312,
+            "page": 9,
+            "dimensions": "187x375 px",
+            "size_kb": 21.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img6_xref312.png"
+          },
+          {
+            "xref": 313,
+            "page": 9,
+            "dimensions": "187x375 px",
+            "size_kb": 24.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img7_xref313.png"
+          },
+          {
+            "xref": 326,
+            "page": 9,
+            "dimensions": "447x448 px",
+            "size_kb": 25.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img20_xref326.jpeg"
+          },
+          {
+            "xref": 328,
+            "page": 9,
+            "dimensions": "919x632 px",
+            "size_kb": 30.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p9_img21_xref328.png"
+          }
+        ]
+      },
+      {
+        "page": 11,
+        "extracted_images": [
+          {
+            "xref": 362,
+            "page": 11,
+            "dimensions": "146x447 px",
+            "size_kb": 45.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img2_xref362.png"
+          },
+          {
+            "xref": 363,
+            "page": 11,
+            "dimensions": "204x485 px",
+            "size_kb": 35.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img3_xref363.png"
+          },
+          {
+            "xref": 364,
+            "page": 11,
+            "dimensions": "245x581 px",
+            "size_kb": 59.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img4_xref364.png"
+          },
+          {
+            "xref": 366,
+            "page": 11,
+            "dimensions": "184x560 px",
+            "size_kb": 43.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img6_xref366.png"
+          },
+          {
+            "xref": 368,
+            "page": 11,
+            "dimensions": "136x494 px",
+            "size_kb": 101.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img8_xref368.png"
+          },
+          {
+            "xref": 372,
+            "page": 11,
+            "dimensions": "154x558 px",
+            "size_kb": 95.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img12_xref372.png"
+          },
+          {
+            "xref": 374,
+            "page": 11,
+            "dimensions": "138x486 px",
+            "size_kb": 28.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img14_xref374.png"
+          },
+          {
+            "xref": 376,
+            "page": 11,
+            "dimensions": "146x515 px",
+            "size_kb": 36.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img16_xref376.png"
+          },
+          {
+            "xref": 378,
+            "page": 11,
+            "dimensions": "131x462 px",
+            "size_kb": 36.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img18_xref378.png"
+          },
+          {
+            "xref": 380,
+            "page": 11,
+            "dimensions": "133x468 px",
+            "size_kb": 34.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img20_xref380.png"
+          },
+          {
+            "xref": 384,
+            "page": 11,
+            "dimensions": "131x425 px",
+            "size_kb": 44.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img24_xref384.png"
+          },
+          {
+            "xref": 386,
+            "page": 11,
+            "dimensions": "124x475 px",
+            "size_kb": 51.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img26_xref386.png"
+          },
+          {
+            "xref": 390,
+            "page": 11,
+            "dimensions": "131x424 px",
+            "size_kb": 44.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img30_xref390.png"
+          },
+          {
+            "xref": 391,
+            "page": 11,
+            "dimensions": "212x281 px",
+            "size_kb": 38.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img31_xref391.png"
+          },
+          {
+            "xref": 392,
+            "page": 11,
+            "dimensions": "687x562 px",
+            "size_kb": 181.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p11_img32_xref392.png"
+          }
+        ]
+      },
+      {
+        "page": 12,
+        "extracted_images": [
+          {
+            "xref": 444,
+            "page": 12,
+            "dimensions": "248x401 px",
+            "size_kb": 88.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img2_xref444.png"
+          },
+          {
+            "xref": 445,
+            "page": 12,
+            "dimensions": "248x401 px",
+            "size_kb": 94.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img3_xref445.png"
+          },
+          {
+            "xref": 446,
+            "page": 12,
+            "dimensions": "248x401 px",
+            "size_kb": 103.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img4_xref446.png"
+          },
+          {
+            "xref": 447,
+            "page": 12,
+            "dimensions": "248x401 px",
+            "size_kb": 97.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img5_xref447.png"
+          },
+          {
+            "xref": 449,
+            "page": 12,
+            "dimensions": "187x379 px",
+            "size_kb": 92.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img7_xref449.png"
+          },
+          {
+            "xref": 450,
+            "page": 12,
+            "dimensions": "187x379 px",
+            "size_kb": 106.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img8_xref450.png"
+          },
+          {
+            "xref": 451,
+            "page": 12,
+            "dimensions": "187x379 px",
+            "size_kb": 93.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img9_xref451.png"
+          },
+          {
+            "xref": 452,
+            "page": 12,
+            "dimensions": "186x379 px",
+            "size_kb": 99.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img10_xref452.png"
+          },
+          {
+            "xref": 453,
+            "page": 12,
+            "dimensions": "192x239 px",
+            "size_kb": 29.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img11_xref453.png"
+          },
+          {
+            "xref": 455,
+            "page": 12,
+            "dimensions": "200x695 px",
+            "size_kb": 38.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img13_xref455.png"
+          },
+          {
+            "xref": 457,
+            "page": 12,
+            "dimensions": "200x695 px",
+            "size_kb": 48.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img15_xref457.png"
+          },
+          {
+            "xref": 458,
+            "page": 12,
+            "dimensions": "200x695 px",
+            "size_kb": 50.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img16_xref458.png"
+          },
+          {
+            "xref": 460,
+            "page": 12,
+            "dimensions": "200x695 px",
+            "size_kb": 48.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img18_xref460.png"
+          },
+          {
+            "xref": 461,
+            "page": 12,
+            "dimensions": "246x272 px",
+            "size_kb": 70.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img19_xref461.png"
+          },
+          {
+            "xref": 463,
+            "page": 12,
+            "dimensions": "205x742 px",
+            "size_kb": 105.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img21_xref463.png"
+          },
+          {
+            "xref": 465,
+            "page": 12,
+            "dimensions": "205x742 px",
+            "size_kb": 112.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img23_xref465.png"
+          },
+          {
+            "xref": 467,
+            "page": 12,
+            "dimensions": "205x742 px",
+            "size_kb": 98.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img25_xref467.png"
+          },
+          {
+            "xref": 469,
+            "page": 12,
+            "dimensions": "175x634 px",
+            "size_kb": 80.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img27_xref469.png"
+          },
+          {
+            "xref": 471,
+            "page": 12,
+            "dimensions": "175x634 px",
+            "size_kb": 85.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img29_xref471.png"
+          },
+          {
+            "xref": 473,
+            "page": 12,
+            "dimensions": "175x634 px",
+            "size_kb": 76.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img31_xref473.png"
+          },
+          {
+            "xref": 475,
+            "page": 12,
+            "dimensions": "181x629 px",
+            "size_kb": 33.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img33_xref475.png"
+          },
+          {
+            "xref": 477,
+            "page": 12,
+            "dimensions": "181x629 px",
+            "size_kb": 43.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img35_xref477.png"
+          },
+          {
+            "xref": 479,
+            "page": 12,
+            "dimensions": "181x629 px",
+            "size_kb": 43.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img37_xref479.png"
+          },
+          {
+            "xref": 480,
+            "page": 12,
+            "dimensions": "181x629 px",
+            "size_kb": 42.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img38_xref480.png"
+          },
+          {
+            "xref": 482,
+            "page": 12,
+            "dimensions": "207x429 px",
+            "size_kb": 85.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img40_xref482.png"
+          },
+          {
+            "xref": 484,
+            "page": 12,
+            "dimensions": "233x484 px",
+            "size_kb": 57.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img42_xref484.png"
+          },
+          {
+            "xref": 485,
+            "page": 12,
+            "dimensions": "233x484 px",
+            "size_kb": 98.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img43_xref485.png"
+          },
+          {
+            "xref": 487,
+            "page": 12,
+            "dimensions": "266x552 px",
+            "size_kb": 106.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img45_xref487.png"
+          },
+          {
+            "xref": 488,
+            "page": 12,
+            "dimensions": "199x255 px",
+            "size_kb": 60.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img46_xref488.png"
+          },
+          {
+            "xref": 489,
+            "page": 12,
+            "dimensions": "271x270 px",
+            "size_kb": 8.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p12_img47_xref489.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 13,
+        "extracted_images": [
+          {
+            "xref": 538,
+            "page": 13,
+            "dimensions": "253x258 px",
+            "size_kb": 72.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img1_xref538.png"
+          },
+          {
+            "xref": 552,
+            "page": 13,
+            "dimensions": "146x400 px",
+            "size_kb": 63.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img15_xref552.png"
+          },
+          {
+            "xref": 554,
+            "page": 13,
+            "dimensions": "146x395 px",
+            "size_kb": 83.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img17_xref554.png"
+          },
+          {
+            "xref": 556,
+            "page": 13,
+            "dimensions": "216x354 px",
+            "size_kb": 124.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img19_xref556.png"
+          },
+          {
+            "xref": 558,
+            "page": 13,
+            "dimensions": "216x354 px",
+            "size_kb": 111.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img21_xref558.png"
+          },
+          {
+            "xref": 560,
+            "page": 13,
+            "dimensions": "216x354 px",
+            "size_kb": 111.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img23_xref560.png"
+          },
+          {
+            "xref": 562,
+            "page": 13,
+            "dimensions": "216x354 px",
+            "size_kb": 122.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img25_xref562.png"
+          },
+          {
+            "xref": 564,
+            "page": 13,
+            "dimensions": "161x326 px",
+            "size_kb": 78.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img27_xref564.png"
+          },
+          {
+            "xref": 566,
+            "page": 13,
+            "dimensions": "170x345 px",
+            "size_kb": 107.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img29_xref566.png"
+          },
+          {
+            "xref": 568,
+            "page": 13,
+            "dimensions": "181x309 px",
+            "size_kb": 97.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img31_xref568.png"
+          },
+          {
+            "xref": 569,
+            "page": 13,
+            "dimensions": "161x326 px",
+            "size_kb": 75.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img32_xref569.png"
+          },
+          {
+            "xref": 572,
+            "page": 13,
+            "dimensions": "188x335 px",
+            "size_kb": 112.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img35_xref572.png"
+          },
+          {
+            "xref": 574,
+            "page": 13,
+            "dimensions": "211x359 px",
+            "size_kb": 101.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img37_xref574.png"
+          },
+          {
+            "xref": 576,
+            "page": 13,
+            "dimensions": "196x349 px",
+            "size_kb": 105.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p13_img39_xref576.png"
+          }
+        ]
+      },
+      {
+        "page": 14,
+        "extracted_images": [
+          {
+            "xref": 636,
+            "page": 14,
+            "dimensions": "526x462 px",
+            "size_kb": 163.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p14_img2_xref636.png"
+          },
+          {
+            "xref": 638,
+            "page": 14,
+            "dimensions": "266x565 px",
+            "size_kb": 54.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p14_img4_xref638.png"
+          },
+          {
+            "xref": 640,
+            "page": 14,
+            "dimensions": "266x565 px",
+            "size_kb": 43.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p14_img6_xref640.png"
+          },
+          {
+            "xref": 642,
+            "page": 14,
+            "dimensions": "266x565 px",
+            "size_kb": 53.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p14_img8_xref642.png"
+          },
+          {
+            "xref": 644,
+            "page": 14,
+            "dimensions": "266x565 px",
+            "size_kb": 63.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p14_img10_xref644.png"
+          }
+        ]
+      },
+      {
+        "page": 17,
+        "extracted_images": [
+          {
+            "xref": 682,
+            "page": 17,
+            "dimensions": "134x404 px",
+            "size_kb": 55.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img4_xref682.png"
+          },
+          {
+            "xref": 685,
+            "page": 17,
+            "dimensions": "168x505 px",
+            "size_kb": 40.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img7_xref685.png"
+          },
+          {
+            "xref": 690,
+            "page": 17,
+            "dimensions": "122x466 px",
+            "size_kb": 31.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img12_xref690.png"
+          },
+          {
+            "xref": 694,
+            "page": 17,
+            "dimensions": "121x464 px",
+            "size_kb": 33.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img16_xref694.png"
+          },
+          {
+            "xref": 698,
+            "page": 17,
+            "dimensions": "141x439 px",
+            "size_kb": 25.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img20_xref698.png"
+          },
+          {
+            "xref": 700,
+            "page": 17,
+            "dimensions": "141x439 px",
+            "size_kb": 32.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img22_xref700.png"
+          },
+          {
+            "xref": 709,
+            "page": 17,
+            "dimensions": "120x494 px",
+            "size_kb": 31.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img31_xref709.png"
+          },
+          {
+            "xref": 711,
+            "page": 17,
+            "dimensions": "120x494 px",
+            "size_kb": 40.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img33_xref711.png"
+          },
+          {
+            "xref": 713,
+            "page": 17,
+            "dimensions": "148x467 px",
+            "size_kb": 45.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img35_xref713.png"
+          },
+          {
+            "xref": 715,
+            "page": 17,
+            "dimensions": "129x352 px",
+            "size_kb": 34.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img37_xref715.png"
+          },
+          {
+            "xref": 717,
+            "page": 17,
+            "dimensions": "139x381 px",
+            "size_kb": 34.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img39_xref717.png"
+          },
+          {
+            "xref": 719,
+            "page": 17,
+            "dimensions": "148x467 px",
+            "size_kb": 60.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img41_xref719.png"
+          },
+          {
+            "xref": 721,
+            "page": 17,
+            "dimensions": "139x381 px",
+            "size_kb": 32.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img43_xref721.png"
+          },
+          {
+            "xref": 723,
+            "page": 17,
+            "dimensions": "128x478 px",
+            "size_kb": 48.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img45_xref723.png"
+          },
+          {
+            "xref": 729,
+            "page": 17,
+            "dimensions": "128x478 px",
+            "size_kb": 61.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p17_img51_xref729.png"
+          }
+        ]
+      },
+      {
+        "page": 18,
+        "extracted_images": [
+          {
+            "xref": 815,
+            "page": 18,
+            "dimensions": "146x493 px",
+            "size_kb": 29.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img7_xref815.png"
+          },
+          {
+            "xref": 825,
+            "page": 18,
+            "dimensions": "135x478 px",
+            "size_kb": 30.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img17_xref825.png"
+          },
+          {
+            "xref": 836,
+            "page": 18,
+            "dimensions": "272x462 px",
+            "size_kb": 69.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img28_xref836.png"
+          },
+          {
+            "xref": 837,
+            "page": 18,
+            "dimensions": "342x462 px",
+            "size_kb": 25.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img29_xref837.png"
+          },
+          {
+            "xref": 839,
+            "page": 18,
+            "dimensions": "343x463 px",
+            "size_kb": 8.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img31_xref839.png"
+          },
+          {
+            "xref": 841,
+            "page": 18,
+            "dimensions": "146x438 px",
+            "size_kb": 36.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img33_xref841.png"
+          },
+          {
+            "xref": 849,
+            "page": 18,
+            "dimensions": "130x426 px",
+            "size_kb": 33.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img41_xref849.png"
+          },
+          {
+            "xref": 851,
+            "page": 18,
+            "dimensions": "130x426 px",
+            "size_kb": 21.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img43_xref851.png"
+          },
+          {
+            "xref": 852,
+            "page": 18,
+            "dimensions": "130x426 px",
+            "size_kb": 28.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img44_xref852.png"
+          },
+          {
+            "xref": 863,
+            "page": 18,
+            "dimensions": "133x428 px",
+            "size_kb": 22.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p18_img55_xref863.png"
+          }
+        ]
+      },
+      {
+        "page": 19,
+        "extracted_images": [
+          {
+            "xref": 949,
+            "page": 19,
+            "dimensions": "233x251 px",
+            "size_kb": 37.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img1_xref949.png"
+          },
+          {
+            "xref": 951,
+            "page": 19,
+            "dimensions": "204x625 px",
+            "size_kb": 51.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img3_xref951.png"
+          },
+          {
+            "xref": 953,
+            "page": 19,
+            "dimensions": "204x625 px",
+            "size_kb": 48.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img5_xref953.png"
+          },
+          {
+            "xref": 955,
+            "page": 19,
+            "dimensions": "204x625 px",
+            "size_kb": 55.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img7_xref955.png"
+          },
+          {
+            "xref": 956,
+            "page": 19,
+            "dimensions": "204x625 px",
+            "size_kb": 44.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img8_xref956.png"
+          },
+          {
+            "xref": 964,
+            "page": 19,
+            "dimensions": "209x714 px",
+            "size_kb": 44.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img16_xref964.png"
+          },
+          {
+            "xref": 966,
+            "page": 19,
+            "dimensions": "209x789 px",
+            "size_kb": 75.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img18_xref966.png"
+          },
+          {
+            "xref": 968,
+            "page": 19,
+            "dimensions": "209x789 px",
+            "size_kb": 77.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img20_xref968.png"
+          },
+          {
+            "xref": 969,
+            "page": 19,
+            "dimensions": "209x714 px",
+            "size_kb": 71.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p19_img21_xref969.png"
+          }
+        ]
+      },
+      {
+        "page": 20,
+        "extracted_images": [
+          {
+            "xref": 998,
+            "page": 20,
+            "dimensions": "355x398 px",
+            "size_kb": 105.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p20_img2_xref998.png"
+          }
+        ]
+      },
+      {
+        "page": 21,
+        "extracted_images": [
+          {
+            "xref": 1020,
+            "page": 21,
+            "dimensions": "133x503 px",
+            "size_kb": 62.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img8_xref1020.png"
+          },
+          {
+            "xref": 1025,
+            "page": 21,
+            "dimensions": "121x332 px",
+            "size_kb": 37.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img13_xref1025.png"
+          },
+          {
+            "xref": 1027,
+            "page": 21,
+            "dimensions": "131x360 px",
+            "size_kb": 28.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img15_xref1027.png"
+          },
+          {
+            "xref": 1029,
+            "page": 21,
+            "dimensions": "131x359 px",
+            "size_kb": 42.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img17_xref1029.png"
+          },
+          {
+            "xref": 1031,
+            "page": 21,
+            "dimensions": "131x359 px",
+            "size_kb": 23.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img19_xref1031.png"
+          },
+          {
+            "xref": 1033,
+            "page": 21,
+            "dimensions": "183x501 px",
+            "size_kb": 48.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img21_xref1033.png"
+          },
+          {
+            "xref": 1042,
+            "page": 21,
+            "dimensions": "136x509 px",
+            "size_kb": 65.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img30_xref1042.png"
+          },
+          {
+            "xref": 1044,
+            "page": 21,
+            "dimensions": "157x432 px",
+            "size_kb": 36.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img32_xref1044.png"
+          },
+          {
+            "xref": 1045,
+            "page": 21,
+            "dimensions": "157x432 px",
+            "size_kb": 47.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img33_xref1045.png"
+          },
+          {
+            "xref": 1046,
+            "page": 21,
+            "dimensions": "157x432 px",
+            "size_kb": 54.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img34_xref1046.png"
+          },
+          {
+            "xref": 1047,
+            "page": 21,
+            "dimensions": "157x432 px",
+            "size_kb": 47.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img35_xref1047.png"
+          },
+          {
+            "xref": 1049,
+            "page": 21,
+            "dimensions": "157x470 px",
+            "size_kb": 27.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img37_xref1049.png"
+          },
+          {
+            "xref": 1051,
+            "page": 21,
+            "dimensions": "157x470 px",
+            "size_kb": 40.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img39_xref1051.png"
+          },
+          {
+            "xref": 1053,
+            "page": 21,
+            "dimensions": "152x390 px",
+            "size_kb": 40.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img41_xref1053.png"
+          },
+          {
+            "xref": 1055,
+            "page": 21,
+            "dimensions": "152x390 px",
+            "size_kb": 40.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img43_xref1055.png"
+          },
+          {
+            "xref": 1059,
+            "page": 21,
+            "dimensions": "124x465 px",
+            "size_kb": 29.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img47_xref1059.png"
+          },
+          {
+            "xref": 1061,
+            "page": 21,
+            "dimensions": "121x397 px",
+            "size_kb": 31.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p21_img49_xref1061.png"
+          }
+        ]
+      },
+      {
+        "page": 22,
+        "extracted_images": [
+          {
+            "xref": 1136,
+            "page": 22,
+            "dimensions": "213x283 px",
+            "size_kb": 47.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p22_img1_xref1136.png"
+          },
+          {
+            "xref": 1137,
+            "page": 22,
+            "dimensions": "211x322 px",
+            "size_kb": 39.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p22_img2_xref1137.png"
+          },
+          {
+            "xref": 1138,
+            "page": 22,
+            "dimensions": "400x1333 px",
+            "size_kb": 469.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p22_img3_xref1138.png"
+          }
+        ]
+      },
+      {
+        "page": 23,
+        "extracted_images": [
+          {
+            "xref": 1198,
+            "page": 23,
+            "dimensions": "171x262 px",
+            "size_kb": 27.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img1_xref1198.png"
+          },
+          {
+            "xref": 1200,
+            "page": 23,
+            "dimensions": "202x268 px",
+            "size_kb": 28.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img3_xref1200.png"
+          },
+          {
+            "xref": 1202,
+            "page": 23,
+            "dimensions": "177x564 px",
+            "size_kb": 57.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img5_xref1202.png"
+          },
+          {
+            "xref": 1204,
+            "page": 23,
+            "dimensions": "177x564 px",
+            "size_kb": 54.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img7_xref1204.png"
+          },
+          {
+            "xref": 1206,
+            "page": 23,
+            "dimensions": "177x564 px",
+            "size_kb": 65.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img9_xref1206.png"
+          },
+          {
+            "xref": 1208,
+            "page": 23,
+            "dimensions": "177x564 px",
+            "size_kb": 54.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img11_xref1208.png"
+          },
+          {
+            "xref": 1210,
+            "page": 23,
+            "dimensions": "175x573 px",
+            "size_kb": 128.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img13_xref1210.png"
+          },
+          {
+            "xref": 1212,
+            "page": 23,
+            "dimensions": "175x573 px",
+            "size_kb": 67.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img15_xref1212.png"
+          },
+          {
+            "xref": 1214,
+            "page": 23,
+            "dimensions": "175x573 px",
+            "size_kb": 89.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img17_xref1214.png"
+          },
+          {
+            "xref": 1216,
+            "page": 23,
+            "dimensions": "175x573 px",
+            "size_kb": 157.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p23_img19_xref1216.png"
+          }
+        ]
+      },
+      {
+        "page": 24,
+        "extracted_images": [
+          {
+            "xref": 1248,
+            "page": 24,
+            "dimensions": "294x295 px",
+            "size_kb": 72.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p24_img1_xref1248.png"
+          },
+          {
+            "xref": 1258,
+            "page": 24,
+            "dimensions": "186x648 px",
+            "size_kb": 66.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p24_img11_xref1258.png"
+          },
+          {
+            "xref": 1260,
+            "page": 24,
+            "dimensions": "188x571 px",
+            "size_kb": 76.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p24_img13_xref1260.png"
+          },
+          {
+            "xref": 1262,
+            "page": 24,
+            "dimensions": "192x669 px",
+            "size_kb": 62.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p24_img15_xref1262.png"
+          },
+          {
+            "xref": 1264,
+            "page": 24,
+            "dimensions": "188x571 px",
+            "size_kb": 80.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p24_img17_xref1264.png"
+          },
+          {
+            "xref": 1265,
+            "page": 24,
+            "dimensions": "214x299 px",
+            "size_kb": 52.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p24_img18_xref1265.png"
+          },
+          {
+            "xref": 1266,
+            "page": 24,
+            "dimensions": "294x243 px",
+            "size_kb": 46.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p24_img19_xref1266.png"
+          }
+        ]
+      },
+      {
+        "page": 25,
+        "extracted_images": [
+          {
+            "xref": 1300,
+            "page": 25,
+            "dimensions": "279x357 px",
+            "size_kb": 87.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img2_xref1300.png"
+          },
+          {
+            "xref": 1301,
+            "page": 25,
+            "dimensions": "279x357 px",
+            "size_kb": 86.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img3_xref1301.png"
+          },
+          {
+            "xref": 1302,
+            "page": 25,
+            "dimensions": "279x357 px",
+            "size_kb": 97.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img4_xref1302.png"
+          },
+          {
+            "xref": 1303,
+            "page": 25,
+            "dimensions": "279x357 px",
+            "size_kb": 100.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img5_xref1303.png"
+          },
+          {
+            "xref": 1305,
+            "page": 25,
+            "dimensions": "179x305 px",
+            "size_kb": 75.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img7_xref1305.png"
+          },
+          {
+            "xref": 1306,
+            "page": 25,
+            "dimensions": "179x305 px",
+            "size_kb": 75.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img8_xref1306.png"
+          },
+          {
+            "xref": 1307,
+            "page": 25,
+            "dimensions": "179x305 px",
+            "size_kb": 86.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img9_xref1307.png"
+          },
+          {
+            "xref": 1308,
+            "page": 25,
+            "dimensions": "179x305 px",
+            "size_kb": 84.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img10_xref1308.png"
+          },
+          {
+            "xref": 1310,
+            "page": 25,
+            "dimensions": "154x314 px",
+            "size_kb": 72.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img12_xref1310.png"
+          },
+          {
+            "xref": 1311,
+            "page": 25,
+            "dimensions": "154x314 px",
+            "size_kb": 70.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img13_xref1311.png"
+          },
+          {
+            "xref": 1312,
+            "page": 25,
+            "dimensions": "154x314 px",
+            "size_kb": 67.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img14_xref1312.png"
+          },
+          {
+            "xref": 1313,
+            "page": 25,
+            "dimensions": "154x314 px",
+            "size_kb": 80.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img15_xref1313.png"
+          },
+          {
+            "xref": 1315,
+            "page": 25,
+            "dimensions": "223x361 px",
+            "size_kb": 74.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img17_xref1315.png"
+          },
+          {
+            "xref": 1316,
+            "page": 25,
+            "dimensions": "223x361 px",
+            "size_kb": 69.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img18_xref1316.png"
+          },
+          {
+            "xref": 1317,
+            "page": 25,
+            "dimensions": "223x361 px",
+            "size_kb": 75.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img19_xref1317.png"
+          },
+          {
+            "xref": 1319,
+            "page": 25,
+            "dimensions": "224x363 px",
+            "size_kb": 86.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p25_img21_xref1319.png"
+          }
+        ]
+      },
+      {
+        "page": 26,
+        "extracted_images": [
+          {
+            "xref": 1347,
+            "page": 26,
+            "dimensions": "516x1245 px",
+            "size_kb": 539.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img1_xref1347.png"
+          },
+          {
+            "xref": 1349,
+            "page": 26,
+            "dimensions": "133x364 px",
+            "size_kb": 91.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img3_xref1349.png"
+          },
+          {
+            "xref": 1351,
+            "page": 26,
+            "dimensions": "133x364 px",
+            "size_kb": 87.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img5_xref1351.png"
+          },
+          {
+            "xref": 1352,
+            "page": 26,
+            "dimensions": "133x364 px",
+            "size_kb": 88.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img6_xref1352.png"
+          },
+          {
+            "xref": 1353,
+            "page": 26,
+            "dimensions": "204x430 px",
+            "size_kb": 69.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img7_xref1353.png"
+          },
+          {
+            "xref": 1354,
+            "page": 26,
+            "dimensions": "180x493 px",
+            "size_kb": 89.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img8_xref1354.png"
+          },
+          {
+            "xref": 1355,
+            "page": 26,
+            "dimensions": "180x493 px",
+            "size_kb": 73.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img9_xref1355.png"
+          },
+          {
+            "xref": 1356,
+            "page": 26,
+            "dimensions": "180x493 px",
+            "size_kb": 78.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img10_xref1356.png"
+          },
+          {
+            "xref": 1357,
+            "page": 26,
+            "dimensions": "189x402 px",
+            "size_kb": 49.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img11_xref1357.png"
+          },
+          {
+            "xref": 1358,
+            "page": 26,
+            "dimensions": "185x395 px",
+            "size_kb": 60.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img12_xref1358.png"
+          },
+          {
+            "xref": 1359,
+            "page": 26,
+            "dimensions": "189x402 px",
+            "size_kb": 57.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img13_xref1359.png"
+          },
+          {
+            "xref": 1368,
+            "page": 26,
+            "dimensions": "135x427 px",
+            "size_kb": 104.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img22_xref1368.png"
+          },
+          {
+            "xref": 1370,
+            "page": 26,
+            "dimensions": "135x427 px",
+            "size_kb": 113.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img24_xref1370.png"
+          },
+          {
+            "xref": 1372,
+            "page": 26,
+            "dimensions": "135x427 px",
+            "size_kb": 95.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p26_img26_xref1372.png"
+          }
+        ]
+      },
+      {
+        "page": 27,
+        "extracted_images": [
+          {
+            "xref": 1411,
+            "page": 27,
+            "dimensions": "423x163 px",
+            "size_kb": 84.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img2_xref1411.png"
+          },
+          {
+            "xref": 1412,
+            "page": 27,
+            "dimensions": "200x489 px",
+            "size_kb": 86.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img3_xref1412.png"
+          },
+          {
+            "xref": 1413,
+            "page": 27,
+            "dimensions": "200x489 px",
+            "size_kb": 51.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img4_xref1413.png"
+          },
+          {
+            "xref": 1414,
+            "page": 27,
+            "dimensions": "200x489 px",
+            "size_kb": 84.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img5_xref1414.png"
+          },
+          {
+            "xref": 1415,
+            "page": 27,
+            "dimensions": "368x164 px",
+            "size_kb": 81.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img6_xref1415.png"
+          },
+          {
+            "xref": 1417,
+            "page": 27,
+            "dimensions": "124x466 px",
+            "size_kb": 95.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img8_xref1417.png"
+          },
+          {
+            "xref": 1419,
+            "page": 27,
+            "dimensions": "124x466 px",
+            "size_kb": 114.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img10_xref1419.png"
+          },
+          {
+            "xref": 1421,
+            "page": 27,
+            "dimensions": "124x466 px",
+            "size_kb": 110.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img12_xref1421.png"
+          },
+          {
+            "xref": 1423,
+            "page": 27,
+            "dimensions": "236x302 px",
+            "size_kb": 73.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img14_xref1423.png"
+          },
+          {
+            "xref": 1425,
+            "page": 27,
+            "dimensions": "232x296 px",
+            "size_kb": 84.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img16_xref1425.png"
+          },
+          {
+            "xref": 1427,
+            "page": 27,
+            "dimensions": "215x275 px",
+            "size_kb": 69.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img18_xref1427.png"
+          },
+          {
+            "xref": 1429,
+            "page": 27,
+            "dimensions": "145x248 px",
+            "size_kb": 59.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img20_xref1429.png"
+          },
+          {
+            "xref": 1431,
+            "page": 27,
+            "dimensions": "143x245 px",
+            "size_kb": 57.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img22_xref1431.png"
+          },
+          {
+            "xref": 1432,
+            "page": 27,
+            "dimensions": "145x248 px",
+            "size_kb": 65.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img23_xref1432.png"
+          },
+          {
+            "xref": 1434,
+            "page": 27,
+            "dimensions": "146x249 px",
+            "size_kb": 66.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img25_xref1434.png"
+          },
+          {
+            "xref": 1436,
+            "page": 27,
+            "dimensions": "241x308 px",
+            "size_kb": 77.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img27_xref1436.png"
+          },
+          {
+            "xref": 1438,
+            "page": 27,
+            "dimensions": "194x314 px",
+            "size_kb": 63.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img29_xref1438.png"
+          },
+          {
+            "xref": 1440,
+            "page": 27,
+            "dimensions": "206x333 px",
+            "size_kb": 84.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img31_xref1440.png"
+          },
+          {
+            "xref": 1442,
+            "page": 27,
+            "dimensions": "191x309 px",
+            "size_kb": 69.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img33_xref1442.png"
+          },
+          {
+            "xref": 1444,
+            "page": 27,
+            "dimensions": "197x320 px",
+            "size_kb": 68.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img35_xref1444.png"
+          },
+          {
+            "xref": 1446,
+            "page": 27,
+            "dimensions": "153x312 px",
+            "size_kb": 84.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img37_xref1446.png"
+          },
+          {
+            "xref": 1448,
+            "page": 27,
+            "dimensions": "149x303 px",
+            "size_kb": 79.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img39_xref1448.png"
+          },
+          {
+            "xref": 1450,
+            "page": 27,
+            "dimensions": "148x301 px",
+            "size_kb": 72.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img41_xref1450.png"
+          },
+          {
+            "xref": 1452,
+            "page": 27,
+            "dimensions": "147x299 px",
+            "size_kb": 69.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p27_img43_xref1452.png"
+          }
+        ]
+      },
+      {
+        "page": 28,
+        "extracted_images": [
+          {
+            "xref": 1521,
+            "page": 28,
+            "dimensions": "967x1363 px",
+            "size_kb": 26.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p28_img1_xref1521.jpeg"
+          },
+          {
+            "xref": 1522,
+            "page": 28,
+            "dimensions": "683x739 px",
+            "size_kb": 287.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p28_img2_xref1522.png"
+          },
+          {
+            "xref": 1523,
+            "page": 28,
+            "dimensions": "1258x1058 px",
+            "size_kb": 78.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p28_img3_xref1523.jpeg"
+          },
+          {
+            "xref": 1528,
+            "page": 28,
+            "dimensions": "497x235 px",
+            "size_kb": 23.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p28_img8_xref1528.png"
+          },
+          {
+            "xref": 1529,
+            "page": 28,
+            "dimensions": "625x1328 px",
+            "size_kb": 226.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p28_img9_xref1529.png"
+          }
+        ]
+      },
+      {
+        "page": 30,
+        "extracted_images": [
+          {
+            "xref": 1557,
+            "page": 30,
+            "dimensions": "125x442 px",
+            "size_kb": 66.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p30_img3_xref1557.png"
+          },
+          {
+            "xref": 1558,
+            "page": 30,
+            "dimensions": "186x519 px",
+            "size_kb": 58.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p30_img4_xref1558.png"
+          },
+          {
+            "xref": 1560,
+            "page": 30,
+            "dimensions": "128x456 px",
+            "size_kb": 50.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p30_img6_xref1560.png"
+          },
+          {
+            "xref": 1565,
+            "page": 30,
+            "dimensions": "122x466 px",
+            "size_kb": 60.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p30_img11_xref1565.png"
+          },
+          {
+            "xref": 1569,
+            "page": 30,
+            "dimensions": "120x457 px",
+            "size_kb": 58.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p30_img13_xref1569.png"
+          },
+          {
+            "xref": 1571,
+            "page": 30,
+            "dimensions": "132x462 px",
+            "size_kb": 51.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p30_img15_xref1571.png"
+          }
+        ]
+      },
+      {
+        "page": 31,
+        "extracted_images": [
+          {
+            "xref": 1618,
+            "page": 31,
+            "dimensions": "297x506 px",
+            "size_kb": 115.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img4_xref1618.png"
+          },
+          {
+            "xref": 1620,
+            "page": 31,
+            "dimensions": "121x428 px",
+            "size_kb": 101.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img6_xref1620.png"
+          },
+          {
+            "xref": 1622,
+            "page": 31,
+            "dimensions": "121x428 px",
+            "size_kb": 124.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img8_xref1622.png"
+          },
+          {
+            "xref": 1624,
+            "page": 31,
+            "dimensions": "136x481 px",
+            "size_kb": 152.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img10_xref1624.png"
+          },
+          {
+            "xref": 1626,
+            "page": 31,
+            "dimensions": "180x548 px",
+            "size_kb": 64.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img12_xref1626.png"
+          },
+          {
+            "xref": 1628,
+            "page": 31,
+            "dimensions": "180x548 px",
+            "size_kb": 49.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img14_xref1628.png"
+          },
+          {
+            "xref": 1629,
+            "page": 31,
+            "dimensions": "180x548 px",
+            "size_kb": 73.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img15_xref1629.png"
+          },
+          {
+            "xref": 1630,
+            "page": 31,
+            "dimensions": "180x548 px",
+            "size_kb": 53.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img16_xref1630.png"
+          },
+          {
+            "xref": 1632,
+            "page": 31,
+            "dimensions": "120x433 px",
+            "size_kb": 97.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img18_xref1632.png"
+          },
+          {
+            "xref": 1636,
+            "page": 31,
+            "dimensions": "134x482 px",
+            "size_kb": 125.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img22_xref1636.png"
+          },
+          {
+            "xref": 1638,
+            "page": 31,
+            "dimensions": "158x550 px",
+            "size_kb": 153.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img24_xref1638.png"
+          },
+          {
+            "xref": 1640,
+            "page": 31,
+            "dimensions": "157x549 px",
+            "size_kb": 139.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img26_xref1640.png"
+          },
+          {
+            "xref": 1642,
+            "page": 31,
+            "dimensions": "157x546 px",
+            "size_kb": 151.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img28_xref1642.png"
+          },
+          {
+            "xref": 1644,
+            "page": 31,
+            "dimensions": "158x547 px",
+            "size_kb": 147.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img30_xref1644.png"
+          },
+          {
+            "xref": 1646,
+            "page": 31,
+            "dimensions": "285x490 px",
+            "size_kb": 112.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p31_img32_xref1646.png"
+          }
+        ]
+      },
+      {
+        "page": 32,
+        "extracted_images": [
+          {
+            "xref": 1701,
+            "page": 32,
+            "dimensions": "280x397 px",
+            "size_kb": 131.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img3_xref1701.png"
+          },
+          {
+            "xref": 1703,
+            "page": 32,
+            "dimensions": "280x397 px",
+            "size_kb": 83.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img5_xref1703.png"
+          },
+          {
+            "xref": 1704,
+            "page": 32,
+            "dimensions": "280x397 px",
+            "size_kb": 152.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img6_xref1704.png"
+          },
+          {
+            "xref": 1706,
+            "page": 32,
+            "dimensions": "225x382 px",
+            "size_kb": 110.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img8_xref1706.png"
+          },
+          {
+            "xref": 1708,
+            "page": 32,
+            "dimensions": "225x382 px",
+            "size_kb": 105.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img10_xref1708.png"
+          },
+          {
+            "xref": 1709,
+            "page": 32,
+            "dimensions": "225x382 px",
+            "size_kb": 58.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img11_xref1709.png"
+          },
+          {
+            "xref": 1711,
+            "page": 32,
+            "dimensions": "162x545 px",
+            "size_kb": 134.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img13_xref1711.png"
+          },
+          {
+            "xref": 1713,
+            "page": 32,
+            "dimensions": "162x545 px",
+            "size_kb": 75.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img15_xref1713.png"
+          },
+          {
+            "xref": 1715,
+            "page": 32,
+            "dimensions": "170x572 px",
+            "size_kb": 147.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p32_img17_xref1715.png"
+          }
+        ]
+      },
+      {
+        "page": 34,
+        "extracted_images": [
+          {
+            "xref": 1762,
+            "page": 34,
+            "dimensions": "368x205 px",
+            "size_kb": 58.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img2_xref1762.png"
+          },
+          {
+            "xref": 1764,
+            "page": 34,
+            "dimensions": "198x368 px",
+            "size_kb": 70.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img4_xref1764.png"
+          },
+          {
+            "xref": 1766,
+            "page": 34,
+            "dimensions": "182x338 px",
+            "size_kb": 52.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img6_xref1766.png"
+          },
+          {
+            "xref": 1768,
+            "page": 34,
+            "dimensions": "197x366 px",
+            "size_kb": 35.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img8_xref1768.png"
+          },
+          {
+            "xref": 1770,
+            "page": 34,
+            "dimensions": "182x338 px",
+            "size_kb": 41.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img10_xref1770.png"
+          },
+          {
+            "xref": 1772,
+            "page": 34,
+            "dimensions": "182x338 px",
+            "size_kb": 31.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img12_xref1772.png"
+          },
+          {
+            "xref": 1774,
+            "page": 34,
+            "dimensions": "197x366 px",
+            "size_kb": 23.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img14_xref1774.png"
+          },
+          {
+            "xref": 1775,
+            "page": 34,
+            "dimensions": "183x185 px",
+            "size_kb": 51.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img15_xref1775.png"
+          },
+          {
+            "xref": 1777,
+            "page": 34,
+            "dimensions": "153x362 px",
+            "size_kb": 37.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img17_xref1777.png"
+          },
+          {
+            "xref": 1779,
+            "page": 34,
+            "dimensions": "201x476 px",
+            "size_kb": 63.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img19_xref1779.png"
+          },
+          {
+            "xref": 1781,
+            "page": 34,
+            "dimensions": "201x476 px",
+            "size_kb": 53.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img21_xref1781.png"
+          },
+          {
+            "xref": 1783,
+            "page": 34,
+            "dimensions": "172x408 px",
+            "size_kb": 35.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img23_xref1783.png"
+          },
+          {
+            "xref": 1785,
+            "page": 34,
+            "dimensions": "172x408 px",
+            "size_kb": 46.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img25_xref1785.png"
+          },
+          {
+            "xref": 1787,
+            "page": 34,
+            "dimensions": "214x633 px",
+            "size_kb": 98.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img27_xref1787.png"
+          },
+          {
+            "xref": 1789,
+            "page": 34,
+            "dimensions": "185x471 px",
+            "size_kb": 67.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img29_xref1789.png"
+          },
+          {
+            "xref": 1791,
+            "page": 34,
+            "dimensions": "210x534 px",
+            "size_kb": 84.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img31_xref1791.png"
+          },
+          {
+            "xref": 1792,
+            "page": 34,
+            "dimensions": "216x320 px",
+            "size_kb": 65.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p34_img32_xref1792.png"
+          }
+        ]
+      },
+      {
+        "page": 35,
+        "extracted_images": [
+          {
+            "xref": 1840,
+            "page": 35,
+            "dimensions": "245x237 px",
+            "size_kb": 30.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img2_xref1840.png"
+          },
+          {
+            "xref": 1842,
+            "page": 35,
+            "dimensions": "268x259 px",
+            "size_kb": 37.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img4_xref1842.png"
+          },
+          {
+            "xref": 1844,
+            "page": 35,
+            "dimensions": "268x259 px",
+            "size_kb": 50.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img6_xref1844.png"
+          },
+          {
+            "xref": 1845,
+            "page": 35,
+            "dimensions": "268x259 px",
+            "size_kb": 38.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img7_xref1845.png"
+          },
+          {
+            "xref": 1846,
+            "page": 35,
+            "dimensions": "268x259 px",
+            "size_kb": 30.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img8_xref1846.png"
+          },
+          {
+            "xref": 1848,
+            "page": 35,
+            "dimensions": "232x223 px",
+            "size_kb": 36.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img10_xref1848.png"
+          },
+          {
+            "xref": 1850,
+            "page": 35,
+            "dimensions": "244x235 px",
+            "size_kb": 21.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img12_xref1850.png"
+          },
+          {
+            "xref": 1852,
+            "page": 35,
+            "dimensions": "267x257 px",
+            "size_kb": 43.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img14_xref1852.png"
+          },
+          {
+            "xref": 1854,
+            "page": 35,
+            "dimensions": "267x257 px",
+            "size_kb": 43.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img16_xref1854.png"
+          },
+          {
+            "xref": 1856,
+            "page": 35,
+            "dimensions": "267x257 px",
+            "size_kb": 39.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img18_xref1856.png"
+          },
+          {
+            "xref": 1858,
+            "page": 35,
+            "dimensions": "267x257 px",
+            "size_kb": 47.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img20_xref1858.png"
+          },
+          {
+            "xref": 1860,
+            "page": 35,
+            "dimensions": "226x262 px",
+            "size_kb": 39.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img22_xref1860.png"
+          },
+          {
+            "xref": 1862,
+            "page": 35,
+            "dimensions": "250x289 px",
+            "size_kb": 48.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img24_xref1862.png"
+          },
+          {
+            "xref": 1864,
+            "page": 35,
+            "dimensions": "274x316 px",
+            "size_kb": 72.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img26_xref1864.png"
+          },
+          {
+            "xref": 1866,
+            "page": 35,
+            "dimensions": "250x289 px",
+            "size_kb": 48.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img28_xref1866.png"
+          },
+          {
+            "xref": 1868,
+            "page": 35,
+            "dimensions": "266x308 px",
+            "size_kb": 51.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img30_xref1868.png"
+          },
+          {
+            "xref": 1870,
+            "page": 35,
+            "dimensions": "164x236 px",
+            "size_kb": 22.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img32_xref1870.png"
+          },
+          {
+            "xref": 1871,
+            "page": 35,
+            "dimensions": "164x236 px",
+            "size_kb": 25.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img33_xref1871.png"
+          },
+          {
+            "xref": 1872,
+            "page": 35,
+            "dimensions": "164x236 px",
+            "size_kb": 25.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img34_xref1872.png"
+          },
+          {
+            "xref": 1874,
+            "page": 35,
+            "dimensions": "169x183 px",
+            "size_kb": 26.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img36_xref1874.png"
+          },
+          {
+            "xref": 1875,
+            "page": 35,
+            "dimensions": "169x183 px",
+            "size_kb": 26.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img37_xref1875.png"
+          },
+          {
+            "xref": 1876,
+            "page": 35,
+            "dimensions": "169x183 px",
+            "size_kb": 22.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img38_xref1876.png"
+          },
+          {
+            "xref": 1878,
+            "page": 35,
+            "dimensions": "246x267 px",
+            "size_kb": 44.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img40_xref1878.png"
+          },
+          {
+            "xref": 1881,
+            "page": 35,
+            "dimensions": "290x290 px",
+            "size_kb": 8.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p35_img43_xref1881.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 36,
+        "extracted_images": [
+          {
+            "xref": 1939,
+            "page": 36,
+            "dimensions": "223x387 px",
+            "size_kb": 38.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p36_img3_xref1939.png"
+          },
+          {
+            "xref": 1941,
+            "page": 36,
+            "dimensions": "223x387 px",
+            "size_kb": 49.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p36_img5_xref1941.png"
+          },
+          {
+            "xref": 1943,
+            "page": 36,
+            "dimensions": "276x591 px",
+            "size_kb": 68.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p36_img7_xref1943.png"
+          },
+          {
+            "xref": 1944,
+            "page": 36,
+            "dimensions": "223x387 px",
+            "size_kb": 48.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p36_img8_xref1944.png"
+          }
+        ]
+      },
+      {
+        "page": 38,
+        "extracted_images": [
+          {
+            "xref": 1965,
+            "page": 38,
+            "dimensions": "612x505 px",
+            "size_kb": 122.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p38_img1_xref1965.png"
+          },
+          {
+            "xref": 1966,
+            "page": 38,
+            "dimensions": "227x311 px",
+            "size_kb": 37.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p38_img2_xref1966.png"
+          },
+          {
+            "xref": 1968,
+            "page": 38,
+            "dimensions": "209x837 px",
+            "size_kb": 63.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p38_img4_xref1968.png"
+          },
+          {
+            "xref": 1969,
+            "page": 38,
+            "dimensions": "202x191 px",
+            "size_kb": 20.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p38_img5_xref1969.png"
+          },
+          {
+            "xref": 1972,
+            "page": 38,
+            "dimensions": "242x926 px",
+            "size_kb": 90.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p38_img8_xref1972.png"
+          }
+        ]
+      },
+      {
+        "page": 39,
+        "extracted_images": [
+          {
+            "xref": 1989,
+            "page": 39,
+            "dimensions": "227x577 px",
+            "size_kb": 109.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p39_img2_xref1989.png"
+          },
+          {
+            "xref": 1991,
+            "page": 39,
+            "dimensions": "226x619 px",
+            "size_kb": 117.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p39_img4_xref1991.png"
+          },
+          {
+            "xref": 1993,
+            "page": 39,
+            "dimensions": "227x650 px",
+            "size_kb": 125.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p39_img6_xref1993.png"
+          },
+          {
+            "xref": 1995,
+            "page": 39,
+            "dimensions": "223x704 px",
+            "size_kb": 126.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p39_img8_xref1995.png"
+          },
+          {
+            "xref": 1997,
+            "page": 39,
+            "dimensions": "193x216 px",
+            "size_kb": 45.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p39_img10_xref1997.png"
+          },
+          {
+            "xref": 1998,
+            "page": 39,
+            "dimensions": "216x194 px",
+            "size_kb": 50.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p39_img11_xref1998.png"
+          }
+        ]
+      },
+      {
+        "page": 40,
+        "extracted_images": [
+          {
+            "xref": 2022,
+            "page": 40,
+            "dimensions": "876x809 px",
+            "size_kb": 29.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img1_xref2022.jpeg"
+          },
+          {
+            "xref": 2023,
+            "page": 40,
+            "dimensions": "842x1142 px",
+            "size_kb": 440.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img2_xref2023.png"
+          },
+          {
+            "xref": 2025,
+            "page": 40,
+            "dimensions": "278x498 px",
+            "size_kb": 88.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img4_xref2025.png"
+          },
+          {
+            "xref": 2027,
+            "page": 40,
+            "dimensions": "289x470 px",
+            "size_kb": 85.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img6_xref2027.png"
+          },
+          {
+            "xref": 2030,
+            "page": 40,
+            "dimensions": "266x400 px",
+            "size_kb": 72.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img9_xref2030.png"
+          },
+          {
+            "xref": 2033,
+            "page": 40,
+            "dimensions": "270x552 px",
+            "size_kb": 92.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img12_xref2033.png"
+          },
+          {
+            "xref": 2036,
+            "page": 40,
+            "dimensions": "174x484 px",
+            "size_kb": 69.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img15_xref2036.png"
+          },
+          {
+            "xref": 2038,
+            "page": 40,
+            "dimensions": "144x402 px",
+            "size_kb": 50.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img17_xref2038.png"
+          },
+          {
+            "xref": 2040,
+            "page": 40,
+            "dimensions": "160x445 px",
+            "size_kb": 59.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p40_img19_xref2040.png"
+          }
+        ]
+      },
+      {
+        "page": 41,
+        "extracted_images": [
+          {
+            "xref": 2077,
+            "page": 41,
+            "dimensions": "346x615 px",
+            "size_kb": 97.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img2_xref2077.png"
+          },
+          {
+            "xref": 2079,
+            "page": 41,
+            "dimensions": "271x415 px",
+            "size_kb": 60.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img4_xref2079.png"
+          },
+          {
+            "xref": 2081,
+            "page": 41,
+            "dimensions": "318x488 px",
+            "size_kb": 81.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img6_xref2081.png"
+          },
+          {
+            "xref": 2083,
+            "page": 41,
+            "dimensions": "320x569 px",
+            "size_kb": 87.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img8_xref2083.png"
+          },
+          {
+            "xref": 2085,
+            "page": 41,
+            "dimensions": "242x372 px",
+            "size_kb": 55.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img10_xref2085.png"
+          },
+          {
+            "xref": 2087,
+            "page": 41,
+            "dimensions": "225x345 px",
+            "size_kb": 46.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img12_xref2087.png"
+          },
+          {
+            "xref": 2089,
+            "page": 41,
+            "dimensions": "205x315 px",
+            "size_kb": 41.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img14_xref2089.png"
+          },
+          {
+            "xref": 2091,
+            "page": 41,
+            "dimensions": "162x213 px",
+            "size_kb": 28.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p41_img16_xref2091.png"
+          }
+        ]
+      },
+      {
+        "page": 42,
+        "extracted_images": [
+          {
+            "xref": 2124,
+            "page": 42,
+            "dimensions": "716x334 px",
+            "size_kb": 71.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img1_xref2124.png"
+          },
+          {
+            "xref": 2125,
+            "page": 42,
+            "dimensions": "606x1004 px",
+            "size_kb": 235.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img2_xref2125.png"
+          },
+          {
+            "xref": 2126,
+            "page": 42,
+            "dimensions": "523x244 px",
+            "size_kb": 43.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img3_xref2126.png"
+          },
+          {
+            "xref": 2127,
+            "page": 42,
+            "dimensions": "443x733 px",
+            "size_kb": 135.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img4_xref2127.png"
+          },
+          {
+            "xref": 2128,
+            "page": 42,
+            "dimensions": "464x216 px",
+            "size_kb": 35.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img5_xref2128.png"
+          },
+          {
+            "xref": 2129,
+            "page": 42,
+            "dimensions": "392x582 px",
+            "size_kb": 99.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img6_xref2129.png"
+          },
+          {
+            "xref": 2130,
+            "page": 42,
+            "dimensions": "452x211 px",
+            "size_kb": 34.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img7_xref2130.png"
+          },
+          {
+            "xref": 2131,
+            "page": 42,
+            "dimensions": "382x500 px",
+            "size_kb": 90.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img8_xref2131.png"
+          },
+          {
+            "xref": 2132,
+            "page": 42,
+            "dimensions": "391x182 px",
+            "size_kb": 27.3,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img9_xref2132.png"
+          },
+          {
+            "xref": 2133,
+            "page": 42,
+            "dimensions": "331x433 px",
+            "size_kb": 69.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p42_img10_xref2133.png"
+          }
+        ]
+      },
+      {
+        "page": 43,
+        "extracted_images": [
+          {
+            "xref": 2158,
+            "page": 43,
+            "dimensions": "533x678 px",
+            "size_kb": 172.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p43_img1_xref2158.png"
+          },
+          {
+            "xref": 2164,
+            "page": 43,
+            "dimensions": "282x469 px",
+            "size_kb": 148.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p43_img7_xref2164.png"
+          },
+          {
+            "xref": 2172,
+            "page": 43,
+            "dimensions": "271x462 px",
+            "size_kb": 141.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p43_img15_xref2172.png"
+          },
+          {
+            "xref": 2179,
+            "page": 43,
+            "dimensions": "404x503 px",
+            "size_kb": 240.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p43_img22_xref2179.png"
+          },
+          {
+            "xref": 2181,
+            "page": 43,
+            "dimensions": "186x297 px",
+            "size_kb": 43.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p43_img24_xref2181.png"
+          },
+          {
+            "xref": 2183,
+            "page": 43,
+            "dimensions": "186x297 px",
+            "size_kb": 42.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p43_img26_xref2183.png"
+          },
+          {
+            "xref": 2185,
+            "page": 43,
+            "dimensions": "208x789 px",
+            "size_kb": 146.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p43_img28_xref2185.png"
+          }
+        ]
+      },
+      {
+        "page": 44,
+        "extracted_images": [
+          {
+            "xref": 2239,
+            "page": 44,
+            "dimensions": "484x727 px",
+            "size_kb": 22.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img1_xref2239.jpeg"
+          },
+          {
+            "xref": 2246,
+            "page": 44,
+            "dimensions": "484x727 px",
+            "size_kb": 20.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img8_xref2246.jpeg"
+          },
+          {
+            "xref": 2255,
+            "page": 44,
+            "dimensions": "433x247 px",
+            "size_kb": 127.4,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img17_xref2255.png"
+          },
+          {
+            "xref": 2256,
+            "page": 44,
+            "dimensions": "193x162 px",
+            "size_kb": 36.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img18_xref2256.png"
+          },
+          {
+            "xref": 2257,
+            "page": 44,
+            "dimensions": "207x174 px",
+            "size_kb": 41.7,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img19_xref2257.png"
+          },
+          {
+            "xref": 2259,
+            "page": 44,
+            "dimensions": "225x382 px",
+            "size_kb": 112.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img21_xref2259.png"
+          },
+          {
+            "xref": 2267,
+            "page": 44,
+            "dimensions": "235x400 px",
+            "size_kb": 117.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img29_xref2267.png"
+          },
+          {
+            "xref": 2281,
+            "page": 44,
+            "dimensions": "211x338 px",
+            "size_kb": 110.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img43_xref2281.png"
+          },
+          {
+            "xref": 2299,
+            "page": 44,
+            "dimensions": "184x338 px",
+            "size_kb": 83.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img61_xref2299.png"
+          },
+          {
+            "xref": 2301,
+            "page": 44,
+            "dimensions": "235x349 px",
+            "size_kb": 11.1,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img63_xref2301.png"
+          },
+          {
+            "xref": 2302,
+            "page": 44,
+            "dimensions": "364x233 px",
+            "size_kb": 98.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img64_xref2302.png"
+          },
+          {
+            "xref": 2304,
+            "page": 44,
+            "dimensions": "129x140 px",
+            "size_kb": 15.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img66_xref2304.png"
+          },
+          {
+            "xref": 2305,
+            "page": 44,
+            "dimensions": "129x140 px",
+            "size_kb": 17.8,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p44_img67_xref2305.png"
+          }
+        ]
+      },
+      {
+        "page": 45,
+        "extracted_images": [
+          {
+            "xref": 2411,
+            "page": 45,
+            "dimensions": "326x501 px",
+            "size_kb": 228.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img2_xref2411.png"
+          },
+          {
+            "xref": 2413,
+            "page": 45,
+            "dimensions": "149x418 px",
+            "size_kb": 39.6,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img4_xref2413.png"
+          },
+          {
+            "xref": 2417,
+            "page": 45,
+            "dimensions": "475x713 px",
+            "size_kb": 182.5,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img8_xref2417.png"
+          },
+          {
+            "xref": 2418,
+            "page": 45,
+            "dimensions": "139x409 px",
+            "size_kb": 27.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img9_xref2418.png"
+          },
+          {
+            "xref": 2421,
+            "page": 45,
+            "dimensions": "526x686 px",
+            "size_kb": 320.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img12_xref2421.png"
+          },
+          {
+            "xref": 2423,
+            "page": 45,
+            "dimensions": "198x504 px",
+            "size_kb": 76.2,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img14_xref2423.png"
+          },
+          {
+            "xref": 2425,
+            "page": 45,
+            "dimensions": "247x199 px",
+            "size_kb": 32.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img16_xref2425.png"
+          },
+          {
+            "xref": 2427,
+            "page": 45,
+            "dimensions": "247x199 px",
+            "size_kb": 32.0,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img18_xref2427.png"
+          },
+          {
+            "xref": 2428,
+            "page": 45,
+            "dimensions": "154x228 px",
+            "size_kb": 37.9,
+            "image_url": "/images/catalog_extracted/steel_drinkware_catalogue_new_mrp_may_2026/p45_img19_xref2428.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "catalog_file": "hasbro regular 042026.pdf",
+    "slug": "hasbro_regular_042026",
+    "pages_processed": 64,
+    "extracted_product_count": 59,
+    "total_clean_images": 85,
+    "pages": [
+      {
+        "page": 1,
+        "extracted_images": [
+          {
+            "xref": 732,
+            "page": 1,
+            "dimensions": "480x372 px",
+            "size_kb": 32.1,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p1_img1_xref732.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 3,
+        "extracted_images": [
+          {
+            "xref": 7,
+            "page": 3,
+            "dimensions": "1500x300 px",
+            "size_kb": 67.7,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p3_img1_xref7.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 4,
+        "extracted_images": [
+          {
+            "xref": 12,
+            "page": 4,
+            "dimensions": "1200x1200 px",
+            "size_kb": 142.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p4_img1_xref12.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 5,
+        "extracted_images": [
+          {
+            "xref": 16,
+            "page": 5,
+            "dimensions": "569x569 px",
+            "size_kb": 36.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p5_img1_xref16.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 6,
+        "extracted_images": [
+          {
+            "xref": 20,
+            "page": 6,
+            "dimensions": "1500x1500 px",
+            "size_kb": 169.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p6_img1_xref20.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 7,
+        "extracted_images": [
+          {
+            "xref": 24,
+            "page": 7,
+            "dimensions": "1500x1500 px",
+            "size_kb": 201.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p7_img1_xref24.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 8,
+        "extracted_images": [
+          {
+            "xref": 28,
+            "page": 8,
+            "dimensions": "1500x947 px",
+            "size_kb": 187.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p8_img1_xref28.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 9,
+        "extracted_images": [
+          {
+            "xref": 32,
+            "page": 9,
+            "dimensions": "1362x921 px",
+            "size_kb": 238.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p9_img1_xref32.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 10,
+        "extracted_images": [
+          {
+            "xref": 36,
+            "page": 10,
+            "dimensions": "861x861 px",
+            "size_kb": 166.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p10_img1_xref36.jpeg"
+          },
+          {
+            "xref": 37,
+            "page": 10,
+            "dimensions": "752x329 px",
+            "size_kb": 23.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p10_img2_xref37.png"
+          }
+        ]
+      },
+      {
+        "page": 11,
+        "extracted_images": [
+          {
+            "xref": 42,
+            "page": 11,
+            "dimensions": "1000x1000 px",
+            "size_kb": 111.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p11_img1_xref42.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 12,
+        "extracted_images": [
+          {
+            "xref": 47,
+            "page": 12,
+            "dimensions": "757x228 px",
+            "size_kb": 31.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p12_img2_xref47.png"
+          }
+        ]
+      },
+      {
+        "page": 13,
+        "extracted_images": [
+          {
+            "xref": 52,
+            "page": 13,
+            "dimensions": "1500x954 px",
+            "size_kb": 234.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p13_img1_xref52.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 14,
+        "extracted_images": [
+          {
+            "xref": 56,
+            "page": 14,
+            "dimensions": "1200x1200 px",
+            "size_kb": 62.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p14_img1_xref56.jpeg"
+          },
+          {
+            "xref": 57,
+            "page": 14,
+            "dimensions": "1200x1120 px",
+            "size_kb": 144.1,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p14_img2_xref57.jpeg"
+          },
+          {
+            "xref": 58,
+            "page": 14,
+            "dimensions": "729x255 px",
+            "size_kb": 21.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p14_img3_xref58.png"
+          }
+        ]
+      },
+      {
+        "page": 15,
+        "extracted_images": [
+          {
+            "xref": 63,
+            "page": 15,
+            "dimensions": "500x500 px",
+            "size_kb": 31.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p15_img1_xref63.jpeg"
+          },
+          {
+            "xref": 64,
+            "page": 15,
+            "dimensions": "743x329 px",
+            "size_kb": 22.1,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p15_img2_xref64.png"
+          },
+          {
+            "xref": 65,
+            "page": 15,
+            "dimensions": "800x438 px",
+            "size_kb": 47.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p15_img3_xref65.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 16,
+        "extracted_images": [
+          {
+            "xref": 70,
+            "page": 16,
+            "dimensions": "1500x1500 px",
+            "size_kb": 204.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p16_img1_xref70.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 17,
+        "extracted_images": [
+          {
+            "xref": 74,
+            "page": 17,
+            "dimensions": "1500x1500 px",
+            "size_kb": 227.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p17_img1_xref74.jpeg"
+          },
+          {
+            "xref": 75,
+            "page": 17,
+            "dimensions": "1000x1000 px",
+            "size_kb": 98.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p17_img2_xref75.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 18,
+        "extracted_images": [
+          {
+            "xref": 79,
+            "page": 18,
+            "dimensions": "743x309 px",
+            "size_kb": 29.1,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p18_img1_xref79.png"
+          },
+          {
+            "xref": 80,
+            "page": 18,
+            "dimensions": "1280x1195 px",
+            "size_kb": 159.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p18_img2_xref80.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 19,
+        "extracted_images": [
+          {
+            "xref": 85,
+            "page": 19,
+            "dimensions": "1200x1120 px",
+            "size_kb": 174.7,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p19_img1_xref85.jpeg"
+          },
+          {
+            "xref": 86,
+            "page": 19,
+            "dimensions": "608x245 px",
+            "size_kb": 16.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p19_img2_xref86.png"
+          }
+        ]
+      },
+      {
+        "page": 20,
+        "extracted_images": [
+          {
+            "xref": 91,
+            "page": 20,
+            "dimensions": "1500x1500 px",
+            "size_kb": 287.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p20_img1_xref91.jpeg"
+          },
+          {
+            "xref": 92,
+            "page": 20,
+            "dimensions": "676x269 px",
+            "size_kb": 17.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p20_img2_xref92.png"
+          },
+          {
+            "xref": 93,
+            "page": 20,
+            "dimensions": "886x886 px",
+            "size_kb": 164.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p20_img3_xref93.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 21,
+        "extracted_images": [
+          {
+            "xref": 98,
+            "page": 21,
+            "dimensions": "960x604 px",
+            "size_kb": 134.3,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p21_img1_xref98.jpeg"
+          },
+          {
+            "xref": 99,
+            "page": 21,
+            "dimensions": "676x329 px",
+            "size_kb": 17.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p21_img2_xref99.png"
+          }
+        ]
+      },
+      {
+        "page": 22,
+        "extracted_images": [
+          {
+            "xref": 104,
+            "page": 22,
+            "dimensions": "819x246 px",
+            "size_kb": 22.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p22_img1_xref104.png"
+          },
+          {
+            "xref": 105,
+            "page": 22,
+            "dimensions": "1500x1500 px",
+            "size_kb": 308.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p22_img2_xref105.jpeg"
+          },
+          {
+            "xref": 106,
+            "page": 22,
+            "dimensions": "1500x1500 px",
+            "size_kb": 219.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p22_img3_xref106.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 23,
+        "extracted_images": [
+          {
+            "xref": 111,
+            "page": 23,
+            "dimensions": "1500x1500 px",
+            "size_kb": 171.3,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p23_img1_xref111.jpeg"
+          },
+          {
+            "xref": 112,
+            "page": 23,
+            "dimensions": "752x246 px",
+            "size_kb": 23.1,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p23_img2_xref112.png"
+          },
+          {
+            "xref": 113,
+            "page": 23,
+            "dimensions": "1500x1500 px",
+            "size_kb": 223.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p23_img3_xref113.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 24,
+        "extracted_images": [
+          {
+            "xref": 118,
+            "page": 24,
+            "dimensions": "1500x1500 px",
+            "size_kb": 266.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p24_img1_xref118.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 25,
+        "extracted_images": [
+          {
+            "xref": 123,
+            "page": 25,
+            "dimensions": "819x226 px",
+            "size_kb": 33.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p25_img2_xref123.png"
+          }
+        ]
+      },
+      {
+        "page": 26,
+        "extracted_images": [
+          {
+            "xref": 128,
+            "page": 26,
+            "dimensions": "800x354 px",
+            "size_kb": 71.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p26_img1_xref128.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 27,
+        "extracted_images": [
+          {
+            "xref": 132,
+            "page": 27,
+            "dimensions": "1000x1000 px",
+            "size_kb": 128.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p27_img1_xref132.jpeg"
+          },
+          {
+            "xref": 133,
+            "page": 27,
+            "dimensions": "819x246 px",
+            "size_kb": 33.2,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p27_img2_xref133.png"
+          }
+        ]
+      },
+      {
+        "page": 28,
+        "extracted_images": [
+          {
+            "xref": 138,
+            "page": 28,
+            "dimensions": "1500x1500 px",
+            "size_kb": 267.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p28_img1_xref138.jpeg"
+          },
+          {
+            "xref": 139,
+            "page": 28,
+            "dimensions": "624x269 px",
+            "size_kb": 18.7,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p28_img2_xref139.png"
+          }
+        ]
+      },
+      {
+        "page": 29,
+        "extracted_images": [
+          {
+            "xref": 144,
+            "page": 29,
+            "dimensions": "1500x1037 px",
+            "size_kb": 222.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p29_img1_xref144.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 30,
+        "extracted_images": [
+          {
+            "xref": 148,
+            "page": 30,
+            "dimensions": "886x886 px",
+            "size_kb": 103.3,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p30_img1_xref148.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 31,
+        "extracted_images": [
+          {
+            "xref": 152,
+            "page": 31,
+            "dimensions": "1500x1500 px",
+            "size_kb": 123.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p31_img1_xref152.jpeg"
+          },
+          {
+            "xref": 153,
+            "page": 31,
+            "dimensions": "1500x1500 px",
+            "size_kb": 239.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p31_img2_xref153.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 32,
+        "extracted_images": [
+          {
+            "xref": 157,
+            "page": 32,
+            "dimensions": "1000x629 px",
+            "size_kb": 127.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p32_img1_xref157.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 33,
+        "extracted_images": [
+          {
+            "xref": 161,
+            "page": 33,
+            "dimensions": "922x583 px",
+            "size_kb": 97.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p33_img1_xref161.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 34,
+        "extracted_images": [
+          {
+            "xref": 165,
+            "page": 34,
+            "dimensions": "900x900 px",
+            "size_kb": 94.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p34_img1_xref165.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 35,
+        "extracted_images": [
+          {
+            "xref": 169,
+            "page": 35,
+            "dimensions": "900x900 px",
+            "size_kb": 86.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p35_img1_xref169.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 37,
+        "extracted_images": [
+          {
+            "xref": 177,
+            "page": 37,
+            "dimensions": "1280x720 px",
+            "size_kb": 133.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p37_img1_xref177.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 38,
+        "extracted_images": [
+          {
+            "xref": 181,
+            "page": 38,
+            "dimensions": "1500x1500 px",
+            "size_kb": 261.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p38_img1_xref181.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 39,
+        "extracted_images": [
+          {
+            "xref": 185,
+            "page": 39,
+            "dimensions": "1500x1500 px",
+            "size_kb": 182.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p39_img1_xref185.jpeg"
+          },
+          {
+            "xref": 186,
+            "page": 39,
+            "dimensions": "1500x1500 px",
+            "size_kb": 112.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p39_img2_xref186.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 40,
+        "extracted_images": [
+          {
+            "xref": 190,
+            "page": 40,
+            "dimensions": "828x828 px",
+            "size_kb": 55.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p40_img1_xref190.jpeg"
+          },
+          {
+            "xref": 191,
+            "page": 40,
+            "dimensions": "743x329 px",
+            "size_kb": 22.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p40_img2_xref191.png"
+          }
+        ]
+      },
+      {
+        "page": 41,
+        "extracted_images": [
+          {
+            "xref": 196,
+            "page": 41,
+            "dimensions": "1500x1500 px",
+            "size_kb": 95.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p41_img1_xref196.jpeg"
+          },
+          {
+            "xref": 197,
+            "page": 41,
+            "dimensions": "886x886 px",
+            "size_kb": 83.1,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p41_img2_xref197.jpeg"
+          },
+          {
+            "xref": 198,
+            "page": 41,
+            "dimensions": "655x303 px",
+            "size_kb": 22.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p41_img3_xref198.png"
+          }
+        ]
+      },
+      {
+        "page": 42,
+        "extracted_images": [
+          {
+            "xref": 203,
+            "page": 42,
+            "dimensions": "886x886 px",
+            "size_kb": 105.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p42_img1_xref203.jpeg"
+          },
+          {
+            "xref": 204,
+            "page": 42,
+            "dimensions": "752x329 px",
+            "size_kb": 23.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p42_img2_xref204.png"
+          }
+        ]
+      },
+      {
+        "page": 43,
+        "extracted_images": [
+          {
+            "xref": 209,
+            "page": 43,
+            "dimensions": "1500x1500 px",
+            "size_kb": 133.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p43_img1_xref209.jpeg"
+          },
+          {
+            "xref": 210,
+            "page": 43,
+            "dimensions": "1500x1500 px",
+            "size_kb": 271.2,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p43_img2_xref210.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 44,
+        "extracted_images": [
+          {
+            "xref": 214,
+            "page": 44,
+            "dimensions": "1000x929 px",
+            "size_kb": 109.5,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p44_img1_xref214.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 45,
+        "extracted_images": [
+          {
+            "xref": 218,
+            "page": 45,
+            "dimensions": "1500x1500 px",
+            "size_kb": 153.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p45_img1_xref218.jpeg"
+          },
+          {
+            "xref": 219,
+            "page": 45,
+            "dimensions": "1500x1500 px",
+            "size_kb": 241.1,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p45_img2_xref219.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 46,
+        "extracted_images": [
+          {
+            "xref": 223,
+            "page": 46,
+            "dimensions": "894x679 px",
+            "size_kb": 128.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p46_img1_xref223.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 48,
+        "extracted_images": [
+          {
+            "xref": 232,
+            "page": 48,
+            "dimensions": "1280x720 px",
+            "size_kb": 155.8,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p48_img1_xref232.jpeg"
+          },
+          {
+            "xref": 233,
+            "page": 48,
+            "dimensions": "918x149 px",
+            "size_kb": 11.2,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p48_img2_xref233.png"
+          }
+        ]
+      },
+      {
+        "page": 49,
+        "extracted_images": [
+          {
+            "xref": 238,
+            "page": 49,
+            "dimensions": "734x1000 px",
+            "size_kb": 107.2,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p49_img1_xref238.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 50,
+        "extracted_images": [
+          {
+            "xref": 242,
+            "page": 50,
+            "dimensions": "800x800 px",
+            "size_kb": 59.2,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p50_img1_xref242.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 51,
+        "extracted_images": [
+          {
+            "xref": 246,
+            "page": 51,
+            "dimensions": "409x450 px",
+            "size_kb": 26.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p51_img1_xref246.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 52,
+        "extracted_images": [
+          {
+            "xref": 250,
+            "page": 52,
+            "dimensions": "886x886 px",
+            "size_kb": 77.3,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p52_img1_xref250.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 53,
+        "extracted_images": [
+          {
+            "xref": 254,
+            "page": 53,
+            "dimensions": "970x600 px",
+            "size_kb": 111.2,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p53_img1_xref254.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 54,
+        "extracted_images": [
+          {
+            "xref": 258,
+            "page": 54,
+            "dimensions": "1000x1000 px",
+            "size_kb": 161.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p54_img1_xref258.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 55,
+        "extracted_images": [
+          {
+            "xref": 262,
+            "page": 55,
+            "dimensions": "1000x1000 px",
+            "size_kb": 129.7,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p55_img1_xref262.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 56,
+        "extracted_images": [
+          {
+            "xref": 266,
+            "page": 56,
+            "dimensions": "1000x1000 px",
+            "size_kb": 139.6,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p56_img1_xref266.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 57,
+        "extracted_images": [
+          {
+            "xref": 270,
+            "page": 57,
+            "dimensions": "1080x1080 px",
+            "size_kb": 132.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p57_img1_xref270.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 58,
+        "extracted_images": [
+          {
+            "xref": 274,
+            "page": 58,
+            "dimensions": "1000x1000 px",
+            "size_kb": 153.0,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p58_img1_xref274.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 59,
+        "extracted_images": [
+          {
+            "xref": 278,
+            "page": 59,
+            "dimensions": "1000x1000 px",
+            "size_kb": 155.3,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p59_img1_xref278.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 60,
+        "extracted_images": [
+          {
+            "xref": 282,
+            "page": 60,
+            "dimensions": "1000x1000 px",
+            "size_kb": 124.4,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p60_img1_xref282.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 62,
+        "extracted_images": [
+          {
+            "xref": 290,
+            "page": 62,
+            "dimensions": "1263x1280 px",
+            "size_kb": 248.7,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p62_img1_xref290.jpeg"
+          }
+        ]
+      },
+      {
+        "page": 63,
+        "extracted_images": [
+          {
+            "xref": 294,
+            "page": 63,
+            "dimensions": "686x386 px",
+            "size_kb": 31.9,
+            "image_url": "/images/catalog_extracted/hasbro_regular_042026/p63_img1_xref294.jpeg"
+          }
+        ]
+      }
+    ]
+  }
+]

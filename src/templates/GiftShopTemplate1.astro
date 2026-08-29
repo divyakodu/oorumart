@@ -1,0 +1,50 @@
+---
+/**
+ * src/templates/GiftShopTemplate1.astro
+ * 
+ * 100% REUSABLE COMPONENT TEMPLATE:
+ * - Composed entirely of generic reusable UI components from /src/components/.
+ * - Operates on the Unified Tag-Driven Architecture.
+ */
+
+import HeroPosterBanner from '../components/HeroPosterBanner.astro';
+import InfiniteMarqueeBar from '../components/InfiniteMarqueeBar.astro';
+import Category2ColGridShowcase from '../components/Category2ColGridShowcase.astro';
+import CategoryPillsBar from '../components/CategoryPillsBar.astro';
+import TagShowcaseRow from '../components/TagShowcaseRow.astro';
+
+export interface Props {
+  shop: any;
+  products: any[];
+  categories: any[];
+  primaryColor?: string;
+}
+
+const { shop, products = [], categories = [], primaryColor = '#0F172A' } = Astro.props;
+---
+
+<main class="flex-1 space-y-12 pb-16 bg-white">
+  <!-- 1. Reusable Hero Poster Banner Component -->
+  <HeroPosterBanner shop={shop} />
+
+  <!-- 2. Reusable Features Marquee Ticker Component (Store Property Driven) -->
+  <InfiniteMarqueeBar items={shop.features_ticker} />
+
+  <!-- 3. Reusable 2-Column Category Image Banner Grid Showcase (GIFT SETS, HOME & DECOR, etc.) -->
+  <Category2ColGridShowcase shopSlug={shop.slug} />
+
+  <!-- 4. Reusable Tag Navigation Pills Bar Component -->
+  <CategoryPillsBar tags={categories} shopSlug={shop.slug} />
+
+  <!-- 5. Reusable Unified Tag Showcase Rows (4 initial items + horizontal scroll track + SEE MORE link) -->
+  {categories.map((c: any) => (
+    <TagShowcaseRow 
+      tagId={c.id} 
+      title={c.label} 
+      products={products} 
+      shopSlug={shop.slug} 
+      initialCount={4} 
+      maxScrollCount={10} 
+    />
+  ))}
+</main>

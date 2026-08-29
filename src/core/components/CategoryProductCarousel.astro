@@ -1,0 +1,186 @@
+---
+interface Product {
+  id: string;
+  name: string;
+  category_id: string;
+  price: number;
+  mrp?: number;
+  badge?: string;
+  tags?: string[];
+  image_url: string;
+  is_available?: boolean;
+}
+
+interface Category {
+  id: string;
+  label: string;
+  image_url?: string;
+  tag?: string;
+}
+
+interface Props {
+  category?: Category;
+  title?: string;
+  tag?: string;
+  imageUrl?: string;
+  products: Product[];
+  maxItems?: number;
+  seeMoreUrl?: string;
+  shopSlug?: string;
+}
+
+const { category, title, tag, imageUrl, products = [], maxItems = 10, seeMoreUrl, shopSlug = 'yesfancy' } = Astro.props;
+
+const label = category?.label || title || 'Featured Collection';
+const catId = category?.tag || category?.id || tag || 'all';
+const catImage = category?.image_url || imageUrl || products[0]?.image_url || '/images/hero_banner.jpg';
+
+// Strip any leading emojis/icons and trailing arrows to get plain clean name
+const cleanCategoryName = (label || 'Collection')
+  .replace(/^[^\w\s]+\s*/, '')
+  .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+  .replace(/[\->➔]/g, '')
+  .trim() || label;
+
+// Filter active products matching this category or tag
+const activeProductsList = (products || []).filter(p => p.is_active !== false);
+const categoryProducts = activeProductsList
+  .filter(p => catId === 'all' || p.category_id === catId || (Array.isArray(p.tags) && p.tags.includes(catId)))
+  .slice(0, maxItems);
+
+const finalProducts = categoryProducts.length > 0 ? categoryProducts : activeProductsList.slice(0, maxItems);
+const catalogLink = seeMoreUrl || `/catalog?shop=${shopSlug}&category=${catId}`;
+---
+
+<section class="w-full my-6 sm:my-8 select-none">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6">
+    
+    <!-- Outer Container: Single Horizontal Row Layout on Mobile & Desktop -->
+    <div class="flex flex-row items-stretch border border-slate-300 rounded-xl overflow-hidden bg-slate-50/50 shadow-xs">
+      
+      <!-- 1. Left Category Banner Tile with Outer Border -->
+      <a 
+        href={catalogLink} 
+        class="relative w-28 sm:w-36 md:w-52 shrink-0 bg-slate-100 p-2.5 sm:p-4 flex flex-col items-center justify-center text-center no-underline group hover:bg-slate-200/90 transition-colors z-20 border-r border-slate-300"
+      >
+        <!-- Category Image Box -->
+        <div class="w-full h-20 sm:h-28 md:h-36 flex items-center justify-center overflow-hidden mb-2 p-1 bg-white rounded-md border border-slate-300/80 shadow-2xs">
+          <img 
+            src={catImage} 
+            alt={cleanCategoryName} 
+            class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+
+        <!-- Clean Category Title -->
+        <div class="w-full px-0.5">
+          <h3 class="font-extrabold text-[11px] sm:text-xs md:text-base text-slate-900 uppercase tracking-wider font-serif-title line-clamp-2 leading-tight">
+            {cleanCategoryName}
+          </h3>
+        </div>
+
+        <!-- Right Chevron SVG Overlay -->
+        <svg 
+          class="absolute -right-2.5 top-0 bottom-0 h-full w-2.5 pointer-events-none z-30" 
+          viewBox="0 0 10 100" 
+          preserveAspectRatio="none" 
+          fill="none"
+        >
+          <polygon 
+            points="0,0 1,0 10,50 1,100 0,100" 
+            class="fill-slate-100 group-hover:fill-slate-200/90 transition-colors" 
+          />
+          <polyline 
+            points="0,0 9,50 0,100" 
+            stroke="#64748b" 
+            stroke-width="1.5" 
+            stroke-linejoin="round" 
+            stroke-linecap="round" 
+          />
+        </svg>
+      </a>
+
+      <!-- 2. Right Carousel Track -->
+      <div class="flex-1 overflow-x-auto p-2.5 sm:p-4 flex items-center space-x-3 sm:space-x-4 scrollbar-thin scroll-smooth snap-x snap-mandatory pl-4 sm:pl-6">
+        
+        {finalProducts.map((product) => {
+          const isOutOfStock = product.stock !== undefined && Number(product.stock) <= 0;
+          return (
+            <div class={`w-36 sm:w-44 md:w-52 shrink-0 snap-start border border-slate-300/80 bg-white p-2.5 sm:p-3 rounded-lg flex flex-col justify-between group hover:border-slate-800 transition-all shadow-xs hover:shadow-md ${isOutOfStock ? 'opacity-80' : ''}`}>
+              <div>
+                <div class="relative aspect-square overflow-hidden bg-slate-50 mb-2 rounded-md border border-slate-300/80">
+                  <a href={`/product/${product.id}?shop=${shopSlug}`}>
+                    <img 
+                      src={product.image_url} 
+                      alt={product.name} 
+                      class={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${isOutOfStock ? 'grayscale-[30%]' : ''}`}
+                    />
+                  </a>
+                  {isOutOfStock ? (
+                    <span class="absolute top-1 left-1 bg-rose-700 text-white text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-xs">
+                      OUT OF STOCK
+                    </span>
+                  ) : product.badge ? (
+                    <span class="absolute top-1 left-1 bg-slate-900 text-white text-[8px] sm:text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-xs">
+                      {product.badge}
+                    </span>
+                  ) : null}
+
+                  {isOutOfStock ? (
+                    <button 
+                      class="absolute bottom-1 right-1 bg-slate-200 text-slate-500 border border-slate-300 px-1 py-0.5 text-[8px] font-bold rounded-xs cursor-pointer"
+                      onclick="showShopToast('Out of Stock', 'Sorry, this product is currently out of stock!', '📦')"
+                      title="Out of Stock"
+                    >
+                      OUT
+                    </button>
+                  ) : (
+                    <button 
+                      class="absolute bottom-1 right-1 bg-white text-slate-900 border border-slate-900 w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center text-sm sm:text-base font-bold rounded-xs hover:bg-slate-900 hover:text-white transition-colors cursor-pointer shadow-xs"
+                      onclick={`addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100})`}
+                      title="Quick Add to Cart"
+                    >
+                      +
+                    </button>
+                  )}
+                </div>
+                <a href={`/product/${product.id}?shop=${shopSlug}`} class="no-underline">
+                  <h4 class="text-[11px] sm:text-xs font-bold text-slate-900 leading-tight line-clamp-2 hover:text-rose-600 transition-colors mb-1">
+                    {product.name}
+                  </h4>
+                </a>
+              </div>
+
+              <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs">
+                <span class="font-extrabold text-slate-900">₹ {product.price}</span>
+                {product.mrp && (
+                  <span class="line-through text-slate-400 text-[10px] sm:text-[11px]">₹ {product.mrp}</span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+
+        <!-- 3. Terminal "See More" Card -->
+        <a 
+          href={catalogLink} 
+          class="w-32 sm:w-40 md:w-48 shrink-0 snap-start border-2 border-dashed border-slate-300 rounded-lg bg-slate-50 flex flex-col items-center justify-center p-4 sm:p-6 text-center no-underline hover:bg-slate-100 hover:border-slate-900 transition-all group min-h-[200px] sm:min-h-[240px]"
+        >
+          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full border border-slate-400 group-hover:border-slate-900 flex items-center justify-center text-slate-700 group-hover:text-slate-900 mb-2 group-hover:scale-110 transition-all bg-white shadow-xs">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </div>
+          <span class="font-extrabold text-xs sm:text-sm text-slate-900 uppercase tracking-wider font-serif-title group-hover:text-rose-600 transition-colors">
+            See More
+          </span>
+          <span class="text-[9px] sm:text-[10px] font-medium text-slate-500 mt-0.5">
+            Explore All {cleanCategoryName}
+          </span>
+        </a>
+
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,1915 @@
+---
+export const prerender = false;
+
+import '../styles/global.css';
+import { getAllShopsConfigAsync } from '../lib/getShopConfig';
+
+export interface Props {
+  shopSlug?: string;
+}
+
+const { shopSlug } = Astro.props;
+const allShops = await getAllShopsConfigAsync();
+const supabaseUrl = process.env.PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Admin Portal | Oorumart Merchant Center</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #F8FAFC;
+      color: #0F172A;
+    }
+    .font-serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 bg-slate-50 flex flex-col relative">
+
+  <!-- AUDIO: Simplest possible — new Audio().play() works when Chrome Sound=Allow -->
+  <script is:inline>
+    window.playOrderNotificationSound = function(title, body) {
+      // Simplest possible audio call — works from WebSocket callbacks when Chrome Sound=Allow
+      var audio = new Audio('/sounds/order_chime.wav');
+      audio.volume = 1.0;
+      audio.play().then(function() {
+        console.log('✅ Chime played!');
+      }).catch(function(e) {
+        console.warn('Audio play blocked:', e.message);
+      });
+
+      // Visual OS notification banner
+      if (window.Notification && Notification.permission === 'granted') {
+        try {
+          var n = new Notification(title || '🛍️ New Order!', {
+            body: body || 'A new customer order has arrived.',
+            icon: '/favicon.ico',
+            tag: 'oorumart-' + Date.now(),
+            silent: true
+          });
+          n.onclick = function() { window.focus(); n.close(); };
+        } catch(e) {}
+      }
+    };
+
+    window.requestNotifPermission = async function() {
+      if (!('Notification' in window)) return false;
+      if (Notification.permission === 'granted') return true;
+      if (Notification.permission !== 'denied') {
+        return (await Notification.requestPermission()) === 'granted';
+      }
+      return false;
+    };
+  </script>
+
+  <!-- AESTHETIC THEMED CONFIRMATION MODAL -->
+  <div id="confirm-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[110] flex items-center justify-center p-4 opacity-0 pointer-events-none hidden transition-all duration-300">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-200 transform scale-95 transition-transform duration-300" id="confirm-card">
+      <div id="confirm-icon" class="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-2xl mx-auto font-bold">
+        ⚠️
+      </div>
+      <div class="space-y-1">
+        <h3 id="confirm-title" class="font-serif-title font-extrabold text-base text-slate-900 uppercase">Confirm Action</h3>
+        <p id="confirm-message" class="text-xs text-slate-600 leading-relaxed">Are you sure you want to proceed?</p>
+      </div>
+      <div class="flex space-x-3 pt-2">
+        <button id="confirm-cancel-btn" onclick="closeConfirmModal(false)" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider rounded-lg transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <button id="confirm-action-btn" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors cursor-pointer shadow-sm">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AESTHETIC GLASSMORPHISM TOAST POPUP MODAL -->
+  <div id="toast-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none hidden transition-all duration-300">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-200 transform scale-95 transition-transform duration-300" id="toast-card">
+      <div id="toast-icon" class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto font-bold">
+        ✅
+      </div>
+      <div class="space-y-1">
+        <h3 id="toast-title" class="font-serif-title font-extrabold text-base text-slate-900 uppercase">Settings Saved</h3>
+        <p id="toast-message" class="text-xs text-slate-500 leading-relaxed">Changes successfully synced to Supabase database.</p>
+      </div>
+      <button onclick="closeToastModal()" class="w-full py-2.5 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider rounded-lg hover:bg-slate-800 transition-colors shadow-xs cursor-pointer">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- 1. VENDOR LOGIN MODAL -->
+  <div id="admin-login-screen" class="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6 border border-slate-200 relative">
+      
+      <!-- Close Exit Button -->
+      <button onclick="window.location.href='/'" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer" title="Exit to Oorumart Marketplace">
+        ✕
+      </button>
+
+      <div class="text-center space-y-2">
+        <div class="w-12 h-12 bg-slate-900 text-white font-extrabold rounded-xl mx-auto flex items-center justify-center text-xl font-serif-title shadow-md">
+          OM
+        </div>
+        <h2 class="font-extrabold text-xl text-slate-900 tracking-wider font-serif-title uppercase">OORUMART VENDOR PORTAL</h2>
+        <p class="text-xs text-slate-500">Log in to customize your store template, component carousels, live orders, and catalog.</p>
+      </div>
+
+      <form onsubmit="handleVendorLogin(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Select Your Business Shop</label>
+          <select id="login-shop-select" class="w-full px-3.5 py-3 border border-slate-300 rounded-lg font-bold text-slate-900 text-xs focus:outline-none focus:border-slate-900 bg-slate-50">
+            {allShops.map((s: any) => (
+              <option value={s.slug}>{s.name} ({s.slug}.oorumart.in)</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">Store Admin Security PIN</label>
+          <input id="login-pin-input" type="password" value="1234" required placeholder="Enter PIN (default: 1234)" class="w-full px-3.5 py-3 border border-slate-300 rounded-lg text-xs font-bold tracking-widest focus:outline-none focus:border-slate-900" />
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded-lg shadow-lg cursor-pointer transition-all">
+          Login to Vendor Dashboard &rarr;
+        </button>
+      </form>
+
+      <div class="text-[11px] text-center text-slate-400 border-t border-slate-100 pt-3 flex items-center justify-between">
+        <span>Protected Merchant Portal</span>
+        <a href="/" class="text-rose-600 font-bold no-underline hover:underline">Exit to Marketplace ➔</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. VENDOR DASHBOARD HEADER -->
+  <header class="bg-slate-900 text-white px-4 sm:px-8 py-3.5 flex items-center justify-between border-b border-slate-800 shadow-md">
+    <div class="flex items-center space-x-3">
+      <div id="active-vendor-avatar" class="w-9 h-9 rounded-lg bg-rose-600 flex items-center justify-center font-bold text-white text-sm shadow-sm uppercase">
+        OM
+      </div>
+      <div>
+        <h1 id="active-vendor-title" class="font-extrabold text-sm sm:text-base tracking-wider uppercase">Merchant Store</h1>
+        <div class="flex items-center space-x-2 text-[11px] text-slate-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Active Subdomain: <code id="active-vendor-domain" class="text-slate-200 font-bold">oorumart.in</code></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3">
+      <button id="btn-test-sound" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded cursor-pointer shadow-sm flex items-center space-x-1" title="Test Order Chime Sound">
+        <span>🔔 Test Alert Sound</span>
+      </button>
+      <a id="live-shop-link" href="/" target="_blank" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded border border-emerald-500 no-underline flex items-center space-x-1 shadow-sm">
+        <span>View Live Storefront ↗</span>
+      </a>
+      <button onclick="logoutVendor()" class="px-3 py-1.5 bg-rose-950/80 hover:bg-rose-900 text-rose-200 text-xs font-bold rounded border border-rose-800 cursor-pointer">
+        Switch Shop
+      </button>
+    </div>
+  </header>
+
+  <!-- 3. MAIN DASHBOARD NAVIGATION TABS -->
+  <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
+
+    <!-- Chrome macOS File Access Warning Banner (auto-detects Chrome, dismissible) -->
+    <div id="chrome-file-warning" style="display:none;" class="bg-amber-50 border border-amber-300 rounded-xl p-4 flex items-start space-x-3">
+      <span style="font-size:22px;">⚠️</span>
+      <div class="flex-1">
+        <div class="font-extrabold text-amber-900 text-sm uppercase tracking-wider">Chrome on Mac: Enable File Access for Photo Uploads</div>
+        <div class="text-xs text-amber-800 mt-1 space-y-1">
+          <p>If the <strong>Browse &amp; Choose Photo</strong> button does nothing when clicked, Chrome needs macOS permission to access your files.</p>
+          <p class="font-bold">Fix: <span class="font-normal">Open <strong>System Settings → Privacy &amp; Security → Files and Folders</strong> → Enable <strong>Google Chrome</strong>. Then restart Chrome.</span></p>
+          <p class="text-amber-600 text-[10px]">This is a macOS security requirement for all third-party browsers. Safari does not need this step.</p>
+        </div>
+      </div>
+      <button onclick="dismissChromeWarning()" class="text-amber-600 hover:text-amber-900 font-bold text-lg cursor-pointer shrink-0" title="Dismiss">✕</button>
+    </div>
+
+    <div class="flex border-b border-slate-200 space-x-2 sm:space-x-6 text-xs sm:text-sm font-bold uppercase tracking-wider overflow-x-auto no-scrollbar">
+      <button onclick="switchTab('orders')" id="tab-btn-orders" class="py-3 border-b-2 border-slate-900 text-slate-900 cursor-pointer flex items-center space-x-2 shrink-0">
+        <span>📦 Real-Time Orders</span>
+        <span id="admin-orders-count-badge" class="bg-rose-600 text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold">0</span>
+      </button>
+      <button onclick="switchTab('categories')" id="tab-btn-categories" class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 cursor-pointer flex items-center space-x-2 shrink-0">
+        <span>🖼️ Category Carousels & Cover Uploads</span>
+      </button>
+      <button onclick="switchTab('banners')" id="tab-btn-banners" class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 cursor-pointer flex items-center space-x-2 shrink-0">
+        <span>🎨 Tagged Offer Canvases</span>
+      </button>
+      <button onclick="switchTab('products')" id="tab-btn-products" class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 cursor-pointer flex items-center space-x-2 shrink-0">
+        <span>🛍️ Products (<span id="products-count-label">0</span>)</span>
+      </button>
+      <button onclick="switchTab('add-product')" id="tab-btn-add-product" class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 cursor-pointer flex items-center space-x-2 shrink-0">
+        <span>➕ Add / Edit Product</span>
+      </button>
+      <button onclick="switchTab('settings')" id="tab-btn-settings" class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 cursor-pointer flex items-center space-x-2 shrink-0">
+        <span>⚙️ Template Style & Colors</span>
+      </button>
+    </div>
+
+    <!-- SECTION 1: REAL-TIME ORDERS TAB -->
+    <div id="tab-orders" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <h2 class="font-serif-title text-xl font-bold text-slate-900 uppercase">LIVE ORDERS FEED</h2>
+          <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded animate-pulse">Supabase Realtime Socket Active</span>
+        </div>
+        <button onclick="loadAdminOrders()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded cursor-pointer">
+          🔄 Refresh Orders
+        </button>
+      </div>
+
+      <div id="admin-orders-list" class="space-y-4"></div>
+    </div>
+
+    <!-- SECTION 2: CATEGORY CAROUSEL & COVER UPLOAD MANAGER -->
+    <div id="tab-categories" class="space-y-6" style="height:0;overflow:hidden;visibility:hidden;position:absolute;pointer-events:none;opacity:0;">
+      <div>
+        <h2 class="font-serif-title text-xl font-bold text-slate-900 uppercase">CATEGORY CAROUSELS & COVER PHOTO MANAGER</h2>
+        <p class="text-xs text-slate-500 mt-1">Configure individual category carousel sections, set matching tags, and upload cloud cover photos.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Category Add/Edit Form -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-4 text-xs">
+          <h3 id="cat-form-title" class="font-bold text-sm text-slate-900 uppercase">Add / Update Category Carousel</h3>
+          
+          <form onsubmit="handleSaveCategory(event)" enctype="multipart/form-data" class="space-y-4">
+            <input id="cat-id-input" type="hidden" />
+
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Category Title / Label</label>
+              <input id="cat-label-input" type="text" required placeholder="e.g. Silk Sarees & Lehengas" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Target Tag Code (Layer 2 DSL)</label>
+              <input id="cat-tag-input" type="text" required placeholder="e.g. silk_sarees, mugs, sweets" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900 font-mono text-[11px]" />
+              <p class="text-[10px] text-slate-400 mt-1">Products matching this tag code will automatically render inside this category carousel.</p>
+            </div>
+
+            <!-- Bare-minimum file upload: label text directly (no child span), input as sibling -->
+            <div class="space-y-2">
+              <label class="block font-bold text-slate-700 uppercase tracking-wider">Category Cover Photo Upload</label>
+              
+              <label for="cat-file-input" style="display:inline-block;padding:10px 16px;background:#0f172a;color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:6px;cursor:pointer;user-select:none;">🖼️ Browse &amp; Choose Photo</label>
+              <input id="cat-file-input" type="file" accept="image/*" onchange="previewCatImage(event)" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" />
+              <span id="cat-file-label" style="font-size:11px;color:#64748b;font-weight:700;margin-left:8px;">No file chosen</span>
+
+              <div style="margin-top:6px;">
+                <div style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Or Paste Image URL Directly:</div>
+                <input type="text" placeholder="https://images.unsplash.com/photo-..." oninput="document.getElementById('cat-image-url').value = this.value" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900 font-mono" />
+              </div>
+
+              <div id="cat-upload-preview" class="mt-2"></div>
+              <input id="cat-image-url" type="hidden" />
+            </div>
+
+            <button id="cat-submit-btn" type="submit" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded cursor-pointer shadow-md">
+              Save Category Carousel to Supabase
+            </button>
+          </form>
+        </div>
+
+        <!-- Current Category List Grid -->
+        <div class="md:col-span-2 space-y-3">
+          <h3 class="font-bold text-sm text-slate-900 uppercase">Active Template Categories</h3>
+          <div id="admin-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: TAGGED OFFER CANVASES TAB -->
+    <div id="tab-banners" class="space-y-6" style="height:0;overflow:hidden;visibility:hidden;position:absolute;pointer-events:none;opacity:0;">
+      <div>
+        <h2 class="font-serif-title text-xl font-bold text-slate-900 uppercase">TAGGED HERO CAROUSEL & OFFER CANVASES</h2>
+        <p class="text-xs text-slate-500 mt-1">Manage top homepage offer slides and attach product filter tags so clicking the banner displays targeted sale items.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Add New Hero Banner Form -->
+        <div class="bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-4 text-xs">
+          <h3 class="font-bold text-sm text-slate-900 uppercase">Add Offer Banner Slide</h3>
+
+          <form onsubmit="handleSaveHeroBanner(event)" enctype="multipart/form-data" class="space-y-4">
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Offer Banner Title</label>
+              <input id="banner-title" type="text" required placeholder="e.g. Exclusive Festive Sale" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Subtitle / Offer Description</label>
+              <input id="banner-subtitle" type="text" placeholder="e.g. Up to 40% OFF on all handcrafted items this weekend" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Attached Filter Tag Code</label>
+                <input id="banner-cta-link" type="text" value="festive_sale" placeholder="e.g. 10%_off, b2g1, bestseller" class="w-full px-3.5 py-2.5 border border-slate-300 rounded font-mono text-[11px] focus:outline-none focus:border-slate-900" />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">CTA Button Text</label>
+                <input id="banner-cta-text" type="text" value="Shop Festive Offer" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Background Gradient Theme</label>
+              <select id="banner-gradient" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900">
+                <option value="from-slate-900 to-teal-900">Teal Dark Gradient</option>
+                <option value="from-emerald-900 to-slate-900">Emerald Dark Gradient</option>
+                <option value="from-purple-950 to-slate-900">Royal Purple Gradient</option>
+                <option value="from-rose-950 to-slate-900">Rose Crimson Gradient</option>
+              </select>
+            </div>
+
+            <!-- Bare-minimum file upload -->
+            <div class="space-y-2">
+              <label class="block font-bold text-slate-700 uppercase tracking-wider">Offer Banner Photo Upload</label>
+
+              <label for="banner-file" style="display:inline-block;padding:10px 16px;background:#0f172a;color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:6px;cursor:pointer;user-select:none;">🖼️ Browse &amp; Choose Photo</label>
+              <input id="banner-file" type="file" accept="image/*" onchange="previewBannerImage(event)" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" />
+              <span id="banner-file-label" style="font-size:11px;color:#64748b;font-weight:700;margin-left:8px;">No file chosen</span>
+
+              <div style="margin-top:6px;">
+                <div style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Or Paste Image URL Directly:</div>
+                <input type="text" placeholder="https://images.unsplash.com/photo-..." oninput="document.getElementById('banner-image-url').value = this.value" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900 font-mono" />
+              </div>
+
+              <div id="banner-upload-preview" class="mt-2"></div>
+              <input id="banner-image-url" type="hidden" />
+            </div>
+
+            <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded cursor-pointer shadow-md">
+              Publish Tagged Banner Slide to Supabase
+            </button>
+          </form>
+        </div>
+
+        <!-- Published Banners Grid -->
+        <div class="md:col-span-2 space-y-3">
+          <h3 class="font-bold text-sm text-slate-900 uppercase">Published Homepage Offer Slides</h3>
+          <div id="admin-banners-grid" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: CATALOG PRODUCTS TAB -->
+    <div id="tab-products" class="space-y-4" style="height:0;overflow:hidden;visibility:hidden;position:absolute;pointer-events:none;opacity:0;">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="font-serif-title text-xl font-bold text-slate-900 uppercase">STORE PRODUCTS</h2>
+          <p class="text-xs text-slate-500">Manage catalog products, bulk select items, and delete or update active status.</p>
+        </div>
+        <button onclick="switchTab('add-product')" class="px-4 py-2 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider rounded cursor-pointer hover:bg-slate-800 shrink-0">
+          + Add Product
+        </button>
+      </div>
+
+      <!-- Filter, Search & Bulk Actions Toolbar -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Search input -->
+          <input id="admin-prod-search" type="text" oninput="filterAdminProducts()" placeholder="🔍 Search products..." class="px-3 py-2 border border-slate-300 rounded font-semibold text-slate-900 focus:outline-none focus:border-slate-900 w-48 sm:w-64" />
+
+          <!-- Category Filter Dropdown -->
+          <select id="admin-prod-cat-filter" onchange="filterAdminProducts()" class="px-3 py-2 border border-slate-300 rounded font-bold text-slate-900 bg-slate-50 focus:outline-none cursor-pointer">
+            <option value="all">All Categories</option>
+          </select>
+
+          <!-- Status Filter Dropdown -->
+          <select id="admin-prod-status-filter" onchange="filterAdminProducts()" class="px-3 py-2 border border-slate-300 rounded font-bold text-slate-900 bg-slate-50 focus:outline-none cursor-pointer">
+            <option value="all">All Status (Active &amp; Hidden)</option>
+            <option value="active">🟢 Active Only</option>
+            <option value="hidden">⚪ Hidden Only</option>
+          </select>
+        </div>
+
+        <!-- Bulk Action Controls -->
+        <div class="flex items-center space-x-2">
+          <span id="bulk-selected-count" class="bg-slate-100 text-slate-700 font-bold px-2.5 py-1 rounded border border-slate-300 text-[11px]">0 selected</span>
+          <button id="bulk-delete-btn" disabled onclick="bulkDeleteProducts()" class="px-3 py-1.5 bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-rose-700 text-white font-bold text-xs rounded shadow-xs cursor-pointer transition-colors">
+            🗑️ Delete
+          </button>
+          <button id="bulk-deactivate-btn" disabled onclick="bulkToggleProductsActive(false)" class="px-3 py-1.5 bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-800 text-white font-bold text-xs rounded shadow-xs cursor-pointer transition-colors">
+            ⚪ Hide
+          </button>
+          <button id="bulk-activate-btn" disabled onclick="bulkToggleProductsActive(true)" class="px-3 py-1.5 bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-emerald-800 text-white font-bold text-xs rounded shadow-xs cursor-pointer transition-colors">
+            🟢 Activate
+          </button>
+          <button id="bulk-out-stock-btn" disabled onclick="bulkSetStock(0)" class="px-3 py-1.5 bg-amber-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-amber-700 text-white font-bold text-xs rounded shadow-xs cursor-pointer transition-colors">
+            🔴 Out of Stock
+          </button>
+          <button id="bulk-in-stock-btn" disabled onclick="bulkSetStock(100)" class="px-3 py-1.5 bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-teal-800 text-white font-bold text-xs rounded shadow-xs cursor-pointer transition-colors">
+            🟢 In Stock
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 font-extrabold uppercase">
+              <tr>
+                <th class="p-3.5 w-10 text-center">
+                  <input type="checkbox" id="select-all-products" onchange="toggleSelectAllProducts(this.checked)" class="w-4 h-4 cursor-pointer rounded" />
+                </th>
+                <th class="p-3.5">Image</th>
+                <th class="p-3.5">Product Name</th>
+                <th class="p-3.5">Category</th>
+                <th class="p-3.5">Price / MRP</th>
+                <th class="p-3.5">Tags &amp; Badges</th>
+                <th class="p-3.5">Active Status</th>
+                <th class="p-3.5">Inventory</th>
+                <th class="p-3.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-product-table-body" class="divide-y divide-slate-200 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: ADD NEW PRODUCT TAB -->
+    <div id="tab-add-product" class="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-5" style="height:0;overflow:hidden;visibility:hidden;position:absolute;pointer-events:none;opacity:0;">
+      <div>
+        <h2 id="add-prod-heading" class="font-serif-title text-xl font-bold text-slate-900 uppercase">ADD NEW PRODUCT</h2>
+        <p class="text-xs text-slate-500 mt-1">Upload a photo from your computer or phone to publish a product live to Supabase Storage.</p>
+      </div>
+
+      <form onsubmit="handleAddNewProduct(event)" enctype="multipart/form-data" class="space-y-4 text-xs">
+        <input id="edit-prod-id" type="hidden" />
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Product Title</label>
+          <input id="new-prod-name" type="text" required placeholder="e.g. Handcrafted Decorative Plate" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Selling Price (₹)</label>
+            <input id="new-prod-price" type="number" required placeholder="499" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Original MRP (₹)</label>
+            <input id="new-prod-mrp" type="number" placeholder="799" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Category</label>
+          <select id="new-prod-category" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900">
+            <!-- Dynamically populated per shop -->
+          </select>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block font-bold text-slate-700 uppercase tracking-wider">Select Product Tags (Layer 2 Component DSL)</label>
+          <div class="flex flex-wrap gap-2 text-xs" id="tag-selector-box">
+            <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 flex items-center space-x-1.5">
+              <input type="checkbox" value="bestseller" class="tag-checkbox cursor-pointer" />
+              <span>🔥 BESTSELLER</span>
+            </label>
+            <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 flex items-center space-x-1.5">
+              <input type="checkbox" value="10%_off" class="tag-checkbox cursor-pointer" />
+              <span>🏷️ 10% OFF</span>
+            </label>
+            <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 flex items-center space-x-1.5">
+              <input type="checkbox" value="b2g1" class="tag-checkbox cursor-pointer" />
+              <span>🎁 BUY 2 GET 1</span>
+            </label>
+            <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 flex items-center space-x-1.5">
+              <input type="checkbox" value="new_arrival" class="tag-checkbox cursor-pointer" />
+              <span>✨ NEW ARRIVAL</span>
+            </label>
+            <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 flex items-center space-x-1.5">
+              <input type="checkbox" value="featured" class="tag-checkbox cursor-pointer" />
+              <span>⭐ FEATURED</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Bare-minimum file upload -->
+        <div class="space-y-2">
+          <label class="block font-bold text-slate-700 uppercase tracking-wider">Product Photo Upload (Cloud Storage)</label>
+
+          <label for="new-prod-file" style="display:inline-block;padding:10px 16px;background:#0f172a;color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:6px;cursor:pointer;user-select:none;">📸 Browse &amp; Choose Photo</label>
+          <input id="new-prod-file" type="file" accept="image/*" onchange="previewProductImage(event)" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;" />
+          <span id="prod-file-label" style="font-size:11px;color:#64748b;font-weight:700;margin-left:8px;">No file chosen</span>
+
+          <div style="margin-top:6px;">
+            <div style="font-size:10px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Or Paste Image URL Directly:</div>
+            <input type="text" placeholder="https://images.unsplash.com/photo-..." oninput="document.getElementById('new-prod-image-url').value = this.value" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900 font-mono" />
+          </div>
+
+          <div id="image-upload-preview" class="mt-2"></div>
+          <input id="new-prod-image-url" type="hidden" />
+        </div>
+
+        <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded cursor-pointer shadow-md">
+          Publish Product to Supabase Cloud
+        </button>
+      </form>
+    </div>
+
+    <!-- SECTION 6: STORE TEMPLATE & THEME CUSTOMIZER STUDIO TAB -->
+    <div id="tab-settings" class="space-y-6 text-xs" style="height:0;overflow:hidden;visibility:hidden;position:absolute;pointer-events:none;opacity:0;">
+      <div>
+        <h2 class="font-serif-title text-xl font-bold text-slate-900 uppercase">STORE TEMPLATE DESIGN STUDIO & THEME CUSTOMIZER</h2>
+        <p class="text-xs text-slate-500 mt-1">Configure layout template variants, brand colors, typography, WhatsApp phone number, and announcement text.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        
+        <!-- Left 2-Cols: Full Customization Form -->
+        <div class="lg:col-span-2 bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-xs space-y-6">
+          <form onsubmit="handleSaveShopSettings(event)" class="space-y-5">
+            
+            <!-- Store Identity Section -->
+            <div class="space-y-4 pb-4 border-b border-slate-200">
+              <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">1. Store Brand Identity</h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Store Name</label>
+                  <input id="settings-name" type="text" oninput="updateLivePreview()" placeholder="e.g. YesFancy Gift Corner" class="w-full px-3.5 py-2.5 border border-slate-300 rounded font-bold text-slate-900 focus:outline-none focus:border-slate-900" />
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Store Tagline / Slogan</label>
+                  <input id="settings-tagline" type="text" oninput="updateLivePreview()" placeholder="e.g. Premium Handcrafted Gifts & Home Decor" class="w-full px-3.5 py-2.5 border border-slate-300 rounded font-medium text-slate-900 focus:outline-none focus:border-slate-900" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Template Layout Variant Section -->
+            <div class="space-y-3 pb-4 border-b border-slate-200">
+              <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">2. Template Layout Variant</h3>
+              <select id="settings-template" onchange="updateLivePreview()" class="w-full px-3.5 py-3 border border-slate-300 rounded font-bold text-slate-900 text-xs focus:outline-none focus:border-slate-900 bg-slate-50">
+                <option value="gift_novelty_template_2">🎁 Gift &amp; Novelty Template 1 (Responsive Category Grid Layout)</option>
+                <option value="gift_novelty_template_1">🎁 Gift &amp; Novelty Template 2 (Express Showcase Layout)</option>
+                <option value="paan_beverage_express">🍃 Paan &amp; Refreshments Quick Order Style (FMCG &amp; Drinks)</option>
+                <option value="boutique_saree_fashion">👗 Luxe Boutique &amp; Ethnic Fashion Style (Apparel &amp; Sarees)</option>
+              </select>
+            </div>
+
+            <!-- Color Palette Section -->
+            <div class="space-y-3 pb-4 border-b border-slate-200">
+              <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">3. Brand Color Palette</h3>
+              
+              <div class="grid grid-cols-3 gap-3">
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Primary Color</label>
+                  <div class="flex items-center space-x-1.5">
+                    <input id="settings-primary-color" type="color" value="#00A896" oninput="document.getElementById('settings-primary-hex').value = this.value; updateLivePreview();" class="w-8 h-8 border border-slate-300 rounded cursor-pointer p-0.5" />
+                    <input id="settings-primary-hex" type="text" value="#00A896" oninput="document.getElementById('settings-primary-color').value = this.value; updateLivePreview();" class="w-full px-2 py-1.5 border border-slate-300 rounded font-mono font-bold text-[11px] uppercase" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Secondary Surface</label>
+                  <div class="flex items-center space-x-1.5">
+                    <input id="settings-secondary-color" type="color" value="#F8FAFC" oninput="document.getElementById('settings-secondary-hex').value = this.value; updateLivePreview();" class="w-8 h-8 border border-slate-300 rounded cursor-pointer p-0.5" />
+                    <input id="settings-secondary-hex" type="text" value="#F8FAFC" oninput="document.getElementById('settings-secondary-color').value = this.value; updateLivePreview();" class="w-full px-2 py-1.5 border border-slate-300 rounded font-mono font-bold text-[11px] uppercase" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Accent Button</label>
+                  <div class="flex items-center space-x-1.5">
+                    <input id="settings-accent-color" type="color" value="#E63946" oninput="document.getElementById('settings-accent-hex').value = this.value; updateLivePreview();" class="w-8 h-8 border border-slate-300 rounded cursor-pointer p-0.5" />
+                    <input id="settings-accent-hex" type="text" value="#E63946" oninput="document.getElementById('settings-accent-color').value = this.value; updateLivePreview();" class="w-full px-2 py-1.5 border border-slate-300 rounded font-mono font-bold text-[11px] uppercase" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Typography & Contact Section -->
+            <div class="space-y-3 pb-4 border-b border-slate-200">
+              <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">4. Typography &amp; Support Contact</h3>
+              
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Header Title Font</label>
+                  <select id="settings-font-title" onchange="updateLivePreview()" class="w-full px-3.5 py-2.5 border border-slate-300 rounded font-bold text-slate-900 text-xs">
+                    <option value="Playfair Display">Playfair Display (Serif Elegance)</option>
+                    <option value="Montserrat">Montserrat (Modern Bold)</option>
+                    <option value="Cinzel">Cinzel (Luxury Classic)</option>
+                    <option value="Outfit">Outfit (Clean Geometry)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Phone Number</label>
+                  <input id="settings-phone" type="text" value="918197921458" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded font-bold text-slate-900" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Announcement Section -->
+            <div class="space-y-2">
+              <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">5. Announcement Bar</h3>
+              <input id="settings-announcement" type="text" oninput="updateLivePreview()" placeholder="e.g. Free Local Delivery on orders above Rs. 499!" class="w-full px-3.5 py-2.5 border border-slate-300 rounded font-medium text-slate-900" />
+            </div>
+
+            <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded cursor-pointer shadow-md">
+              Save Customization to Supabase Database
+            </button>
+          </form>
+        </div>
+
+        <!-- Right 1-Col: Live Interactive Storefront Preview Card -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-4 sticky top-6">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-xs text-slate-900 uppercase tracking-wider flex items-center space-x-1.5">
+              <span>👁️ Live Theme Preview</span>
+            </h3>
+            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">Interactive</span>
+          </div>
+
+          <!-- Live Preview Window Box -->
+          <div id="preview-window" class="border border-slate-300 rounded-lg overflow-hidden shadow-sm bg-slate-50 text-xs transition-all">
+            <!-- Preview Top Announcement Bar -->
+            <div id="preview-announcement-bar" class="bg-slate-900 text-white text-[10px] py-1 px-3 text-center font-semibold truncate">
+              Free Local Delivery on orders above Rs. 499!
+            </div>
+
+            <!-- Preview Header Bar -->
+            <div id="preview-header-bar" class="p-3 bg-white border-b border-slate-200 flex items-center justify-between">
+              <span id="preview-store-name" class="font-extrabold text-sm tracking-wider text-slate-900 uppercase">YesFancy</span>
+              <div class="flex space-x-1">
+                <span id="preview-accent-btn" class="px-2 py-1 bg-rose-600 text-white text-[9px] font-bold rounded">Cart (0)</span>
+              </div>
+            </div>
+
+            <!-- Preview Hero Canvas Section -->
+            <div id="preview-hero-box" class="p-5 text-white text-center space-y-2" style="background-color:#00A896;">
+              <span class="bg-white/20 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Template Preview</span>
+              <h4 id="preview-title-sample" class="text-base font-extrabold leading-tight">Handcrafted Collection</h4>
+              <p id="preview-tagline-sample" class="text-[10px] opacity-90 truncate">Premium Handcrafted Gifts &amp; Home Decor</p>
+              <button id="preview-cta-btn" class="px-3 py-1.5 bg-white text-slate-900 font-extrabold text-[10px] uppercase rounded shadow-xs mt-1">
+                Explore Store
+              </button>
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 text-center font-medium">
+            Updates in real-time as you tweak colors, fonts &amp; store details above.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script define:vars={{ allShopsData: allShops, supabaseUrl, supabaseAnonKey }}>
+    let currentShop = null;
+    let realtimeChannel = null;
+
+    console.log('🚀 Merchant Admin Portal Script Initialized. Registered shops:', allShopsData.length);
+
+    window.showToast = function(title, message, icon = '✅') {
+      const modal = document.getElementById('toast-modal');
+      const card = document.getElementById('toast-card');
+      const iconElem = document.getElementById('toast-icon');
+      const titleElem = document.getElementById('toast-title');
+      const msgElem = document.getElementById('toast-message');
+
+      if (iconElem) iconElem.innerText = icon;
+      if (titleElem) titleElem.innerText = title;
+      if (msgElem) msgElem.innerText = message;
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+      }
+      if (card) { card.classList.remove('scale-95'); card.classList.add('scale-100'); }
+    };
+
+    window.closeToastModal = function() {
+      const modal = document.getElementById('toast-modal');
+      const card = document.getElementById('toast-card');
+      if (modal) {
+        modal.classList.add('opacity-0', 'pointer-events-none', 'hidden');
+      }
+      if (card) { card.classList.remove('scale-100'); card.classList.add('scale-95'); }
+    };
+
+    let pendingConfirmResolver = null;
+
+    window.showThemeConfirm = function(title, message, confirmText = 'Delete', icon = '🗑️') {
+      return new Promise((resolve) => {
+        pendingConfirmResolver = resolve;
+        const modal = document.getElementById('confirm-modal');
+        const card = document.getElementById('confirm-card');
+        const iconElem = document.getElementById('confirm-icon');
+        const titleElem = document.getElementById('confirm-title');
+        const msgElem = document.getElementById('confirm-message');
+        const actionBtn = document.getElementById('confirm-action-btn');
+
+        if (iconElem) iconElem.innerText = icon;
+        if (titleElem) titleElem.innerText = title;
+        if (msgElem) msgElem.innerText = message;
+        if (actionBtn) {
+          actionBtn.innerText = confirmText;
+          actionBtn.onclick = function() {
+            closeConfirmModal(true);
+          };
+        }
+
+        if (modal) { modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none'); }
+        if (card) { card.classList.remove('scale-95'); card.classList.add('scale-100'); }
+      });
+    };
+
+    window.closeConfirmModal = function(result) {
+      const modal = document.getElementById('confirm-modal');
+      const card = document.getElementById('confirm-card');
+      if (modal) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+      }
+      if (card) { card.classList.remove('scale-100'); card.classList.add('scale-95'); }
+      if (pendingConfirmResolver) {
+        pendingConfirmResolver(result);
+        pendingConfirmResolver = null;
+      }
+    };
+
+    window.handleVendorLogin = function(e) {
+      if (e) e.preventDefault();
+      const selectedSlug = document.getElementById('login-shop-select').value;
+      const pin = document.getElementById('login-pin-input').value;
+
+      console.log('🔐 Merchant Login Attempt:', { selectedSlug, pin });
+
+      if (pin !== "1234") {
+        window.showToast('Authentication Error', 'Invalid Security PIN! Default PIN is 1234.', '⚠️');
+        return;
+      }
+
+      currentShop = allShopsData.find(s => s.slug === selectedSlug) || allShopsData[0];
+
+      try {
+        localStorage.setItem('oorumart_admin_session_slug', currentShop.slug);
+      } catch (err) {}
+
+      // Update Header & Controls
+      const titleElem = document.getElementById('active-vendor-title');
+      const avatarElem = document.getElementById('active-vendor-avatar');
+      const domainElem = document.getElementById('active-vendor-domain');
+      const liveLinkElem = document.getElementById('live-shop-link');
+      
+      const nameInput = document.getElementById('settings-name');
+      const phoneInput = document.getElementById('settings-phone');
+      const annInput = document.getElementById('settings-announcement');
+      const taglineInput = document.getElementById('settings-tagline');
+      const tmplInput = document.getElementById('settings-template');
+      const colorInput = document.getElementById('settings-primary-color');
+      const hexInput = document.getElementById('settings-primary-hex');
+      const secColorInput = document.getElementById('settings-secondary-color');
+      const secHexInput = document.getElementById('settings-secondary-hex');
+      const fontInput = document.getElementById('settings-font-title');
+
+      if (titleElem) titleElem.innerText = currentShop.name;
+      if (avatarElem) avatarElem.innerText = currentShop.slug.slice(0, 2).toUpperCase();
+      if (domainElem) domainElem.innerText = `${currentShop.slug}.oorumart.in`;
+      if (liveLinkElem) liveLinkElem.href = `/?shop=${currentShop.slug}`;
+      if (nameInput) nameInput.value = currentShop.name || '';
+      if (phoneInput) phoneInput.value = currentShop.phone || '918197921458';
+      if (annInput) annInput.value = currentShop.announcement_text || '';
+      if (taglineInput) taglineInput.value = currentShop.tagline || '';
+      if (tmplInput) tmplInput.value = currentShop.template || 'gift_novelty_template_1';
+      
+      const pColor = currentShop.theme?.primary_color || '#00A896';
+      if (colorInput) colorInput.value = pColor;
+      if (hexInput) hexInput.value = pColor;
+
+      const sColor = currentShop.theme?.secondary_color || '#F8FAFC';
+      if (secColorInput) secColorInput.value = sColor;
+      if (secHexInput) secHexInput.value = sColor;
+
+      if (fontInput) fontInput.value = currentShop.theme?.font_title || 'Playfair Display';
+
+      // Populate Category Dropdown
+      const catSelect = document.getElementById('new-prod-category');
+      if (catSelect) {
+        catSelect.innerHTML = (currentShop.categories || []).map(c => `
+          <option value="${c.id}">${c.label}</option>
+        `).join('');
+      }
+
+      // Hide login modal explicitly
+      const modal = document.getElementById('admin-login-screen');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+
+      console.log('✅ Logged in successfully as merchant:', currentShop.name);
+
+      // Request OS notification permission immediately on login (requires user gesture — login click qualifies)
+      window.requestNotifPermission().then(granted => {
+        if (granted) console.log('🔔 OS notification permission granted — order alerts will use device sound');
+        else console.warn('⚠️ Notification permission denied — falling back to synthesized chime');
+      });
+
+      window.renderAdminProducts();
+      window.renderAdminCategories();
+      window.renderAdminHeroBanners();
+      window.updateLivePreview();
+      window.loadAdminOrders();
+
+      // Start hybrid sync polling interval (4s) as guaranteed fallback in case WebSocket drops
+      if (ordersPollInterval) clearInterval(ordersPollInterval);
+      ordersPollInterval = setInterval(() => {
+        if (currentShop) window.loadAdminOrders(true);
+      }, 4000);
+
+      // Industry Standard: Event-Driven Realtime WebSocket Push
+      if (window.supabase && supabaseUrl && supabaseAnonKey) {
+        try {
+          const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+          if (realtimeChannel) {
+            try { supabaseClient.removeChannel(realtimeChannel); } catch (e) {}
+          }
+          realtimeChannel = supabaseClient
+            .channel(`public-orders-${currentShop.slug}`)
+            .on('postgres_changes', {
+              event: '*',
+              schema: 'public',
+              table: 'orders'
+            }, (payload) => {
+              if (currentShop && payload.new && (payload.new.shop_slug === currentShop.slug || !payload.new.shop_slug)) {
+                console.log('🔔 Realtime Order Received via Supabase Socket for tenant:', currentShop.slug, payload.new);
+                window.playOrderNotificationSound(
+                  `🛍️ New Order — ${currentShop.name}`,
+                  `Order #${payload.new.order_id} | Rs. ${payload.new.total} | ${payload.new.customer_name}`
+                );
+                window.loadAdminOrders();
+              }
+            })
+            .subscribe((status) => {
+              console.log(`📡 Supabase Realtime Socket Status for [${currentShop.slug}]:`, status);
+            });
+        } catch (err) {}
+      }
+    };
+
+    // Industry Standard: Auto-sync when merchant returns to browser tab
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && currentShop) {
+        console.log('🔄 Tab focused: Syncing latest orders from server...');
+        window.loadAdminOrders();
+      }
+    });
+
+    // Wire test sound button — requests permission first then fires test notification
+    const testSoundBtn = document.getElementById('btn-test-sound');
+    if (testSoundBtn) {
+      testSoundBtn.addEventListener('click', async () => {
+        await window.requestNotifPermission();
+        window.playOrderNotificationSound('🔔 Test Alert — Oorumart Admin', 'This is a test order notification sound.');
+      });
+    }
+
+    // playOrderNotificationSound is defined in the is:inline bootstrap script above
+
+    window.logoutVendor = function() {
+      try { localStorage.removeItem('oorumart_admin_session_slug'); } catch (err) {}
+      const modal = document.getElementById('admin-login-screen');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    };
+
+    // Chrome on macOS file access warning banner
+    (function() {
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      const isMac = /Mac/.test(navigator.platform || navigator.userAgentData?.platform || '');
+      const dismissed = localStorage.getItem('chrome_file_warning_dismissed');
+      if (isChrome && isMac && !dismissed) {
+        const banner = document.getElementById('chrome-file-warning');
+        if (banner) banner.style.display = 'flex';
+      }
+    })();
+
+    window.dismissChromeWarning = function() {
+      const banner = document.getElementById('chrome-file-warning');
+      if (banner) banner.style.display = 'none';
+      localStorage.setItem('chrome_file_warning_dismissed', '1');
+    };
+
+    window.switchTab = function(tabId) {
+      console.log('📂 Switching Admin Tab to:', tabId);
+      ['orders', 'categories', 'banners', 'products', 'add-product', 'settings'].forEach(t => {
+        const tab = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabId) {
+          // ACTIVE: fully visible in normal document flow
+          if (tab) {
+            tab.style.height = 'auto';
+            tab.style.overflow = 'visible';
+            tab.style.visibility = 'visible';
+            tab.style.position = 'static';
+            tab.style.pointerEvents = 'auto';
+            tab.style.opacity = '1';
+          }
+          btn?.classList.add('border-slate-900', 'text-slate-900');
+          btn?.classList.remove('border-transparent', 'text-slate-500');
+        } else {
+          // INACTIVE: zero height, clipped, invisible — but NOT display:none!
+          // Chrome requires file inputs to never have a display:none ancestor
+          // or the native file picker will be blocked silently.
+          if (tab) {
+            tab.style.height = '0';
+            tab.style.overflow = 'hidden';
+            tab.style.visibility = 'hidden';
+            tab.style.position = 'absolute';
+            tab.style.pointerEvents = 'none';
+            tab.style.opacity = '0';
+          }
+          btn?.classList.remove('border-slate-900', 'text-slate-900');
+          btn?.classList.add('border-transparent', 'text-slate-500');
+        }
+      });
+    };
+
+    window.editCategory = function(catId) {
+      if (!currentShop) return;
+      const cat = (currentShop.categories || []).find(c => c.id === catId);
+      if (!cat) return;
+
+      console.log('✏️ Editing Category:', cat);
+
+      document.getElementById('cat-id-input').value = cat.id;
+      document.getElementById('cat-label-input').value = cat.label;
+      document.getElementById('cat-tag-input').value = cat.tag || cat.id;
+      document.getElementById('cat-image-url').value = cat.image_url || '';
+      document.getElementById('cat-form-title').innerText = `✏️ EDITING: ${cat.label.toUpperCase()}`;
+
+      const submitBtn = document.getElementById('cat-submit-btn');
+      if (submitBtn) submitBtn.innerText = `💾 Save Photo & Updates to "${cat.label}"`;
+
+      // Show existing image in file label and preview
+      const fileLabelElem = document.getElementById('cat-file-label');
+      if (fileLabelElem) fileLabelElem.innerText = cat.image_url ? '✅ Existing image loaded (upload new to replace)' : 'No file chosen';
+      
+      const preview = document.getElementById('cat-upload-preview');
+      if (preview && cat.image_url) {
+        preview.innerHTML = `
+          <div class="mt-2">
+            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Current Active Image:</div>
+            <img src="${cat.image_url}" class="max-h-24 rounded border border-slate-200 shadow-sm" />
+          </div>
+        `;
+      }
+
+      // Scroll form into view
+      document.getElementById('cat-form-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    window.resetCategoryForm = function() {
+      document.getElementById('cat-id-input').value = '';
+      document.getElementById('cat-label-input').value = '';
+      document.getElementById('cat-tag-input').value = '';
+      document.getElementById('cat-image-url').value = '';
+      document.getElementById('cat-upload-preview').innerHTML = '';
+      document.getElementById('cat-file-label').innerText = 'No file chosen';
+      document.getElementById('cat-form-title').innerText = 'Add / Update Category Carousel';
+      const submitBtn = document.getElementById('cat-submit-btn');
+      if (submitBtn) submitBtn.innerText = 'Save Category Carousel to Supabase';
+    };
+
+    window.editProduct = function(prodId) {
+      if (!currentShop) return;
+      const prod = (currentShop.products || []).find(p => p.id === prodId);
+      if (!prod) return;
+
+      console.log('✏️ Editing Product:', prod);
+
+      document.getElementById('edit-prod-id').value = prod.id;
+      document.getElementById('new-prod-name').value = prod.name;
+      document.getElementById('new-prod-price').value = prod.price;
+      document.getElementById('new-prod-mrp').value = prod.mrp || prod.price;
+      document.getElementById('new-prod-category').value = prod.category_id;
+      document.getElementById('new-prod-image-url').value = prod.image_url || '';
+      document.getElementById('add-prod-heading').innerText = `EDIT PRODUCT: ${prod.name.toUpperCase()}`;
+
+      const preview = document.getElementById('image-upload-preview');
+      if (preview && prod.image_url) {
+        preview.innerHTML = `<img src="${prod.image_url}" class="max-h-28 mx-auto rounded border border-slate-200 shadow-sm mt-2" />`;
+      }
+
+      window.switchTab('add-product');
+    };
+
+    window.deleteCategory = async function(catId, label) {
+      if (!currentShop) return;
+      const confirmed = await window.showThemeConfirm('Delete Category', `Are you sure you want to delete category "${label}"?`, 'Delete Category', '🗑️');
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch(`/api/categories?id=${encodeURIComponent(catId)}&shop=${currentShop.slug}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentShop.categories = (currentShop.categories || []).filter(c => c.id !== catId);
+          window.renderAdminCategories();
+          window.showToast('Category Deleted', `Category "${label}" deleted successfully.`, '🗑️');
+        } else {
+          window.showToast('Error', data.error || 'Failed to delete category.', '❌');
+        }
+      } catch (err) {
+        console.error('Delete category error:', err);
+        window.showToast('Error', 'Failed to delete category.', '❌');
+      }
+    };
+
+    window.deleteProduct = async function(prodId, name) {
+      if (!currentShop) return;
+      const confirmed = await window.showThemeConfirm('Delete Product', `Are you sure you want to delete product "${name}"?`, 'Delete Product', '🗑️');
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch(`/api/products?id=${encodeURIComponent(prodId)}&shop=${currentShop.slug}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentShop.products = (currentShop.products || []).filter(p => p.id !== prodId);
+          window.renderAdminProducts();
+          window.showToast('Product Deleted', `Product "${name}" deleted successfully.`, '🗑️');
+        } else {
+          window.showToast('Error', data.error || 'Failed to delete product.', '❌');
+        }
+      } catch (err) {
+        console.error('Delete product error:', err);
+        window.showToast('Error', 'Failed to delete product.', '❌');
+      }
+    };
+
+    window.toggleProductActive = async function(prodId, currentStatus) {
+      if (!currentShop) return;
+      const newStatus = !currentStatus;
+
+      try {
+        const res = await fetch('/api/products', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shop_slug: currentShop.slug, id: prodId, is_active: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const prod = (currentShop.products || []).find(p => p.id === prodId);
+          if (prod) prod.is_active = newStatus;
+          window.renderAdminProducts();
+          window.showToast('Product Status Updated', `Product is now ${newStatus ? 'Active on Storefront' : 'Hidden / Deactivated'}.`, newStatus ? '🟢' : '⚪');
+        } else {
+          window.showToast('Error', data.error || 'Failed to update status.', '❌');
+        }
+      } catch (err) {
+        console.error('Toggle status error:', err);
+        window.showToast('Error', 'Failed to update status.', '❌');
+      }
+    };
+
+    window.deleteHeroBanner = async function(bannerId, title) {
+      if (!currentShop) return;
+      const confirmed = await window.showThemeConfirm('Delete Banner', `Are you sure you want to delete banner "${title}"?`, 'Delete Banner', '🗑️');
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch(`/api/hero-slides?id=${encodeURIComponent(bannerId)}&shop=${currentShop.slug}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (currentShop.carousels && currentShop.carousels.hero) {
+            currentShop.carousels.hero = currentShop.carousels.hero.filter(b => (b.id || b.title) !== bannerId);
+          }
+          window.renderAdminHeroBanners();
+          window.showToast('Banner Deleted', `Hero banner slide deleted successfully.`, '🗑️');
+        } else {
+          window.showToast('Error', data.error || 'Failed to delete banner.', '❌');
+        }
+      } catch (err) {
+        console.error('Delete banner error:', err);
+        window.showToast('Error', 'Failed to delete banner.', '❌');
+      }
+    };
+
+    window.renderAdminCategories = function() {
+      if (!currentShop) return;
+      const cats = currentShop.categories || [];
+      const grid = document.getElementById('admin-categories-grid');
+      if (!grid) return;
+
+      if (cats.length === 0) {
+        grid.innerHTML = `<div class="p-6 bg-white border border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-500">No categories created yet for this store.</div>`;
+      } else {
+        grid.innerHTML = cats.map(c => `
+          <div class="bg-white border border-slate-200 rounded-xl p-4 flex space-x-3 items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3">
+              <img src="${c.image_url || '/images/hero_banner.jpg'}" alt="${c.label}" class="w-14 h-14 object-cover rounded-lg border border-slate-200" />
+              <div class="space-y-0.5">
+                <h4 class="font-bold text-slate-900 text-xs">${c.label}</h4>
+                <div class="text-[10px] text-slate-500">Tag Code: <code class="bg-slate-100 text-rose-600 px-1 py-0.5 rounded font-bold">${c.tag || c.id}</code></div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 shrink-0">
+              <button onclick="editCategory('${c.id}')" class="px-2.5 py-1.5 bg-slate-900 text-white rounded font-bold text-[11px] cursor-pointer hover:bg-slate-800">
+                ✏️ Edit
+              </button>
+              <button onclick="deleteCategory('${c.id}', '${(c.label || '').replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded font-bold text-[11px] cursor-pointer border border-rose-200">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    };
+
+    window.renderAdminProducts = function() {
+      if (!currentShop) return;
+
+      const catSelect = document.getElementById('admin-prod-cat-filter');
+      if (catSelect) {
+        const curVal = catSelect.value;
+        catSelect.innerHTML = `<option value="all">All Categories</option>` + (currentShop.categories || []).map(c => `
+          <option value="${c.id}">${c.label}</option>
+        `).join('');
+        catSelect.value = curVal || 'all';
+      }
+
+      window.filterAdminProducts();
+    };
+
+    window.filterAdminProducts = function() {
+      if (!currentShop) return;
+
+      const prods = currentShop.products || [];
+      const searchVal = (document.getElementById('admin-prod-search')?.value || '').toLowerCase();
+      const catVal = document.getElementById('admin-prod-cat-filter')?.value || 'all';
+      const statusVal = document.getElementById('admin-prod-status-filter')?.value || 'all';
+
+      const filtered = prods.filter(p => {
+        if (searchVal) {
+          const matchName = (p.name || '').toLowerCase().includes(searchVal);
+          const matchCat = (p.category_id || '').toLowerCase().includes(searchVal);
+          const matchBadge = (p.badge || '').toLowerCase().includes(searchVal);
+          if (!matchName && !matchCat && !matchBadge) return false;
+        }
+
+        if (catVal !== 'all' && p.category_id !== catVal && !(Array.isArray(p.tags) && p.tags.includes(catVal))) {
+          return false;
+        }
+
+        if (statusVal === 'active' && p.is_active === false) return false;
+        if (statusVal === 'hidden' && p.is_active !== false) return false;
+
+        return true;
+      });
+
+      const countLabel = document.getElementById('products-count-label');
+      if (countLabel) countLabel.innerText = filtered.length;
+
+      const tbody = document.getElementById('admin-product-table-body');
+      if (tbody) {
+        if (filtered.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-xs text-slate-500 font-medium">No products match your search or filter criteria.</td></tr>`;
+        } else {
+          tbody.innerHTML = filtered.map(p => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-3 text-center">
+                <input type="checkbox" value="${p.id}" onchange="updateSelectedProductsState()" class="prod-select-checkbox w-4 h-4 cursor-pointer rounded" />
+              </td>
+              <td class="p-3">
+                <img src="${p.image_url}" alt="${p.name}" class="w-12 h-12 object-cover rounded border border-slate-200" />
+              </td>
+              <td class="p-3 font-bold text-slate-900 max-w-xs truncate">${p.name}</td>
+              <td class="p-3 text-slate-600 uppercase font-semibold text-[11px]">${p.category_id}</td>
+              <td class="p-3 font-bold">
+                <span class="text-rose-600">₹ ${p.price}</span>
+                ${p.mrp ? `<span class="line-through text-slate-400 text-[11px] ml-1">₹ ${p.mrp}</span>` : ''}
+              </td>
+              <td class="p-3">
+                <div class="flex flex-wrap gap-1">
+                  ${p.badge ? `<span class="bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">${p.badge}</span>` : ''}
+                  ${Array.isArray(p.tags) ? p.tags.map((t) => `<span class="bg-slate-100 text-slate-700 text-[9px] font-bold px-1.5 py-0.5 rounded border border-slate-300">${t}</span>`).join('') : ''}
+                </div>
+              </td>
+              <td class="p-3">
+                <button onclick="toggleProductActive('${p.id}', ${p.is_active !== false})" class="px-2 py-1 rounded font-bold text-[10px] cursor-pointer transition-colors ${p.is_active !== false ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-slate-200 text-slate-600 hover:bg-slate-300'}">
+                  ${p.is_active !== false ? '🟢 Active' : '⚪ Hidden'}
+                </button>
+              </td>
+              <td class="p-3">
+                <button onclick="toggleProductStock('${p.id}', ${p.stock !== undefined && p.stock <= 0 ? 100 : 0})" class="px-2 py-1 rounded font-bold text-[10px] cursor-pointer transition-colors ${p.stock !== undefined && p.stock <= 0 ? 'bg-rose-100 text-rose-800 hover:bg-rose-200' : 'bg-teal-100 text-teal-800 hover:bg-teal-200'}">
+                  ${p.stock !== undefined && p.stock <= 0 ? '🔴 Out of Stock' : `🟢 In Stock (${p.stock ?? 100})`}
+                </button>
+              </td>
+              <td class="p-3 text-right">
+                <div class="flex items-center justify-end space-x-1.5">
+                  <button onclick="editProduct('${p.id}')" class="px-2.5 py-1 bg-slate-900 text-white rounded font-bold text-[11px] cursor-pointer hover:bg-slate-800">
+                    ✏️ Edit
+                  </button>
+                  <button onclick="deleteProduct('${p.id}', '${(p.name || '').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded font-bold text-[11px] cursor-pointer border border-rose-200">
+                    🗑️ Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      const selectAll = document.getElementById('select-all-products');
+      if (selectAll) selectAll.checked = false;
+      window.updateSelectedProductsState();
+    };
+
+    window.toggleSelectAllProducts = function(checked) {
+      const boxes = document.querySelectorAll('.prod-select-checkbox');
+      boxes.forEach(box => { box.checked = checked; });
+      window.updateSelectedProductsState();
+    };
+
+    window.getSelectedProductIds = function() {
+      const boxes = document.querySelectorAll('.prod-select-checkbox:checked');
+      return Array.from(boxes).map(box => box.value);
+    };
+
+    window.updateSelectedProductsState = function() {
+      const selectedIds = window.getSelectedProductIds();
+      const count = selectedIds.length;
+
+      const countBadge = document.getElementById('bulk-selected-count');
+      const deleteBtn = document.getElementById('bulk-delete-btn');
+      const deactivateBtn = document.getElementById('bulk-deactivate-btn');
+      const activateBtn = document.getElementById('bulk-activate-btn');
+      const outStockBtn = document.getElementById('bulk-out-stock-btn');
+      const inStockBtn = document.getElementById('bulk-in-stock-btn');
+
+      if (countBadge) countBadge.innerText = `${count} selected`;
+
+      if (deleteBtn) deleteBtn.disabled = count === 0;
+      if (deactivateBtn) deactivateBtn.disabled = count === 0;
+      if (activateBtn) activateBtn.disabled = count === 0;
+      if (outStockBtn) outStockBtn.disabled = count === 0;
+      if (inStockBtn) inStockBtn.disabled = count === 0;
+    };
+
+    window.bulkDeleteProducts = async function() {
+      if (!currentShop) return;
+      const selectedIds = window.getSelectedProductIds();
+      if (selectedIds.length === 0) return;
+
+      const confirmed = await window.showThemeConfirm('Bulk Delete Products', `Are you sure you want to permanently delete ${selectedIds.length} selected products from Supabase?`, `Delete ${selectedIds.length} Products`, '🗑️');
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch('/api/products', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shop_slug: currentShop.slug, ids: selectedIds })
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentShop.products = (currentShop.products || []).filter(p => !selectedIds.includes(p.id));
+          window.renderAdminProducts();
+          window.showToast('Bulk Delete Successful', `${selectedIds.length} products permanently deleted from Supabase.`, '🗑️');
+        } else {
+          window.showToast('Error', data.error || 'Failed bulk delete.', '❌');
+        }
+      } catch (err) {
+        console.error('Bulk delete error:', err);
+        window.showToast('Error', 'Failed bulk delete.', '❌');
+      }
+    };
+
+    window.bulkToggleProductsActive = async function(newStatus) {
+      if (!currentShop) return;
+      const selectedIds = window.getSelectedProductIds();
+      if (selectedIds.length === 0) return;
+
+      try {
+        const res = await fetch('/api/products', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shop_slug: currentShop.slug, ids: selectedIds, is_active: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          (currentShop.products || []).forEach(p => {
+            if (selectedIds.includes(p.id)) p.is_active = newStatus;
+          });
+          window.renderAdminProducts();
+          window.showToast('Bulk Status Updated', `${selectedIds.length} products are now ${newStatus ? 'Active' : 'Hidden'}.`, newStatus ? '🟢' : '⚪');
+        } else {
+          window.showToast('Error', data.error || 'Failed bulk status update.', '❌');
+        }
+      } catch (err) {
+        console.error('Bulk status update error:', err);
+        window.showToast('Error', 'Failed bulk status update.', '❌');
+      }
+    };
+
+    window.toggleProductStock = async function(id, newStock) {
+      if (!currentShop) return;
+
+      try {
+        const res = await fetch('/api/products', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shop_slug: currentShop.slug, id, stock: newStock })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const prod = (currentShop.products || []).find(p => p.id === id);
+          if (prod) prod.stock = newStock;
+          window.renderAdminProducts();
+          window.showToast('Stock Updated', `Product stock is now ${newStock <= 0 ? '🔴 Out of Stock (0)' : `🟢 In Stock (${newStock})`}`, newStock <= 0 ? '🔴' : '🟢');
+        } else {
+          window.showToast('Error', data.error || 'Failed stock update.', '❌');
+        }
+      } catch (err) {
+        window.showToast('Error', 'Failed stock update.', '❌');
+      }
+    };
+
+    window.bulkSetStock = async function(newStock) {
+      if (!currentShop) return;
+      const selectedIds = window.getSelectedProductIds();
+      if (selectedIds.length === 0) return;
+
+      try {
+        const res = await fetch('/api/products', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shop_slug: currentShop.slug, ids: selectedIds, stock: newStock })
+        });
+        const data = await res.json();
+        if (data.success) {
+          (currentShop.products || []).forEach(p => {
+            if (selectedIds.includes(p.id)) p.stock = newStock;
+          });
+          window.renderAdminProducts();
+          window.showToast('Bulk Stock Updated', `${selectedIds.length} products marked as ${newStock <= 0 ? '🔴 Out of Stock' : '🟢 In Stock'}.`, newStock <= 0 ? '🔴' : '🟢');
+        } else {
+          window.showToast('Error', data.error || 'Failed bulk stock update.', '❌');
+        }
+      } catch (err) {
+        window.showToast('Error', 'Failed bulk stock update.', '❌');
+      }
+    };
+
+    window.renderAdminHeroBanners = function() {
+      if (!currentShop) return;
+      const banners = (currentShop.carousels && currentShop.carousels.hero) || [];
+      const container = document.getElementById('admin-banners-grid');
+      if (!container) return;
+
+      if (banners.length === 0) {
+        container.innerHTML = `<div class="p-6 bg-white border border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-500">No active offer banners published yet.</div>`;
+      } else {
+        container.innerHTML = banners.map((b, idx) => `
+          <div class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-3 truncate">
+              ${b.image_url ? `<img src="${b.image_url}" class="w-12 h-12 object-cover rounded border border-slate-200 shrink-0" />` : `<div class="w-12 h-12 rounded bg-slate-900 text-white font-bold flex items-center justify-center shrink-0">🎨</div>`}
+              <div class="truncate">
+                <h4 class="font-bold text-slate-900 text-xs truncate">${b.title || 'Untitled Banner'}</h4>
+                <p class="text-[10px] text-slate-500 truncate">${b.subtitle || 'Offer Slide'}</p>
+                <div class="text-[9px] font-mono text-rose-600 font-bold">Tag: ${b.cta_link || 'all'}</div>
+              </div>
+            </div>
+            <button onclick="deleteHeroBanner('${b.id || b.title}', '${(b.title || 'Slide').replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded font-bold text-[11px] cursor-pointer border border-rose-200 shrink-0">
+              🗑️ Delete
+            </button>
+          </div>
+        `).join('');
+      }
+    };
+
+    window.updateLivePreview = function() {
+      const name = document.getElementById('settings-name')?.value || (currentShop ? currentShop.name : 'YesFancy');
+      const tagline = document.getElementById('settings-tagline')?.value || (currentShop ? currentShop.tagline : 'Store Tagline');
+      const annText = document.getElementById('settings-announcement')?.value || 'Free Local Delivery on orders above Rs. 499!';
+      const pColor = document.getElementById('settings-primary-hex')?.value || '#00A896';
+      const aColor = document.getElementById('settings-accent-hex')?.value || '#E63946';
+      const font = document.getElementById('settings-font-title')?.value || 'Playfair Display';
+
+      const storeNameElem = document.getElementById('preview-store-name');
+      const annElem = document.getElementById('preview-announcement-bar');
+      const heroBox = document.getElementById('preview-hero-box');
+      const titleSample = document.getElementById('preview-title-sample');
+      const taglineSample = document.getElementById('preview-tagline-sample');
+      const accentBtn = document.getElementById('preview-accent-btn');
+
+      if (storeNameElem) storeNameElem.innerText = name;
+      if (annElem) annElem.innerText = annText || 'Welcome to our store!';
+      if (heroBox) heroBox.style.backgroundColor = pColor;
+      if (titleSample) {
+        titleSample.style.fontFamily = font;
+        titleSample.innerText = `${name} Collection`;
+      }
+      if (taglineSample) taglineSample.innerText = tagline;
+      if (accentBtn) accentBtn.style.backgroundColor = aColor;
+    };
+
+    let lastSeenOrderId = null;
+    let lastSeenOrderCount = -1;
+    let ordersPollInterval = null;
+
+    window.loadAdminOrders = async function(isSilentPoll = false) {
+      if (!currentShop) return;
+
+      let orders = [];
+      try {
+        const res = await fetch(`/api/orders?shop=${currentShop.slug}&t=${Date.now()}`);
+        const data = await res.json();
+        orders = data.orders || [];
+      } catch (e) {
+        console.error('❌ Failed to fetch orders from API:', e);
+      }
+
+      const topOrderId = orders[0]?.order_id;
+      const currentCount = orders.length;
+
+      // Detect if a new customer order arrived!
+      if (isSilentPoll && lastSeenOrderCount !== -1 && (currentCount > lastSeenOrderCount || (topOrderId && topOrderId !== lastSeenOrderId))) {
+        console.log('🔔 New Order detected via live sync poll!', orders[0]);
+        window.playOrderNotificationSound(
+          `🛍️ New Order — ${currentShop ? currentShop.name : 'Oorumart'}`,
+          `Order #${orders[0].order_id} | Rs. ${orders[0].total} | ${orders[0].customer_name || 'Customer'}`
+        );
+      }
+
+      lastSeenOrderId = topOrderId;
+      lastSeenOrderCount = currentCount;
+
+      const listElem = document.getElementById('admin-orders-list');
+      const badgeElem = document.getElementById('admin-orders-count-badge');
+
+      if (badgeElem) badgeElem.innerText = orders.length;
+      if (!listElem) return;
+
+      if (orders.length === 0) {
+        listElem.innerHTML = `
+          <div class="bg-white border border-dashed border-slate-300 rounded-xl p-8 text-center space-y-2">
+            <div class="text-3xl">📦</div>
+            <div class="font-bold text-slate-800 text-sm">No Customer Orders Found for ${currentShop.name}</div>
+            <div class="text-xs text-slate-500">Place an order on ${currentShop.name}'s storefront to see live order cards here!</div>
+          </div>
+        `;
+      } else {
+        listElem.innerHTML = orders.map((order, idx) => `
+          <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div class="space-y-0.5">
+                <div class="flex items-center space-x-2">
+                  <span class="font-black text-slate-900 text-sm">Order #${order.order_id}</span>
+                  <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">${order.status}</span>
+                </div>
+                <div class="text-xs font-bold text-slate-700">Customer: ${order.customer_name || 'Customer'} (📱 ${order.phone})</div>
+                <div class="text-[11px] text-slate-400">Delivery Address: ${order.address || 'Store Pickup'}</div>
+              </div>
+            </div>
+
+            <div class="text-xs text-slate-600 space-y-1 bg-slate-50 p-3 rounded-lg border border-slate-100">
+              <div class="font-bold text-slate-800 text-[11px] uppercase tracking-wider mb-1">Items Ordered:</div>
+              ${Array.isArray(order.items) ? order.items.map((i) => `<div>${i}</div>`).join('') : `<div>${order.items}</div>`}
+              <div class="pt-2 border-t border-slate-200 mt-2 flex justify-between items-center font-bold text-slate-900">
+                <span>Total COD Amount: <span class="text-rose-600">₹ ${order.total}</span></span>
+                <a href="https://wa.me/91${order.phone}?text=${encodeURIComponent(`Hi ${order.customer_name || 'Customer'}, update on Order #${order.order_id} at ${currentShop.name}: Status is "${order.status}".`)}" target="_blank" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs no-underline font-bold">
+                  💬 Direct WhatsApp Chat
+                </a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    };
+
+    window.compressImageFile = function(file, callback) {
+      if (!file) return;
+      console.log('🖼️ Compressing image file:', file.name, `${Math.round(file.size / 1024)} KB`);
+
+      // Check for HEIC/HEIF - Chrome Canvas cannot decode these
+      const isHeic = file.type === 'image/heic' || file.type === 'image/heif'
+        || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
+
+      if (isHeic) {
+        console.warn('⚠️ HEIC format detected. Chrome cannot process HEIC files natively.');
+        window.showToast(
+          '⚠️ Unsupported Format',
+          'HEIC/iPhone photos cannot be uploaded directly. Please convert to JPEG first: open in Photos app → Share → Save as JPEG.',
+          '📸'
+        );
+        callback(null); // Signal failure cleanly
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 800;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          console.log('✅ Image compressed to JPEG ~80KB. Ready for cloud upload.');
+          callback(compressedDataUrl);
+        };
+        img.onerror = function() {
+          // Canvas can't decode this format either
+          window.showToast(
+            '⚠️ Format Not Supported',
+            'This image format cannot be processed by your browser. Please use JPEG, PNG, or WebP.',
+            '📸'
+          );
+          callback(null); // Signal failure cleanly - do NOT pass raw blob to DB
+        };
+        img.src = e.target.result;
+      };
+      reader.onerror = function() {
+        window.showToast('Error', 'Could not read the selected file.', '❌');
+        callback(null);
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.previewCatImage = function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const labelElem = document.getElementById('cat-file-label');
+      if (labelElem) labelElem.innerText = `📷 ${file.name}`;
+
+      window.compressImageFile(file, function(dataUrl) {
+        if (!dataUrl) {
+          if (labelElem) labelElem.innerText = '⚠️ Selection failed (unsupported format)';
+          return;
+        }
+        const preview = document.getElementById('cat-upload-preview');
+        const hiddenInput = document.getElementById('cat-image-url');
+        if (hiddenInput) hiddenInput.value = dataUrl;
+
+        if (preview) {
+          preview.innerHTML = `
+            <img src="${dataUrl}" class="max-h-24 mx-auto rounded-md shadow-md border border-slate-200 mt-2" />
+            <div class="text-xs font-bold text-emerald-600 mt-1">✓ Cover photo compressed & ready for cloud upload!</div>
+          `;
+        }
+      });
+    };
+
+    window.previewBannerImage = function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const labelElem = document.getElementById('banner-file-label');
+      if (labelElem) labelElem.innerText = `📷 ${file.name}`;
+
+      window.compressImageFile(file, function(dataUrl) {
+        if (!dataUrl) {
+          if (labelElem) labelElem.innerText = '⚠️ Selection failed (unsupported format)';
+          return;
+        }
+        const preview = document.getElementById('banner-upload-preview');
+        const hiddenInput = document.getElementById('banner-image-url');
+        if (hiddenInput) hiddenInput.value = dataUrl;
+
+        if (preview) {
+          preview.innerHTML = `
+            <img src="${dataUrl}" class="max-h-24 mx-auto rounded-md shadow-md border border-slate-200 mt-2" />
+            <div class="text-xs font-bold text-emerald-600 mt-1">✓ Banner photo compressed & ready for cloud upload!</div>
+          `;
+        }
+      });
+    };
+
+    window.previewProductImage = function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const labelElem = document.getElementById('prod-file-label');
+      if (labelElem) labelElem.innerText = `📷 ${file.name}`;
+
+      window.compressImageFile(file, function(dataUrl) {
+        if (!dataUrl) {
+          if (labelElem) labelElem.innerText = '⚠️ Selection failed (unsupported format)';
+          return;
+        }
+        const preview = document.getElementById('image-upload-preview');
+        const hiddenInput = document.getElementById('new-prod-image-url');
+        if (hiddenInput) hiddenInput.value = dataUrl;
+
+        if (preview) {
+          preview.innerHTML = `
+            <img src="${dataUrl}" class="max-h-32 mx-auto rounded-md shadow-md border border-slate-200 mt-2" />
+            <div class="text-xs font-bold text-emerald-600 mt-1">✓ Product photo compressed & ready for cloud upload!</div>
+          `;
+        }
+      });
+    };
+
+    window.handleSaveCategory = async function(e) {
+      if (e) e.preventDefault();
+      if (!currentShop) return;
+
+      const id = document.getElementById('cat-id-input').value;
+      const label = document.getElementById('cat-label-input').value;
+      const tag = document.getElementById('cat-tag-input').value;
+      const image_url = document.getElementById('cat-image-url').value;
+
+      // If editing an existing category and no new image was chosen, preserve the existing image_url
+      let finalImageUrl = image_url;
+      if (!finalImageUrl && id) {
+        const existing = (currentShop.categories || []).find(c => c.id === id);
+        if (existing) finalImageUrl = existing.image_url || '';
+      }
+
+      console.log('💾 HTTP POST to /api/categories:', { shop_slug: currentShop.slug, id, label, tag, hasImage: !!finalImageUrl });
+
+      try {
+        const res = await fetch('/api/categories', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            shop_slug: currentShop.slug,
+            id,
+            label,
+            tag,
+            image_url: finalImageUrl
+          })
+        });
+
+        const data = await res.json();
+        console.log('✅ Response from /api/categories:', data);
+        const savedUrl = data.image_url || finalImageUrl;
+        const savedId = id || data.id;
+
+        // Update local in-memory cache immediately
+        const existingIdx = (currentShop.categories || []).findIndex(c => c.id === savedId);
+        if (existingIdx >= 0) {
+          currentShop.categories[existingIdx] = { id: savedId, label, tag, image_url: savedUrl };
+        } else {
+          if (!currentShop.categories) currentShop.categories = [];
+          currentShop.categories.push({ id: savedId, label, tag, image_url: savedUrl });
+        }
+
+        // Re-render admin grid immediately
+        window.renderAdminCategories();
+
+        // Reset form
+        window.resetCategoryForm();
+
+        window.showToast('Category Saved', `Category "${label}" saved to Supabase! Refresh your storefront page to see live changes.`, '🖼️');
+      } catch (err) {
+        console.error('❌ Error saving category:', err);
+        window.showToast('Error', 'Failed to save category.', '❌');
+      }
+    };
+
+    window.handleSaveHeroBanner = async function(e) {
+      if (e) e.preventDefault();
+      if (!currentShop) return;
+
+      const title = document.getElementById('banner-title').value;
+      const subtitle = document.getElementById('banner-subtitle').value;
+      const cta_link = document.getElementById('banner-cta-link').value;
+      const cta_text = document.getElementById('banner-cta-text').value;
+      const bg_gradient = document.getElementById('banner-gradient').value;
+      const image_url = document.getElementById('banner-image-url').value;
+
+      console.log('🎨 HTTP POST to /api/hero-slides:', { shop_slug: currentShop.slug, title });
+
+      try {
+        const res = await fetch('/api/hero-slides', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            shop_slug: currentShop.slug,
+            title,
+            subtitle,
+            cta_link,
+            cta_text,
+            bg_gradient,
+            image_url
+          })
+        });
+
+        const data = await res.json();
+        console.log('✅ Response from /api/hero-slides:', data);
+
+        const newSlide = { id: `hero_${Date.now()}`, title, subtitle, cta_link, cta_text, bg_gradient, image_url: data.image_url || image_url };
+        if (!currentShop.carousels) currentShop.carousels = {};
+        if (!currentShop.carousels.hero) currentShop.carousels.hero = [];
+        currentShop.carousels.hero.push(newSlide);
+
+        window.renderAdminHeroBanners();
+        document.getElementById('banner-title').value = '';
+        document.getElementById('banner-subtitle').value = '';
+        document.getElementById('banner-image-url').value = '';
+        document.getElementById('banner-upload-preview').innerHTML = '';
+        document.getElementById('banner-file-label').innerText = 'No file chosen';
+
+        window.showToast('Banner Published', `Tagged offer banner "${title}" saved to Supabase!`, '🎨');
+      } catch (err) {
+        console.error('❌ Error saving banner:', err);
+        window.showToast('Error', 'Failed to save hero banner.', '❌');
+      }
+    };
+
+    window.handleAddNewProduct = async function(e) {
+      if (e) e.preventDefault();
+      if (!currentShop) return;
+
+      const prodId = document.getElementById('edit-prod-id').value;
+      const name = document.getElementById('new-prod-name').value;
+      const price = document.getElementById('new-prod-price').value;
+      const mrp = document.getElementById('new-prod-mrp').value;
+      const category_id = document.getElementById('new-prod-category').value;
+      const image_url = document.getElementById('new-prod-image-url').value;
+
+      let finalUrl = image_url;
+      if (!finalUrl && prodId) {
+        const existing = (currentShop.products || []).find(p => p.id === prodId);
+        if (existing) finalUrl = existing.image_url || '';
+      }
+
+      const tags = [category_id];
+
+      try {
+        const res = await fetch('/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            shop_slug: currentShop.slug,
+            id: prodId || undefined,
+            name,
+            price,
+            mrp,
+            category_id,
+            badge: tags[0] || null,
+            tags,
+            image_url: finalUrl
+          })
+        });
+
+        const data = await res.json();
+        finalUrl = data.image_url || finalUrl;
+
+        const existingIdx = (currentShop.products || []).findIndex(p => p.id === (prodId || data.id));
+        if (existingIdx >= 0) {
+          currentShop.products[existingIdx] = {
+            id: prodId || data.id,
+            name,
+            price: Number(price),
+            mrp: Number(mrp || price),
+            category_id,
+            badge: tags[0] || null,
+            tags,
+            image_url: finalUrl,
+            is_active: true
+          };
+        } else {
+          if (!currentShop.products) currentShop.products = [];
+          currentShop.products.push({
+            id: data.id || `prod_${Date.now()}`,
+            name,
+            price: Number(price),
+            mrp: Number(mrp || price),
+            category_id,
+            badge: tags[0] || null,
+            tags,
+            image_url: finalUrl,
+            is_active: true
+          });
+        }
+
+        window.renderAdminProducts();
+        document.getElementById('edit-prod-id').value = '';
+        document.getElementById('new-prod-name').value = '';
+        document.getElementById('new-prod-price').value = '';
+        document.getElementById('new-prod-mrp').value = '';
+        document.getElementById('image-upload-preview').innerHTML = '';
+        document.getElementById('add-prod-heading').innerText = 'ADD NEW PRODUCT';
+
+        window.showToast('Product Saved', `"${name}" published live to Supabase for ${currentShop.name}!`, '🛍️');
+        window.switchTab('products');
+      } catch (err) {
+        console.error('❌ Error saving product:', err);
+        window.showToast('Error', 'Failed to publish product to cloud.', '❌');
+      }
+    };
+
+    window.handleSaveShopSettings = async function(e) {
+      if (e) e.preventDefault();
+      if (!currentShop) return;
+
+      const name = document.getElementById('settings-name').value;
+      const template_key = document.getElementById('settings-template').value;
+      const tagline = document.getElementById('settings-tagline').value;
+      const primary_color = document.getElementById('settings-primary-color').value || document.getElementById('settings-primary-hex').value;
+      const secondary_color = document.getElementById('settings-secondary-color').value || document.getElementById('settings-secondary-hex').value;
+      const accent_color = document.getElementById('settings-accent-color').value || document.getElementById('settings-accent-hex').value;
+      const font_title = document.getElementById('settings-font-title').value;
+      const phone = document.getElementById('settings-phone').value;
+      const announcement_text = document.getElementById('settings-announcement').value;
+
+      console.log('⚙️ HTTP POST to /api/shop-settings:', { slug: currentShop.slug, name, template_key, primary_color, secondary_color, tagline });
+
+      try {
+        const res = await fetch('/api/shop-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            slug: currentShop.slug,
+            name,
+            template_key,
+            tagline,
+            primary_color,
+            secondary_color,
+            accent_color,
+            font_title,
+            phone,
+            announcement_text
+          })
+        });
+
+        const data = await res.json();
+        console.log('✅ Response from /api/shop-settings:', data);
+
+        currentShop.theme.secondary_color = secondary_color;
+        currentShop.theme.accent_color = accent_color;
+        currentShop.theme.font_title = font_title;
+
+        window.showToast('Settings Saved', `All template and theme customizations saved to Supabase for ${currentShop.name}!`, '✨');
+      } catch (err) {
+        console.error('❌ Error saving shop settings:', err);
+        window.showToast('Error', 'Failed to save shop settings.', '❌');
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const savedSlug = localStorage.getItem('oorumart_admin_session_slug');
+        if (savedSlug) {
+          const select = document.getElementById('login-shop-select');
+          if (select) select.value = savedSlug;
+          window.handleVendorLogin();
+          return;
+        }
+      } catch (e) {}
+
+      const modal = document.getElementById('admin-login-screen');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+      }
+    });
+  </script>
+
+</body>
+</html>

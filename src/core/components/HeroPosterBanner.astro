@@ -1,0 +1,181 @@
+---
+/**
+ * src/components/HeroPosterBanner.astro
+ * 
+ * Generic Reusable Component (Impactful High-Poster Editorial Hero Banner):
+ * - Supports taller poster height (700px) matching reference screenshots.
+ * - Supports seamless auto-rotating offer slides bound to catalog tag filters.
+ */
+
+export interface SlideItem {
+  id?: string;
+  title?: string;
+  subtitle?: string;
+  image_url?: string;
+  tag_id?: string;
+  link?: string;
+}
+
+export interface Props {
+  shop: any;
+  slides?: SlideItem[];
+  title?: string;
+  subtitle?: string;
+  image?: string;
+  tagId?: string;
+}
+
+const { shop, slides: propSlides, title, subtitle, image, tagId = 'all' } = Astro.props;
+
+const slides: SlideItem[] = propSlides || shop?.hero_slides || [
+  {
+    title: title || shop?.tagline || `YOUR GIFT GUIDE`,
+    subtitle: subtitle || `Explore premium novelties & curated gift collections for every occasion.`,
+    image_url: image || shop?.hero_image_url || 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2000&auto=format&fit=crop',
+    tag_id: tagId
+  }
+];
+
+const shopSlug = shop?.slug || 'yesfancy';
+---
+
+<div id="hero-banner-container" class="relative w-full overflow-hidden bg-slate-950 text-white min-h-[480px] sm:min-h-[580px] md:min-h-[640px] lg:min-h-[700px] flex items-center shadow-xl select-none">
+  {slides.map((slide, idx) => {
+    const slideTag = slide.tag_id || 'all';
+    const slideLink = slide.link || `/catalog?shop=${shopSlug}&tag=${slideTag}`;
+
+    return (
+      <div 
+        data-hero-slide={idx}
+        class={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out flex items-center ${idx === 0 ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}
+      >
+        <!-- Full-Width High-Resolution Backdrop Image (Zero Text Embedded inside Image!) -->
+        <img 
+          src={slide.image_url} 
+          alt={slide.title || 'Hero Offer Poster'} 
+          class="absolute inset-0 w-full h-full object-cover object-center brightness-90 contrast-105" 
+        />
+        
+        <!-- Subtle Dark Vignette Overlay for Readability -->
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/45 to-transparent"></div>
+
+        <!-- Foreground Content Container -->
+        <div class="relative max-w-7xl mx-auto px-6 sm:px-12 py-20 w-full z-10">
+          <div class="max-w-2xl space-y-6 text-left">
+            
+            <!-- Brand Tag Badge -->
+            <div class="inline-block bg-white/95 text-slate-950 font-extrabold text-[11px] sm:text-xs uppercase tracking-widest px-3.5 py-1.5 shadow-md">
+              {shop?.name || 'Exclusive'} Special Offer
+            </div>
+
+            <!-- Impactful Poster Title (Clean Plus Jakarta Sans Typography) -->
+            <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] uppercase tracking-wider drop-shadow-lg">
+              {slide.title}
+            </h1>
+
+            <!-- Subtitle Description -->
+            <p class="text-slate-100 text-sm sm:text-base font-medium leading-relaxed max-w-lg drop-shadow-sm">
+              {slide.subtitle}
+            </p>
+
+            <!-- CTA Button Linked to Tag Filter -->
+            <div class="pt-4">
+              <a 
+                href={slideLink} 
+                class="inline-flex items-center space-x-3 bg-white text-slate-950 font-extrabold text-xs sm:text-sm uppercase px-8 py-4 tracking-widest shadow-2xl hover:bg-slate-900 hover:text-white transition-all duration-200 border-2 border-white no-underline group"
+              >
+                <span>EXPLORE COLLECTION</span>
+                <span class="group-hover:translate-x-1 transition-transform">➔</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    );
+  })}
+
+  <!-- Offer Slide Indicator Dots & Prev/Next Arrows -->
+  {slides.length > 1 && (
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center space-x-3 z-30 bg-slate-900/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+      <button id="hero-prev-btn" class="text-white hover:text-amber-400 font-bold text-sm px-1 cursor-pointer" title="Previous Offer">◀</button>
+      <div class="flex items-center space-x-2">
+        {slides.map((_, idx) => (
+          <button 
+            data-hero-dot={idx}
+            class={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${idx === 0 ? 'bg-amber-400 w-6' : 'bg-white/50 hover:bg-white'}`}
+            title={`Slide ${idx + 1}`}
+          ></button>
+        ))}
+      </div>
+      <button id="hero-next-btn" class="text-white hover:text-amber-400 font-bold text-sm px-1 cursor-pointer" title="Next Offer">▶</button>
+    </div>
+  )}
+</div>
+
+<script is:inline>
+  (function() {
+    const slides = document.querySelectorAll('[data-hero-slide]');
+    const dots = document.querySelectorAll('[data-hero-dot]');
+    const prevBtn = document.getElementById('hero-prev-btn');
+    const nextBtn = document.getElementById('hero-next-btn');
+
+    if (slides.length <= 1) return;
+
+    let currentIdx = 0;
+    let autoTimer = null;
+
+    function showSlide(index) {
+      slides.forEach((slide, idx) => {
+        if (idx === index) {
+          slide.classList.remove('opacity-0', 'z-0', 'pointer-events-none');
+          slide.classList.add('opacity-100', 'z-10', 'pointer-events-auto');
+        } else {
+          slide.classList.remove('opacity-100', 'z-10', 'pointer-events-auto');
+          slide.classList.add('opacity-0', 'z-0', 'pointer-events-none');
+        }
+      });
+
+      dots.forEach((dot, idx) => {
+        if (idx === index) {
+          dot.className = 'w-6 h-2.5 rounded-full bg-amber-400 transition-all duration-300 cursor-pointer';
+        } else {
+          dot.className = 'w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white transition-all duration-300 cursor-pointer';
+        }
+      });
+
+      currentIdx = index;
+    }
+
+    function nextSlide() {
+      const nextIdx = (currentIdx + 1) % slides.length;
+      showSlide(nextIdx);
+    }
+
+    function prevSlide() {
+      const prevIdx = (currentIdx - 1 + slides.length) % slides.length;
+      showSlide(prevIdx);
+    }
+
+    function startAutoPlay() {
+      stopAutoPlay();
+      autoTimer = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoPlay() {
+      if (autoTimer) clearInterval(autoTimer);
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); startAutoPlay(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        showSlide(idx);
+        startAutoPlay();
+      });
+    });
+
+    startAutoPlay();
+  })();
+</script>

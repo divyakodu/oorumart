@@ -1,0 +1,783 @@
+---
+export const prerender = false;
+
+import '../../styles/global.css';
+import StoreHeader from '../../components/StoreHeader.astro';
+import StoreFooter from '../../components/StoreFooter.astro';
+import { getShopConfigAsync } from '../../lib/getShopConfig';
+
+const { id } = Astro.params;
+const url = new URL(Astro.request.url);
+const host = Astro.request.headers.get('host') || '';
+const queryShop = url.searchParams.get('shop');
+
+const hostParts = host.split(':')[0].split('.');
+const subdomain = (hostParts.length > 2 && hostParts[0] !== 'www') ? hostParts[0] : null;
+
+const targetSlug = queryShop || subdomain;
+let shopData = targetSlug ? await getShopConfigAsync(targetSlug) : null;
+
+// Auto-discover which merchant owns product 'id' if no ?shop= parameter was given!
+if (!shopData) {
+  const allShops = await getAllShopsConfigAsync();
+  const ownerShop = allShops.find((s: any) => s.products.some((p: any) => p.id === id));
+  if (ownerShop) {
+    shopData = { shop: ownerShop };
+  } else {
+    shopData = { shop: allShops[0] };
+  }
+}
+
+const { shop } = shopData;
+const { products = [], categories = [], theme } = shop;
+const primaryColor = theme?.primary_color || '#581C87';
+
+const product = products.find((p: any) => p.id === id) || products[0];
+const allProducts = products;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{product.name} | {shop.name}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style define:vars={{ primaryColor }}>
+    * { box-sizing: border-box; }
+    .footer-art-bg {
+      background-color: var(--primaryColor);
+    }
+    .badge-dark {
+      background-color: #0F172A;
+      color: #FFFFFF;
+    }
+    .add-btn {
+      background-color: #FFFFFF;
+      color: #0F172A;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+    }
+    .add-btn:hover {
+      background-color: #0F172A;
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 bg-white relative pb-16 sm:pb-0">
+
+  <!-- Dynamic Shop Switcher Banner -->
+  <div class="bg-slate-900 text-slate-200 text-[11px] font-medium py-1 px-4 flex items-center justify-between border-b border-slate-800">
+    <div class="flex items-center space-x-2">
+      <span class="bg-emerald-500 w-2 h-2 rounded-full animate-pulse"></span>
+      <span>Live Tenant Engine | Product View for <strong class="text-white uppercase">{shop.name}</strong> (`{shop.slug}`)</span>
+    </div>
+    <div class="flex items-center space-x-3 text-slate-300">
+      <span class="hidden sm:inline">Switch Demo Shop:</span>
+      <a href={`/product/${product.id}?shop=yesfancy`} class={`hover:text-white no-underline px-1.5 py-0.5 rounded ${shop.slug === 'yesfancy' ? 'bg-slate-700 text-white font-bold' : ''}`}>🎁 Yes Fancy</a>
+      <a href={`/product/${product.id}?shop=sarveshpan`} class={`hover:text-white no-underline px-1.5 py-0.5 rounded ${shop.slug === 'sarveshpan' ? 'bg-slate-700 text-white font-bold' : ''}`}>🍃 Sarvesh Paan</a>
+      <a href={`/product/${product.id}?shop=visistastyle`} class={`hover:text-white no-underline px-1.5 py-0.5 rounded ${shop.slug === 'visistastyle' ? 'bg-slate-700 text-white font-bold' : ''}`}>👗 Visista Boutique</a>
+    </div>
+  </div>
+
+  <!-- 100% Generic Reusable Store Header Component -->
+  <StoreHeader shop={shop} primaryColor={primaryColor} />
+
+  <!-- Product Details Layout -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-10">
+    
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
+      
+      <!-- Left Column: Thumbnails + Main Image -->
+      <div class="md:col-span-7 flex flex-col-reverse sm:flex-row gap-4">
+        <div class="flex sm:flex-col gap-3 shrink-0 overflow-x-auto sm:overflow-visible">
+          <img src={product.image_url} class="w-16 h-16 object-contain p-1 bg-white border-2 border-slate-900 cursor-pointer rounded shadow-xs" alt="Product View 1" />
+        </div>
+
+        <div class="flex-1 bg-white rounded-lg overflow-hidden border border-slate-200 cursor-pointer group relative p-4 flex items-center justify-center min-h-[350px] sm:min-h-[480px]" onclick={`window.open('${product.image_url}', '_blank')`} title="Click to view full-resolution image">
+          <img id="main-product-img" src={product.image_url} alt={product.name} class="w-full h-80 sm:h-[480px] md:h-[520px] object-contain group-hover:scale-105 transition-transform duration-300" />
+          <span class="absolute bottom-3 right-3 bg-slate-900/80 text-white text-[10px] font-bold px-2.5 py-1 rounded backdrop-blur-xs flex items-center space-x-1">
+            <span>🔍 Zoom 4K Image</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Column: Details & Actions -->
+      <div class="md:col-span-5 space-y-5 sm:space-y-6">
+        
+        <div>
+          <h1 class="font-serif-title text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">{product.name}</h1>
+          <div class="mt-3 flex items-baseline space-x-2 text-sm">
+            <span class="font-bold text-slate-900">MRP :</span>
+            <span class="font-extrabold text-rose-600 text-lg">₹ {product.price}</span>
+            {product.mrp && (
+              <span class="line-through text-slate-400">₹ {product.mrp}</span>
+            )}
+            {product.mrp && (
+              <span class="font-bold text-rose-600">
+                {Math.round(((product.mrp - product.price) / product.mrp) * 100)}% OFF
+              </span>
+            )}
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Inclusive of all taxes</p>
+        </div>
+
+        <!-- Store USPs -->
+        <div class="border-y border-slate-200 py-3.5 grid grid-cols-3 gap-2 text-center text-xs">
+          <div>
+            <div class="text-base sm:text-lg">🚚</div>
+            <div class="font-bold text-slate-800 text-[11px] sm:text-xs">Free delivery</div>
+          </div>
+          <div>
+            <div class="text-base sm:text-lg">🛡️</div>
+            <div class="font-bold text-slate-800 text-[11px] sm:text-xs">Secure payments</div>
+          </div>
+          <div>
+            <div class="text-base sm:text-lg">💵</div>
+            <div class="font-bold text-slate-800 text-[11px] sm:text-xs">Cash on delivery</div>
+          </div>
+        </div>
+
+        <!-- Quantity Selector -->
+        <div class="flex items-center space-x-4">
+          <span class="text-xs font-bold text-slate-700">Quantity:</span>
+          <div class="flex items-center border border-slate-300 rounded px-3 py-1.5 text-xs font-bold space-x-3">
+            <button onclick="adjustLocalQty(-1)" class="cursor-pointer font-bold px-1">-</button>
+            <span id="product-page-qty">1</span>
+            <button onclick="adjustLocalQty(1)" class="cursor-pointer font-bold px-1">+</button>
+          </div>
+        </div>
+
+        <!-- Delivery Pincode Checker -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-800 uppercase tracking-wider block">Delivery Date</label>
+          <div class="flex">
+            <input type="text" placeholder="Enter pincode to check" class="flex-1 px-3 py-2 border border-slate-300 text-xs focus:outline-none" />
+            <button class="px-5 py-2 border border-slate-900 bg-slate-900 text-white text-xs font-bold uppercase cursor-pointer">CHECK</button>
+          </div>
+          <div class="text-xs text-emerald-700 font-medium">📍 Next day delivery available in select locations!</div>
+        </div>
+
+        <!-- Promotional Box -->
+        <div class="border border-rose-200 bg-rose-50/50 p-3.5 rounded-lg space-y-1">
+          <span class="text-xs font-extrabold text-rose-600 uppercase tracking-wider block">BEST OFFERS FOR YOU!</span>
+          <p class="text-xs font-bold text-slate-900">Get ₹200 OFF on your 1st order | Code: YESFANCY200</p>
+          <p class="text-[11px] text-slate-500">Valid on a min. purchase of ₹1,000</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3 pt-2">
+          <button 
+            onclick="addCurrentProductToCart()" 
+            class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-widest rounded-sm flex items-center justify-center space-x-2.5 cursor-pointer shadow-md transition-all"
+          >
+            <span class="w-5 h-5 rounded-full bg-white text-slate-900 flex items-center justify-center font-black text-sm shadow-xs shrink-0">+</span>
+            <span>ADD TO CART</span>
+          </button>
+          
+          <a 
+            id="buy-whatsapp-direct"
+            href={`https://wa.me/918197921458?text=${encodeURIComponent(`Hi Yes Fancy, I want to order ${product.name} (Rs. ${product.price}) via Cash on Delivery.`)}`}
+            target="_blank"
+            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-widest rounded flex items-center justify-center space-x-2 no-underline cursor-pointer shadow-md"
+          >
+            <span>BUY NOW VIA WHATSAPP (COD)</span>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Hooking Carousel -->
+    <section class="pt-8 space-y-4">
+      <div class="text-center">
+        <span class="bg-slate-900 text-white font-extrabold text-xs sm:text-sm uppercase px-6 sm:px-8 py-2 tracking-widest inline-block shadow-sm">
+          MORE FROM THE COLLECTION
+        </span>
+      </div>
+
+      <div class="flex space-x-4 overflow-x-auto no-scrollbar py-2">
+        {allProducts.map(p => (
+          <div class="w-44 sm:w-56 shrink-0 space-y-2 group cursor-pointer" onclick={`window.location.href='/product/${p.id}'`}>
+            <div class="relative aspect-square overflow-hidden bg-slate-100 rounded">
+              <img src={p.image_url} alt={p.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+            </div>
+            <h4 class="text-xs font-bold text-slate-900 line-clamp-1">{p.name}</h4>
+            <div class="text-xs font-bold text-rose-600">MRP : ₹ {p.price}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 100% Generic Reusable Store Footer Component -->
+  <StoreFooter shopName={shop.name} logoUrl={shop.logo_url} primaryColor={primaryColor} />
+
+  <!-- Track Order Drawer -->
+  <div id="track-overlay" onclick="toggleTrackDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="track-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between p-4 sm:p-6">
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <div class="flex items-center space-x-2">
+          <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <h3 class="font-extrabold text-sm uppercase tracking-wider text-slate-900">Track Your Order</h3>
+        </div>
+        <button onclick="toggleTrackDrawer(false)" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer" title="Close">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-600">Enter your phone number or Order ID to check real order status.</p>
+
+      <div class="space-y-3">
+        <input id="track-input" type="text" placeholder="Enter Phone (e.g. 8197921458)" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
+        <button onclick="lookupOrderStatus()" class="w-full py-2.5 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider rounded cursor-pointer hover:bg-slate-800">Check Status</button>
+      </div>
+
+      <div id="track-status-box" class="pt-4 border-t border-slate-200 text-xs">
+        <div class="text-center py-6 border border-dashed border-slate-300 rounded-lg space-y-1">
+          <div class="text-2xl">📦</div>
+          <div class="font-bold text-slate-700">No Active Order Selected</div>
+          <div class="text-[11px] text-slate-400">Enter your phone number above to view live status.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-xs text-center text-slate-500 border-t border-slate-200 pt-4">
+      Need store help? Call: <a href="tel:+918197921458" class="font-bold text-slate-900">+91 8197921458</a>
+    </div>
+  </aside>
+
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between">
+    
+    <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+      <div class="flex items-center space-x-2">
+        <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span class="font-extrabold text-sm uppercase tracking-wider text-slate-900">Your Cart</span>
+        <span id="cart-header-badge" class="bg-slate-900 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">0 ITEMS</span>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center justify-center transition-colors cursor-pointer" title="Close Cart">✕</button>
+    </div>
+
+    <div class="bg-slate-900 text-white text-xs font-semibold py-2 px-4 text-center">
+      Save more on Prepaid Orders & Instant WhatsApp Checkout!
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+      <div id="cart-items-list" class="space-y-3"></div>
+
+      <div class="pt-4 border-t border-slate-200 space-y-3">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-900">Customer Delivery Info</h4>
+        <div class="space-y-2">
+          <input id="checkout-name" type="text" placeholder="Enter Full Name (e.g. Divya Kodukula)" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
+          <input id="checkout-phone" type="text" placeholder="Enter Phone Number (e.g. 8197921458)" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
+          <input id="checkout-address" type="text" placeholder="Enter Delivery Address / Store Pickup" class="w-full px-3 py-2 border border-slate-300 rounded text-xs focus:outline-none focus:border-slate-900" />
+        </div>
+      </div>
+    </div>
+
+    <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+      <div id="coupon-feedback" class="hidden text-xs text-center font-bold py-1 bg-emerald-100 text-emerald-800 rounded"></div>
+      
+      <div class="bg-emerald-100 text-emerald-800 text-xs font-bold py-1.5 px-3 rounded-lg text-center">
+        🎉 You're saving <span id="cart-savings-val">₹ 0</span>!
+      </div>
+
+      <div class="pt-2 space-y-2">
+        <div class="flex items-center justify-between font-bold text-slate-900 text-sm">
+          <span>Estimated Total</span>
+          <span id="cart-total-price">₹ 0</span>
+        </div>
+
+        <button 
+          onclick="placeRealWhatsAppOrder()"
+          class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+        >
+          <span>Place Order & Open WhatsApp (COD)</span>
+        </button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Mobile Bottom Sticky Navigation Bar -->
+  <div class="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-40 flex items-center justify-around py-2 shadow-lg">
+    <a href="/" class="flex flex-col items-center text-slate-700 no-underline text-[10px] font-bold">
+      <span class="text-base">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="/catalog" class="flex flex-col items-center text-slate-700 no-underline text-[10px] font-bold">
+      <span class="text-base">🛍️</span>
+      <span>Catalog</span>
+    </a>
+    <button onclick="toggleTrackDrawer(true)" class="flex flex-col items-center text-slate-700 text-[10px] font-bold cursor-pointer">
+      <span class="text-base">📦</span>
+      <span>Track Order</span>
+    </button>
+    <button onclick="toggleCartDrawer(true)" class="flex flex-col items-center text-slate-700 text-[10px] font-bold cursor-pointer relative">
+      <span class="text-base">🛒</span>
+      <span>Cart</span>
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer-art-bg text-white pt-12 pb-8 mt-16">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
+      <div class="space-y-2">
+        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">GET IN TOUCH</h4>
+        <p class="font-semibold">Whatsapp: <span class="underline">+{shop.phone || '918197921458'}</span></p>
+        <p class="text-slate-200">Mon-Sat 10AM - 6PM IST</p>
+        <p class="font-semibold">Email: <span class="underline">support@{shop.slug}.oorumart.in</span></p>
+      </div>
+      <div class="space-y-2">
+        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">NEED HELP</h4>
+        <p class="hover:underline cursor-pointer">FAQs</p>
+        <p class="hover:underline cursor-pointer" onclick="toggleTrackDrawer(true)">Track Order</p>
+        <p class="hover:underline cursor-pointer">Store Pickup</p>
+      </div>
+      <div class="space-y-2">
+        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">ABOUT US</h4>
+        <p class="hover:underline cursor-pointer">Our Story</p>
+        <p class="hover:underline cursor-pointer">{shop.name} Community</p>
+      </div>
+      <div class="space-y-2">
+        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">COMPANY</h4>
+        <p class="hover:underline cursor-pointer">Privacy Policy</p>
+        <p class="hover:underline cursor-pointer">Terms Of Use</p>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 pt-8 mt-8 border-t border-white/20 text-[11px] text-slate-200 flex justify-between">
+      <p>© 2026 {shop.name}</p>
+      <p>Powered by oorumart.in</p>
+    </div>
+  </footer>
+
+  <script define:vars={{ currentShopSlug: shop.slug, currentShopName: shop.name, currentShopPhone: shop.phone || '918197921458' }}>
+    let localQty = 1;
+    window.adjustLocalQty = function(delta) {
+      localQty = Math.max(1, localQty + delta);
+      const elem = document.getElementById('product-page-qty');
+      if (elem) elem.innerText = localQty;
+    };
+
+    window.showShopToast = function(title, message, icon = '⚠️') {
+      const modal = document.getElementById('shop-toast-modal');
+      const card = document.getElementById('shop-toast-card');
+      const iconElem = document.getElementById('shop-toast-icon');
+      const titleElem = document.getElementById('shop-toast-title');
+      const msgElem = document.getElementById('shop-toast-message');
+
+      if (iconElem) iconElem.innerText = icon;
+      if (titleElem) titleElem.innerText = title;
+      if (msgElem) msgElem.innerText = message;
+
+      if (modal) modal.classList.remove('opacity-0', 'pointer-events-none');
+      if (card) { card.classList.remove('scale-95'); card.classList.add('scale-100'); }
+    };
+
+    window.closeShopToast = function() {
+      const modal = document.getElementById('shop-toast-modal');
+      const card = document.getElementById('shop-toast-card');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+      if (card) { card.classList.remove('scale-100'); card.classList.add('scale-95'); }
+    };
+
+    let cart = {};
+
+    window.toggleTrackDrawer = function(open) {
+      const overlay = document.getElementById('track-overlay');
+      const drawer = document.getElementById('track-drawer');
+      if (open) {
+        overlay?.classList.remove('opacity-0', 'pointer-events-none');
+        drawer?.classList.remove('translate-x-full');
+      } else {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        drawer?.classList.add('translate-x-full');
+      }
+    };
+
+    window.lookupOrderStatus = async function() {
+      const input = document.getElementById('track-input')?.value.trim();
+      const box = document.getElementById('track-status-box') || document.getElementById('track-results-box');
+      if (!box) return;
+
+      if (!input) {
+        box.innerHTML = `
+          <div class="text-center py-4 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-bold text-xs">
+            Please enter your phone number or Order ID.
+          </div>
+        `;
+        return;
+      }
+
+      let orders = [];
+      try {
+        const res = await fetch(`/api/orders?shop=${currentShopSlug}`);
+        const data = await res.json();
+        orders = (data.orders || []).filter(o => o.phone && o.phone.includes(input));
+      } catch (e) {}
+
+      if (orders.length === 0) {
+        box.innerHTML = `
+          <div class="text-center py-6 border border-dashed border-rose-300 rounded-lg space-y-2 bg-rose-50/50">
+            <div class="text-2xl">⚠️</div>
+            <div class="font-bold text-slate-800 text-xs">No Active Orders Found</div>
+            <div class="text-[11px] text-slate-500">No order matches phone number "${input}". Place an order to track live delivery!</div>
+          </div>
+        `;
+      } else {
+        box.innerHTML = orders.map(order => `
+          <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50 mb-3">
+            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+              <div>
+                <span class="font-extrabold text-slate-900 text-xs">Order #${order.order_id}</span>
+                <span class="text-[11px] text-slate-500 block">${order.customer_name || 'Customer'}</span>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${order.status}</span>
+            </div>
+            <div class="text-[11px] text-slate-600 space-y-0.5">
+              ${Array.isArray(order.items) ? order.items.map(i => `<div>${i}</div>`).join('') : `<div>${order.items}</div>`}
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
+              <span>Total: ₹ ${order.total}</span>
+              <span class="text-[10px] text-slate-400 font-normal">${order.timestamp || ''}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    };
+
+    window.loadCart = function() {
+      try {
+        const saved = localStorage.getItem(`oorumart_cart_${currentShopSlug}`);
+        if (saved) cart = JSON.parse(saved);
+      } catch (e) { cart = {}; }
+      window.renderCart();
+    };
+
+    window.saveCart = function() {
+      try { localStorage.setItem(`oorumart_cart_${currentShopSlug}`, JSON.stringify(cart)); } catch (e) {}
+      window.renderCart();
+    };
+
+    window.addCurrentProductToCart = function(id, name, price, mrp, image) {
+      const targetId = id || prodId;
+      const targetName = name || prodName;
+      const targetPrice = price || prodPrice;
+      const targetMrp = mrp || prodMrp;
+      const targetImage = image || prodImage;
+
+      if (prodStock !== undefined && Number(prodStock) <= 0) {
+        window.showShopToast('Out of Stock', 'Sorry, this product is currently out of stock!', '📦');
+        return;
+      }
+
+      if (cart[targetId]) { cart[targetId].qty += localQty; }
+      else { cart[targetId] = { id: targetId, name: targetName, price: targetPrice, mrp: targetMrp || targetPrice, image: targetImage, qty: localQty }; }
+      window.saveCart();
+      window.toggleCartDrawer(true);
+    };
+
+    window.addToCart = function(id, name, price, mrp, image, stock) {
+      if (stock !== undefined && Number(stock) <= 0) {
+        window.showShopToast('Out of Stock', 'Sorry, this product is currently out of stock!', '📦');
+        return;
+      }
+      if (cart[id]) { cart[id].qty += 1; }
+      else { cart[id] = { id, name, price, mrp: mrp || price, image, qty: 1 }; }
+      window.saveCart();
+      window.toggleCartDrawer(true);
+    };
+
+    window.updateCartQty = function(id, delta) {
+      if (cart[id]) {
+        cart[id].qty += delta;
+        if (cart[id].qty <= 0) delete cart[id];
+      }
+      window.saveCart();
+    };
+
+    window.renderCart = function() {
+      const itemsList = document.getElementById('cart-items-list');
+      const badge = document.getElementById('cart-count-badge');
+      const headerBadge = document.getElementById('cart-header-badge');
+      const totalPriceElem = document.getElementById('cart-total-price');
+      const savingsVal = document.getElementById('cart-savings-val');
+
+      let totalQty = 0;
+      let totalPrice = 0;
+      let totalSavings = 0;
+      if (itemsList) itemsList.innerHTML = '';
+
+      const keys = Object.keys(cart);
+      if (keys.length === 0) {
+        if (itemsList) {
+          itemsList.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs font-semibold">Your cart for ${currentShopName} is empty. Add items to checkout!</div>`;
+        }
+      } else {
+        keys.forEach(id => {
+          const item = cart[id];
+          totalQty += item.qty;
+          totalPrice += item.price * item.qty;
+          totalSavings += (item.mrp - item.price) * item.qty;
+
+          if (itemsList) {
+            const div = document.createElement('div');
+            div.className = 'border border-slate-200 rounded-lg p-3 flex space-x-3 items-center';
+            div.innerHTML = `
+              <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-md border border-slate-100" />
+              <div class="flex-1 space-y-1">
+                <h4 class="text-xs font-bold text-slate-900 line-clamp-1">${item.name}</h4>
+                <div class="text-xs font-bold text-slate-900">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp}</span></div>
+              </div>
+              <div class="flex items-center space-x-2 border border-slate-300 rounded px-2 py-1 text-xs">
+                <button onclick="updateCartQty('${id}', -1)" class="font-bold cursor-pointer px-1">-</button>
+                <span class="font-bold px-1">${item.qty}</span>
+                <button onclick="updateCartQty('${id}', 1)" class="font-bold cursor-pointer px-1">+</button>
+              </div>
+            `;
+            itemsList.appendChild(div);
+          }
+        });
+      }
+
+      if (badge) badge.innerText = totalQty;
+      if (headerBadge) headerBadge.innerText = `${totalQty} ${totalQty === 1 ? 'ITEM' : 'ITEMS'}`;
+      if (totalPriceElem) totalPriceElem.innerText = `₹ ${totalPrice}`;
+      if (savingsVal) savingsVal.innerText = `₹ ${totalSavings > 0 ? totalSavings : 250}`;
+    };
+
+    window.placeRealWhatsAppOrder = async function() {
+      const keys = Object.keys(cart);
+      if (keys.length === 0) {
+        window.showShopToast('Empty Cart', 'Your cart is empty! Please add products to checkout.', '🛒');
+        return;
+      }
+
+      const nameInput = document.getElementById('checkout-name')?.value.trim() || 'Valued Customer';
+      const phoneInput = document.getElementById('checkout-phone')?.value.trim();
+      const addressInput = document.getElementById('checkout-address')?.value.trim() || 'Store Pickup';
+
+      if (!phoneInput) {
+        window.showShopToast('Missing Phone Number', 'Please enter your phone number to place order & track delivery!', '📱');
+        return;
+      }
+
+      let totalPrice = 0;
+      let itemLines = [];
+      keys.forEach(id => {
+        const item = cart[id];
+        totalPrice += item.price * item.qty;
+        itemLines.push(`- ${item.name} (Qty: ${item.qty}) = Rs. ${item.price * item.qty}`);
+      });
+
+      const prefix = (currentShopSlug || 'OM').toUpperCase().slice(0, 3);
+      const orderId = `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+      const newOrder = {
+        order_id: orderId,
+        shop_slug: currentShopSlug,
+        customer_name: nameInput,
+        phone: phoneInput,
+        address: addressInput,
+        items: itemLines,
+        total: totalPrice,
+        timestamp: new Date().toLocaleString(),
+        status: 'Order Placed & Processing'
+      };
+
+      try {
+        await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newOrder)
+        });
+      } catch (e) {
+        console.error('Error posting order to API:', e);
+      }
+
+      try {
+        let orders = JSON.parse(localStorage.getItem(`oorumart_orders_${currentShopSlug}`) || '[]');
+        orders.unshift(newOrder);
+        localStorage.setItem(`oorumart_orders_${currentShopSlug}`, JSON.stringify(orders));
+      } catch (e) {}
+
+      cart = {};
+      window.saveCart();
+
+      window.toggleCartDrawer(false);
+      window.toggleTrackDrawer(true);
+      const trackInput = document.getElementById('track-input');
+      if (trackInput) trackInput.value = phoneInput;
+      window.lookupOrderStatus();
+
+      window.showShopToast(
+        '🎉 Order Placed Successfully!',
+        `Order #${orderId} (₹ ${totalPrice}) has been sent directly to ${currentShopName}. You can track your order status live right here!`,
+        '🛍️'
+      );
+    };
+
+    window.lookupOrderStatus = function() {
+      const input = document.getElementById('track-input')?.value.trim();
+      const box = document.getElementById('track-status-box');
+      if (!box) return;
+
+      if (!input) {
+        box.innerHTML = `
+          <div class="text-center py-4 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-bold text-xs">
+            Please enter your phone number or Order ID.
+          </div>
+        `;
+        return;
+      }
+
+      let orders = [];
+      try {
+        orders = JSON.parse(localStorage.getItem(`oorumart_orders_${currentShopSlug}`) || '[]');
+      } catch (e) {}
+
+      const found = orders.filter(o => o.phone === input || o.order_id === input || input.includes(o.phone));
+
+      if (found.length === 0) {
+        box.innerHTML = `
+          <div class="text-center py-6 border border-dashed border-rose-300 rounded-lg space-y-2 bg-rose-50/50">
+            <div class="text-2xl">⚠️</div>
+            <div class="font-bold text-slate-800 text-xs">No Active Orders Found</div>
+            <div class="text-[11px] text-slate-500">No order matches phone number "${input}". Place an order to track live delivery!</div>
+          </div>
+        `;
+      } else {
+        box.innerHTML = found.map(order => `
+          <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50 mb-3">
+            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+              <div>
+                <span class="font-extrabold text-slate-900 text-xs">Order #${order.order_id}</span>
+                <span class="text-[11px] text-slate-500 block">${order.customer_name || 'Customer'}</span>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${order.status}</span>
+            </div>
+            <div class="text-[11px] text-slate-600 space-y-0.5">
+              ${order.items.map(i => `<div>${i}</div>`).join('')}
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
+              <span>Total: ₹ ${order.total}</span>
+              <span class="text-[10px] text-slate-400 font-normal">${order.timestamp}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    };
+
+    window.toggleCartDrawer = function(open) {
+      const overlay = document.getElementById('cart-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      if (open) {
+        overlay?.classList.remove('opacity-0', 'pointer-events-none');
+        drawer?.classList.remove('translate-x-full');
+      } else {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        drawer?.classList.add('translate-x-full');
+      }
+    };
+
+    window.toggleTrackDrawer = function(open) {
+      const overlay = document.getElementById('track-overlay');
+      const drawer = document.getElementById('track-drawer');
+      if (open) {
+        overlay?.classList.remove('opacity-0', 'pointer-events-none');
+        drawer?.classList.remove('translate-x-full');
+      } else {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        drawer?.classList.add('translate-x-full');
+      }
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', window.loadCart);
+    } else {
+      window.loadCart();
+    }
+
+    function lookupOrderStatus() {
+      const input = document.getElementById('track-input')?.value.trim();
+      const box = document.getElementById('track-status-box');
+      if (!box) return;
+
+      if (!input) {
+        box.innerHTML = `
+          <div class="text-center py-4 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-bold text-xs">
+            Please enter your phone number or Order ID.
+          </div>
+        `;
+        return;
+      }
+
+      let orders = [];
+      try {
+        orders = JSON.parse(localStorage.getItem('oorumart_orders') || '[]');
+      } catch (e) {}
+
+      const found = orders.filter(o => o.phone === input || o.order_id === input || input.includes(o.phone));
+
+      if (found.length === 0) {
+        box.innerHTML = `
+          <div class="text-center py-6 border border-dashed border-rose-300 rounded-lg space-y-2 bg-rose-50/50">
+            <div class="text-2xl">⚠️</div>
+            <div class="font-bold text-slate-800 text-xs">No Active Orders Found</div>
+            <div class="text-[11px] text-slate-500">No order matches phone number "${input}". Place an order to track live delivery!</div>
+          </div>
+        `;
+      } else {
+        box.innerHTML = found.map(order => `
+          <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50 mb-3">
+            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+              <div>
+                <span class="font-extrabold text-slate-900 text-xs">Order #${order.order_id}</span>
+                <span class="text-[11px] text-slate-500 block">${order.customer_name || 'Customer'}</span>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${order.status}</span>
+            </div>
+            <div class="text-[11px] text-slate-600 space-y-0.5">
+              ${order.items.map(i => `<div>${i}</div>`).join('')}
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
+              <span>Total: ₹ ${order.total}</span>
+              <span class="text-[10px] text-slate-400 font-normal">${order.timestamp}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function toggleCartDrawer(open) {
+      const overlay = document.getElementById('cart-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      if (open) {
+        overlay?.classList.remove('opacity-0', 'pointer-events-none');
+        drawer?.classList.remove('translate-x-full');
+      } else {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        drawer?.classList.add('translate-x-full');
+      }
+    }
+
+    function toggleTrackDrawer(open) {
+      const overlay = document.getElementById('track-overlay');
+      const drawer = document.getElementById('track-drawer');
+      if (open) {
+        overlay?.classList.remove('opacity-0', 'pointer-events-none');
+        drawer?.classList.remove('translate-x-full');
+      } else {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        drawer?.classList.add('translate-x-full');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCart);
+  </script>
+
+</body>
+</html>

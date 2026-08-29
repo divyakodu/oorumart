@@ -1,0 +1,76 @@
+---
+export interface Props {
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    mrp?: number;
+    image_url: string;
+    badge?: string;
+    stock?: number;
+  };
+  shopSlug: string;
+}
+
+const { product, shopSlug } = Astro.props;
+const isOutOfStock = product.stock !== undefined && Number(product.stock) <= 0;
+const discountPercent = product.mrp && product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0;
+---
+
+<div class={`catalog-item space-y-2 sm:space-y-3 group ${isOutOfStock ? 'opacity-80' : ''}`}>
+  <!-- Borderless Warm Studio Alabaster (#F5F3EE) Canvas -->
+  <div class="relative aspect-square overflow-hidden bg-[#F5F3EE] cursor-pointer rounded-lg border-none shadow-2xs hover:shadow-md transition-all duration-300">
+    <a href={`/product/${product.id}?shop=${shopSlug}`} class="block w-full h-full">
+      <img 
+        src={product.image_url} 
+        alt={product.name} 
+        loading="lazy" 
+        class={`w-full h-full object-contain p-4 sm:p-5 mix-blend-multiply group-hover:scale-105 transition-transform duration-500 ${isOutOfStock ? 'grayscale-[30%]' : ''}`} 
+      />
+    </a>
+    
+    {isOutOfStock ? (
+      <span class="absolute top-2 left-2 bg-rose-700 text-white text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 sm:py-1">
+        OUT OF STOCK
+      </span>
+    ) : product.badge ? (
+      <span class="absolute top-2 left-2 bg-[#1D2228] text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 sm:py-1">
+        {product.badge}
+      </span>
+    ) : null}
+
+    {isOutOfStock ? (
+      <button 
+        class="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-slate-200 text-slate-500 w-auto px-2 h-8 sm:h-9 flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer rounded-sm border border-slate-300"
+        title="Out of Stock"
+        onclick="showShopToast('Out of Stock', 'Sorry, this product is currently out of stock!', '📦')"
+      >
+        OUT OF STOCK
+      </button>
+    ) : (
+      <button 
+        class="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 add-btn w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-lg sm:text-xl font-bold transition-colors cursor-pointer rounded-sm shadow-md"
+        title="Quick Add to Cart"
+        onclick={`addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100})`}
+      >
+        +
+      </button>
+    )}
+  </div>
+
+  <div class="space-y-1 text-left">
+    <a href={`/product/${product.id}?shop=${shopSlug}`} class="no-underline">
+      <h3 class="text-xs font-semibold text-slate-900 leading-snug line-clamp-2 hover:text-rose-600 transition-colors">{product.name}</h3>
+    </a>
+    <div class="text-[11px] sm:text-xs font-medium space-x-1">
+      <span class="font-bold text-slate-900">MRP:</span>
+      <span class="font-bold text-rose-600">₹ {product.price}</span>
+      {product.mrp && product.mrp > product.price && (
+        <span class="line-through text-slate-400">₹ {product.mrp}</span>
+      )}
+      {discountPercent > 0 && (
+        <span class="font-bold text-rose-600 text-[11px] ml-1.5">{discountPercent}% OFF</span>
+      )}
+    </div>
+  </div>
+</div>

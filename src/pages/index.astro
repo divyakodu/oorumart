@@ -1,0 +1,465 @@
+---
+export const prerender = false;
+
+import '@styles/global.css';
+import { getShopConfigAsync, getAllShopsConfigAsync } from '@lib/getShopConfig';
+import { getTemplateComponent } from '@lib/resolveTemplate';
+import StoreHeader from '@components/StoreHeader.astro';
+import StoreFooter from '@components/StoreFooter.astro';
+
+// Prevent serving stale deleted/hidden product lists from browser or CDN cache
+Astro.response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+Astro.response.headers.set('Pragma', 'no-cache');
+Astro.response.headers.set('Expires', '0');
+
+const url = new URL(Astro.request.url);
+const host = Astro.request.headers.get('host') || '';
+const queryShop = url.searchParams.get('shop');
+
+const hostParts = host.split(':')[0].split('.');
+const subdomain = (hostParts.length > 2 && hostParts[0] !== 'www') ? hostParts[0] : null;
+
+const defaultShopEnv = (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.DEFAULT_SHOP : null) || process.env.DEFAULT_SHOP;
+const targetSlug = queryShop || subdomain || defaultShopEnv || (host.includes('yesfancy') ? 'yesfancy' : null);
+
+// Fetch all registered shops on Oorumart
+const allShops = await getAllShopsConfigAsync();
+
+// Try resolving single tenant shop if targetSlug is specified
+const shopData = targetSlug ? await getShopConfigAsync(targetSlug) : null;
+const shop = shopData?.shop || null;
+
+const isMarketplace = !targetSlug;
+const isShopNotFound = Boolean(targetSlug && !shop);
+
+const { theme, products: rawProducts = [], categories = [] } = shop || {};
+const products = (rawProducts || []).filter((p: any) => p.is_active !== false);
+const primaryColor = theme?.primary_color || '#581C87';
+const secondaryColor = theme?.secondary_color || '#F8FAFC';
+const accentColor = theme?.accent_color || '#E11D48';
+const fontTitle = theme?.font_title || 'Playfair Display';
+
+// Dynamic Template Component Resolver (0 hardcoded if/else branches!)
+const StorefrontTemplate = shop ? await getTemplateComponent(shop.template) : null;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{isMarketplace ? 'Oorumart | Hyperlocal E-Commerce Marketplace Hub' : isShopNotFound ? 'Store Not Found | Oorumart' : `${shop.name} | Oorumart Storefront`}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style define:vars={{ primaryColor, secondaryColor, accentColor }}>
+    .badge-dark {
+      background-color: #1D2228;
+      color: #FFFFFF;
+    }
+    .add-btn {
+      background-color: var(--primaryColor);
+      color: #FFFFFF;
+    }
+    .add-btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col">
+
+  <!-- ================================================================= -->
+  <!-- STATE 1: MARKETPLACE HUB INDEX                                    -->
+  <!-- ================================================================= -->
+  {isMarketplace && (
+    <div class="min-h-screen bg-slate-950 text-white flex flex-col justify-between p-6 sm:p-12">
+      <div class="max-w-5xl mx-auto w-full space-y-12 my-auto text-center">
+        <div class="space-y-4">
+          <span class="bg-rose-500/20 text-rose-300 font-mono text-xs px-4 py-1.5 rounded-full border border-rose-500/30 uppercase tracking-widest">
+            🚀 Oorumart Multi-Tenant Hyperlocal Platform
+          </span>
+          <h1 class="text-4xl sm:text-7xl font-extrabold tracking-tight font-serif-title text-white">
+            Discover Local Neighborhood Stores
+          </h1>
+          <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            Direct express commerce connecting customers to local neighborhood merchants with instant COD checkout.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-6 text-left">
+          {allShops.map((s: any) => (
+            <a href={`/?shop=${s.slug}`} class="group bg-slate-900 border border-slate-800 hover:border-slate-700 p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg no-underline block">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-2xl">🏪</span>
+                <span class="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full">
+                  {s.category || 'Local Shop'}
+                </span>
+              </div>
+              <h2 class="text-lg font-bold text-white group-hover:text-rose-400 transition-colors line-clamp-1">
+                {s.name}
+              </h2>
+              <p class="text-xs text-slate-400 mt-1 line-clamp-2">
+                {s.announcement_text || 'Shop authentic local catalog products express online.'}
+              </p>
+              <div class="mt-4 text-xs font-bold text-slate-300 flex items-center group-hover:translate-x-1 transition-transform">
+                Visit Storefront ➔
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+      <footer class="text-center text-xs text-slate-600 pt-8 border-t border-slate-900">
+        © 2026 Oorumart Hyperlocal E-Commerce Network.
+      </footer>
+    </div>
+  )}
+
+  <!-- ================================================================= -->
+  <!-- STATE 2: STORE NOT FOUND                                          -->
+  <!-- ================================================================= -->
+  {isShopNotFound && (
+    <div class="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-6 text-center">
+      <div class="bg-white p-8 sm:p-12 rounded-2xl shadow-xl border border-slate-200 max-w-md w-full space-y-6">
+        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-3xl mx-auto">
+          ⚠️
+        </div>
+        <div class="space-y-2">
+          <h1 class="text-2xl font-extrabold text-slate-900 font-serif-title">Storefront Not Found</h1>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            The store slug <code class="bg-slate-100 px-2 py-0.5 rounded text-rose-600 font-bold">{targetSlug}</code> is not registered on Oorumart.
+          </p>
+        </div>
+
+        <a href="/" class="inline-block px-6 py-3 bg-slate-900 text-white font-extrabold text-xs uppercase tracking-wider rounded-lg no-underline hover:bg-slate-800 transition-colors shadow-md">
+          Explore Oorumart Marketplace ➔
+        </a>
+      </div>
+    </div>
+  )}
+
+  <!-- ================================================================= -->
+  <!-- STATE 3: DYNAMIC SINGLE TENANT MERCHANT STOREFRONT                 -->
+  <!-- ================================================================= -->
+  {!isMarketplace && !isShopNotFound && (
+    <div class="min-h-screen flex flex-col">
+      
+      <!-- Tenant Engine Switcher Header -->
+      <div class="bg-slate-900 text-slate-200 text-[11px] font-medium py-1 px-4 flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <span class="bg-emerald-500 w-2 h-2 rounded-full animate-pulse"></span>
+          <span>Tenant Engine | Active Merchant: <strong class="text-white uppercase">{shop.name}</strong> (`{shop.slug}`)</span>
+        </div>
+        <div class="flex items-center space-x-3 text-slate-300">
+          <a href="/" class="hover:text-white no-underline text-rose-400 font-bold">🌐 Marketplace Hub</a>
+          <a href="/admin" class="hover:text-white no-underline text-slate-300 font-bold">⚙️ Admin Center</a>
+        </div>
+      </div>
+
+      <!-- 100% Generic Reusable Store Header Component -->
+      <StoreHeader shop={shop} primaryColor={primaryColor} />
+
+      <!-- DYNAMIC STOREFRONT TEMPLATE (0 IF/ELSE LOGIC!) -->
+      {StorefrontTemplate && (
+        <StorefrontTemplate shop={shop} products={products} categories={categories} primaryColor={primaryColor} />
+      )}
+
+      <!-- 100% Generic Reusable Store Footer Component -->
+      <StoreFooter shopName={shop.name} logoUrl={shop.logo_url} primaryColor={primaryColor} />
+
+    </div>
+  )}
+
+  <!-- Slide-Over Shopping Cart Drawer -->
+  <div id="cart-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCartDrawer(false)"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+      <div class="flex items-center space-x-2">
+        <span class="text-xl">🛍️</span>
+        <h2 class="font-extrabold text-slate-900 uppercase text-sm tracking-wider">Shopping Cart</h2>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600">✕</button>
+    </div>
+
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-3 divide-y divide-slate-100"></div>
+
+    <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+      <div class="flex justify-between items-center text-sm font-bold text-slate-900">
+        <span>Total Payable (COD):</span>
+        <span id="cart-total-price" class="text-rose-600 font-extrabold text-base">₹ 0</span>
+      </div>
+
+      <div class="space-y-2 pt-2">
+        <input type="text" id="checkout-name" placeholder="Full Name" class="w-full text-xs p-2.5 border border-slate-300 rounded focus:ring-1 focus:ring-slate-900 outline-none" />
+        <input type="tel" id="checkout-phone" placeholder="Phone Number (Required for COD Tracking)" class="w-full text-xs p-2.5 border border-slate-300 rounded focus:ring-1 focus:ring-slate-900 outline-none" />
+        <textarea id="checkout-address" placeholder="Delivery Address / Landmark" class="w-full text-xs p-2.5 border border-slate-300 rounded h-16 focus:ring-1 focus:ring-slate-900 outline-none resize-none"></textarea>
+      </div>
+
+      <button onclick="placeRealWhatsAppOrder()" style={`background-color: ${primaryColor}`} class="w-full py-3 text-white font-extrabold text-xs uppercase tracking-widest rounded shadow-md hover:opacity-90 transition-opacity cursor-pointer">
+        Place COD Order Now ➔
+      </button>
+    </div>
+  </aside>
+
+  <!-- Track Order Drawer -->
+  <div id="track-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleTrackDrawer(false)"></div>
+  <aside id="track-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[380px] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col p-6 space-y-6">
+    <div class="flex justify-between items-center border-b border-slate-200 pb-4">
+      <h2 class="font-extrabold text-slate-900 uppercase text-sm tracking-wider">Track Your Orders</h2>
+      <button onclick="toggleTrackDrawer(false)" class="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600">✕</button>
+    </div>
+
+    <div class="space-y-3">
+      <label class="text-xs font-bold text-slate-700">Enter Your Registered Phone Number:</label>
+      <div class="flex gap-2">
+        <input type="tel" id="track-input" placeholder="e.g. 9876543210" class="flex-1 text-xs p-2.5 border border-slate-300 rounded focus:ring-1 focus:ring-slate-900 outline-none" />
+        <button onclick="lookupOrderStatus()" class="px-4 py-2.5 bg-slate-900 text-white font-bold text-xs rounded hover:bg-slate-800">Search</button>
+      </div>
+    </div>
+
+    <div id="track-results-box" class="flex-1 overflow-y-auto space-y-3">
+      <div class="text-center py-8 text-slate-400 text-xs">Enter phone number to view live COD order status.</div>
+    </div>
+  </aside>
+
+  <!-- Toast Notification Modal -->
+  <div id="shop-toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white p-4 rounded-xl shadow-2xl flex items-center space-x-3 max-w-sm border border-slate-700">
+    <span id="toast-icon" class="text-2xl">✨</span>
+    <div>
+      <h4 id="toast-title" class="font-bold text-xs text-white">Notification</h4>
+      <p id="toast-message" class="text-[11px] text-slate-300 mt-0.5">Operation complete.</p>
+    </div>
+  </div>
+
+  <script is:inline define:vars={{ currentShopSlug: shop?.slug || '', currentShopName: shop?.name || 'Store' }}>
+    let cart = {};
+
+    window.loadCart = function() {
+      try {
+        const saved = localStorage.getItem(`oorumart_cart_${currentShopSlug}`);
+        if (saved) cart = JSON.parse(saved);
+      } catch (e) {
+        cart = {};
+      }
+      window.updateCartUI();
+    };
+
+    window.saveCart = function() {
+      try {
+        localStorage.setItem(`oorumart_cart_${currentShopSlug}`, JSON.stringify(cart));
+      } catch (e) {}
+      window.updateCartUI();
+    };
+
+    window.addToCart = function(id, name, price, mrp, image_url, stock = 100) {
+      if (cart[id]) {
+        if (cart[id].qty < stock) {
+          cart[id].qty += 1;
+        }
+      } else {
+        cart[id] = { id, name, price, mrp, image_url, qty: 1, stock };
+      }
+      window.saveCart();
+      window.toggleCartDrawer(true);
+    };
+
+    window.updateCartUI = function() {
+      const container = document.getElementById('cart-items-container');
+      const badge = document.getElementById('cart-count-badge');
+      const totalEl = document.getElementById('cart-total-price');
+
+      let totalItems = 0;
+      let totalPrice = 0;
+      let html = '';
+
+      const keys = Object.keys(cart);
+      keys.forEach(id => {
+        const item = cart[id];
+        totalItems += item.qty;
+        totalPrice += item.price * item.qty;
+
+        html += `
+          <div class="flex items-center justify-between py-3">
+            <div class="flex items-center space-x-3">
+              <img src="${item.image_url}" class="w-12 h-12 object-contain p-1 bg-white border border-slate-200 rounded" />
+              <div>
+                <h4 class="font-bold text-xs text-slate-900 line-clamp-1">${item.name}</h4>
+                <div class="text-xs text-rose-600 font-extrabold">₹ ${item.price}</div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="changeQty('${id}', -1)" class="w-6 h-6 bg-slate-200 hover:bg-slate-300 font-bold rounded flex items-center justify-center text-xs">-</button>
+              <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+              <button onclick="changeQty('${id}', 1)" class="w-6 h-6 bg-slate-200 hover:bg-slate-300 font-bold rounded flex items-center justify-center text-xs">+</button>
+            </div>
+          </div>
+        `;
+      });
+
+      if (keys.length === 0) {
+        html = `<div class="text-center py-12 text-slate-400 text-xs">Your cart is empty. Explore items and add them!</div>`;
+      }
+
+      if (container) container.innerHTML = html;
+      if (badge) badge.innerText = totalItems;
+      if (totalEl) totalEl.innerText = `₹ ${totalPrice}`;
+    };
+
+    window.changeQty = function(id, delta) {
+      if (cart[id]) {
+        cart[id].qty += delta;
+        if (cart[id].qty <= 0) delete cart[id];
+        window.saveCart();
+      }
+    };
+
+    window.showShopToast = function(title, message, icon = '✨') {
+      const toast = document.getElementById('shop-toast');
+      const titleEl = document.getElementById('toast-title');
+      const msgEl = document.getElementById('toast-message');
+      const iconEl = document.getElementById('toast-icon');
+
+      if (!toast) return;
+      if (titleEl) titleEl.innerText = title;
+      if (msgEl) msgEl.innerText = message;
+      if (iconEl) iconEl.innerText = icon;
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    };
+
+    window.toggleCartDrawer = function(open) {
+      const overlay = document.getElementById('cart-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      if (open) {
+        overlay?.classList.remove('opacity-0', 'pointer-events-none');
+        drawer?.classList.remove('translate-x-full');
+      } else {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        drawer?.classList.add('translate-x-full');
+      }
+    };
+
+    window.toggleTrackDrawer = function(open) {
+      const overlay = document.getElementById('track-overlay');
+      const drawer = document.getElementById('track-drawer');
+      if (open) {
+        overlay?.classList.remove('opacity-0', 'pointer-events-none');
+        drawer?.classList.remove('translate-x-full');
+      } else {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        drawer?.classList.add('translate-x-full');
+      }
+    };
+
+    window.lookupOrderStatus = async function() {
+      const phone = document.getElementById('track-input')?.value.trim();
+      const resultsBox = document.getElementById('track-results-box');
+      if (!phone || !resultsBox) return;
+
+      let orders = [];
+      try {
+        const res = await fetch(`/api/orders?shop=${currentShopSlug}`);
+        const data = await res.json();
+        orders = (data.orders || []).filter(o => o.phone.includes(phone));
+      } catch (e) {}
+
+      if (orders.length === 0) {
+        resultsBox.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">No active orders found for phone number ${phone}.</div>`;
+      } else {
+        resultsBox.innerHTML = orders.map(o => `
+          <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50">
+            <div class="flex justify-between items-center text-xs font-bold">
+              <span>Order #${o.order_id}</span>
+              <span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded">${o.status}</span>
+            </div>
+            <div class="text-[11px] text-slate-600">${Array.isArray(o.items) ? o.items.join(', ') : o.items}</div>
+            <div class="text-xs font-extrabold text-rose-600 pt-1 border-t border-slate-200">Total COD: ₹ ${o.total}</div>
+          </div>
+        `).join('');
+      }
+    };
+
+    window.placeRealWhatsAppOrder = async function() {
+      const keys = Object.keys(cart);
+      if (keys.length === 0) {
+        window.showShopToast('Empty Cart', 'Your cart is empty! Please add products to checkout.', '🛒');
+        return;
+      }
+
+      const nameInput = document.getElementById('checkout-name')?.value.trim() || 'Valued Customer';
+      const phoneInput = document.getElementById('checkout-phone')?.value.trim();
+      const addressInput = document.getElementById('checkout-address')?.value.trim() || 'Store Pickup';
+
+      if (!phoneInput) {
+        window.showShopToast('Missing Phone Number', 'Please enter your phone number to place order & track delivery!', '📱');
+        return;
+      }
+
+      let totalPrice = 0;
+      let itemLines = [];
+      keys.forEach(id => {
+        const item = cart[id];
+        totalPrice += item.price * item.qty;
+        itemLines.push(`- ${item.name} (Qty: ${item.qty}) = Rs. ${item.price * item.qty}`);
+      });
+
+      const prefix = (currentShopSlug || 'OM').toUpperCase().slice(0, 3);
+      const orderId = `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+      const newOrder = {
+        order_id: orderId,
+        shop_slug: currentShopSlug,
+        customer_name: nameInput,
+        phone: phoneInput,
+        address: addressInput,
+        items: itemLines,
+        total: totalPrice,
+        timestamp: new Date().toLocaleString(),
+        status: 'Order Placed & Processing'
+      };
+
+      try {
+        await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newOrder)
+        });
+      } catch (e) {
+        console.error('Error posting order to API:', e);
+      }
+
+      try {
+        let orders = JSON.parse(localStorage.getItem(`oorumart_orders_${currentShopSlug}`) || '[]');
+        orders.unshift(newOrder);
+        localStorage.setItem(`oorumart_orders_${currentShopSlug}`, JSON.stringify(orders));
+      } catch (e) {}
+
+      cart = {};
+      window.saveCart();
+
+      window.toggleCartDrawer(false);
+      window.toggleTrackDrawer(true);
+      const trackInput = document.getElementById('track-input');
+      if (trackInput) trackInput.value = phoneInput;
+      window.lookupOrderStatus();
+
+      window.showShopToast(
+        '🎉 Order Placed Successfully!',
+        `Order #${orderId} (₹ ${totalPrice}) has been sent directly to ${currentShopName}. You can track your order status live right here!`,
+        '🛍️'
+      );
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', window.loadCart);
+    } else {
+      window.loadCart();
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+---
+export interface MarqueeItem {
+  iconSvg?: string;
+  icon?: string;
+  label: string;
+}
+
+export interface Props {
+  items?: MarqueeItem[];
+  backgroundColor?: string;
+  textColor?: string;
+}
+
+const defaultIconMap: Record<string, string> = {
+  return: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>`,
+  quality: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>`,
+  heart: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
+  dispatch: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`
+};
+
+const defaultItems: MarqueeItem[] = [
+  { label: "Easy Return", icon: "return" },
+  { label: "Quality Assured", icon: "quality" },
+  { label: "1M+ Happy Customers", icon: "heart" },
+  { label: "Express Dispatch", icon: "dispatch" }
+];
+
+const { items = defaultItems, backgroundColor = '#F8FAFC', textColor = '#0F172A' } = Astro.props;
+
+const marqueeList = (items && items.length > 0 ? items : defaultItems).map(item => ({
+  label: item.label,
+  iconSvg: item.iconSvg || defaultIconMap[item.icon || 'quality'] || defaultIconMap['quality']
+}));
+---
+
+<div style={`background-color: ${backgroundColor}`} class="py-5 border-y border-slate-200/80 overflow-hidden select-none">
+  <div class="marquee-track flex items-center whitespace-nowrap">
+    <!-- First set of items -->
+    <div class="flex items-center space-x-12 sm:space-x-20 shrink-0 px-6 animate-marquee">
+      {marqueeList.map(item => (
+        <div class="flex items-center space-x-3 text-slate-800 shrink-0">
+          <div class="w-9 h-9 rounded-full border border-slate-800 flex items-center justify-center text-slate-900 shrink-0">
+            <Fragment set:html={item.iconSvg} />
+          </div>
+          <span class="text-xs sm:text-sm font-bold tracking-wider text-slate-900 uppercase">{item.label}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Duplicated set for seamless infinite loop -->
+    <div aria-hidden="true" class="flex items-center space-x-12 sm:space-x-20 shrink-0 px-6 animate-marquee">
+      {marqueeList.map(item => (
+        <div class="flex items-center space-x-3 text-slate-800 shrink-0">
+          <div class="w-9 h-9 rounded-full border border-slate-800 flex items-center justify-center text-slate-900 shrink-0">
+            <Fragment set:html={item.iconSvg} />
+          </div>
+          <span class="text-xs sm:text-sm font-bold tracking-wider text-slate-900 uppercase">{item.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  .animate-marquee {
+    animation: marquee 25s linear infinite;
+  }
+
+  .marquee-track:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+/**
+ * src/components/CuratedCollectionsGrid.astro
+ * 
+ * Generic Reusable Component:
+ * - Renders a curated collections card grid showcasing featured tag cards.
+ */
+
+export interface Props {
+  tags: any[];
+  shopSlug: string;
+}
+
+const { tags = [], shopSlug } = Astro.props;
+---
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
+  <div class="text-center space-y-1">
+    <h2 class="text-2xl sm:text-3xl font-serif-title font-bold text-slate-900 uppercase tracking-wide">CURATED COLLECTIONS</h2>
+    <div class="w-12 h-0.5 bg-slate-900 mx-auto"></div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    {tags.map((t: any) => (
+      <a href={`/catalog?shop=${shopSlug}&tag=${t.id || t.tag}`} class="group relative block h-80 overflow-hidden shadow-sm no-underline border border-slate-200 bg-white">
+        <img src={t.image_url || '/images/hero_banner.jpg'} alt={t.label} class="w-full h-full object-contain p-4 bg-white group-hover:scale-105 transition-transform duration-500" />
+        <div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 z-10 w-4/5 text-center">
+          <span class="bg-white text-slate-900 font-serif-title font-extrabold text-xs uppercase px-6 py-3 tracking-widest shadow-md border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-colors block truncate">
+            {(t.label || '').replace(/^[^\w\s]+\s*/, '')}
+          </span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

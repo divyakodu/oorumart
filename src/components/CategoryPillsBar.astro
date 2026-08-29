@@ -1,0 +1,37 @@
+---
+/**
+ * src/components/CategoryPillsBar.astro
+ * 
+ * Generic Reusable Component:
+ * - Renders horizontal pill filter navigation tabs for tags/categories with identical spacing.
+ */
+
+export interface Props {
+  tags: any[];
+  shopSlug: string;
+}
+
+const { tags = [], shopSlug } = Astro.props;
+
+// Ensure unique tags list
+const uniqueTags = tags.filter((t: any, index: number, self: any[]) => 
+  index === self.findIndex((o: any) => (o.id || o.tag) === (t.id || t.tag))
+);
+---
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+  <div class="flex items-center justify-center space-x-3 overflow-x-auto py-2 scrollbar-none">
+    {uniqueTags.map((t: any) => {
+      const isAll = (t.id || t.tag) === 'all';
+      const cleanLabel = (t.label || '').replace(/^[^\w\s]+\s*/, '');
+      return (
+        <a 
+          href={`/catalog?shop=${shopSlug}&tag=${t.id || t.tag}`} 
+          class={`font-serif-title font-bold text-xs uppercase px-5 py-2.5 rounded-full tracking-wider transition-colors shrink-0 no-underline border ${isAll ? 'bg-slate-900 text-white border-slate-900 hover:bg-slate-800' : 'bg-slate-100 text-slate-900 border-slate-200 hover:bg-slate-200'}`}
+        >
+          {cleanLabel}
+        </a>
+      );
+    })}
+  </div>
+</div>

@@ -1,0 +1,142 @@
+---
+export interface Props {
+  shop: {
+    slug: string;
+    name: string;
+    logo_url?: string;
+    logo_animated_url?: string;
+    logo_text?: string;
+    announcement_text?: string;
+    categories?: Array<{ id: string; label: string }>;
+  };
+  primaryColor?: string;
+}
+
+const { shop, primaryColor = '#581C87' } = Astro.props;
+const categories = shop.categories || [];
+const logoImg = shop?.logo_animated_url || shop?.logo_url;
+const logoText = shop?.logo_text || shop?.name;
+---
+
+<!-- 1. Top Announcement Bar (High Contrast WCAG AAA Readability) -->
+<div style={`background-color: ${primaryColor}`} class="text-slate-100 text-xs font-semibold py-2.5 px-4 flex items-center justify-between shadow-xs select-none border-b border-slate-800">
+  <button class="hover:text-amber-400 cursor-pointer px-2 text-xs font-bold text-amber-400" title="Previous">◀</button>
+  <span class="tracking-widest text-center flex-1 font-semibold uppercase text-slate-100">{shop.announcement_text || `FREE SHIPPING ON ORDERS ABOVE ₹999 | EXPRESS STORE PICKUP`}</span>
+  <button class="hover:text-amber-400 cursor-pointer px-2 text-xs font-bold text-amber-400" title="Next">▶</button>
+</div>
+
+<!-- 2. Generic Reusable Header Nav (Sharp Defined Search Border + Animated Typewriter Placeholder) -->
+<header class="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 sm:px-6 py-3 shadow-xs">
+  <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 sm:gap-6 h-14">
+    
+    <!-- Brand Logo: Dynamic Icon (Lifted Up) + Stylized Playfair Display Text -->
+    <a href={`/?shop=${shop.slug}`} class="flex items-center space-x-3 shrink-0 no-underline group leading-none my-auto">
+      {logoImg && (
+        <img src={logoImg} alt={shop.name} class="h-10 sm:h-11 w-auto object-contain group-hover:scale-105 transition-transform shrink-0 -translate-y-2" />
+      )}
+      <span class="font-extrabold text-xl sm:text-2xl tracking-[0.15em] text-slate-900 font-serif-title uppercase leading-none my-auto">{logoText}</span>
+    </a>
+
+    <!-- Desktop Category Navigation Tabs (Strict Single Horizontal Line Layout) -->
+    <nav class="hidden lg:flex items-center space-x-3.5 xl:space-x-5 text-xs text-slate-800 my-auto whitespace-nowrap shrink-0">
+      {categories.map((c: any, index: number) => (
+        <a 
+          href={`/catalog?shop=${shop.slug}&category=${c.id}`} 
+          class={`cursor-pointer no-underline transition-colors py-1 whitespace-nowrap shrink-0 ${
+            index === 0 || c.label.toLowerCase().includes('all product')
+              ? 'text-rose-600 font-extrabold hover:text-rose-700' 
+              : 'text-slate-800 hover:text-rose-600 font-bold'
+          }`}
+        >
+          {c.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Right Actions: Sharp Border Search Bar + Track Order + Cart Drawer -->
+    <div class="flex items-center space-x-3 sm:space-x-4 shrink-0 my-auto">
+      <!-- Rectangular Header Search Input with Defined Sharp Border & Typewriter Animation -->
+      <form action={`/catalog?shop=${shop.slug}`} method="GET" class="hidden sm:flex items-center relative">
+        <input type="hidden" name="shop" value={shop.slug} />
+        <div class="relative flex items-center">
+          <svg class="w-4 h-4 text-slate-800 absolute left-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            id="header-animated-search-input"
+            type="text" 
+            name="search" 
+            placeholder="Search For Gift Sets..." 
+            class="w-44 md:w-60 pl-9 pr-3 py-2 bg-white text-xs font-medium text-slate-900 placeholder-slate-500 rounded-none border border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-all shadow-2xs"
+          />
+        </div>
+      </form>
+
+      <button onclick="toggleTrackDrawer(true)" class="text-slate-800 hover:text-slate-900 cursor-pointer p-1.5 hover:bg-slate-100 rounded-full transition-colors" title="Track Your Order">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      </button>
+
+      <button onclick="toggleCartDrawer(true)" class="relative text-slate-800 hover:text-slate-900 cursor-pointer p-1.5 hover:bg-slate-100 rounded-full transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span id="cart-count-badge" class="absolute -top-0.5 -right-0.5 bg-rose-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  // Typewriter Animated Placeholder Script for Header Search Bar
+  (function() {
+    const searchInput = document.getElementById('header-animated-search-input');
+
+    if (searchInput) {
+      const phrases = [
+        "Search For Gift Sets...",
+        "Search For Home & Decor...",
+        "Search For Bags & Travel...",
+        "Search For Board Games...",
+        "Search For Action Toys...",
+        "Search For Lunch Boxes..."
+      ];
+
+      let phraseIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      let typeSpeed = 100;
+
+      function typeEffect() {
+        if (!searchInput) return;
+
+        if (document.activeElement === searchInput && searchInput.value.length > 0) {
+          setTimeout(typeEffect, 1000);
+          return;
+        }
+
+        const currentPhrase = phrases[phraseIndex];
+
+        if (isDeleting) {
+          searchInput.placeholder = currentPhrase.substring(0, charIndex - 1);
+          charIndex--;
+          typeSpeed = 40;
+        } else {
+          searchInput.placeholder = currentPhrase.substring(0, charIndex + 1);
+          charIndex++;
+          typeSpeed = 90;
+        }
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+          typeSpeed = 1800;
+          isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          typeSpeed = 400;
+        }
+
+        setTimeout(typeEffect, typeSpeed);
+      }
+
+      typeEffect();
+    }
+  })();
+</script>

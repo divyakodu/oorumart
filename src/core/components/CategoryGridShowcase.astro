@@ -1,0 +1,49 @@
+---
+/**
+ * src/components/CategoryGridShowcase.astro
+ * 
+ * Generic Reusable Component:
+ * - Renders a clean responsive product grid section per category.
+ * - Caps preview items per category (default 4) for optimal homepage layout.
+ * - Displays a 'VIEW COLLECTION ➔' link to the full catalog page.
+ */
+
+import ProductCard from './ProductCard.astro';
+
+export interface Props {
+  categories: any[];
+  products: any[];
+  shopSlug: string;
+  limitPerCategory?: number;
+}
+
+const { categories = [], products = [], shopSlug, limitPerCategory = 4 } = Astro.props;
+---
+
+{categories.map((c: any) => {
+  if (!c || !c.label) return null;
+  const catProducts = products.filter((p: any) => 
+    p.category_id === c.id || 
+    (Array.isArray(p.tags) && p.tags.includes(c.tag || c.id))
+  );
+  const displayProducts = catProducts.length > 0 ? catProducts.slice(0, limitPerCategory) : products.slice(0, limitPerCategory);
+
+  return (
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <h2 class="text-xl sm:text-2xl font-serif-title font-extrabold text-slate-900 uppercase tracking-wide">
+          {(c.label || '').replace(/^[^\w\s]+\s*/, '')}
+        </h2>
+        <a href={`/catalog?shop=${shopSlug}&category=${c.tag || c.id}`} class="text-xs font-bold text-slate-900 uppercase tracking-wider hover:underline no-underline">
+          VIEW COLLECTION ➔
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+        {displayProducts.map((p: any) => (
+          <ProductCard product={p} shopSlug={shopSlug} />
+        ))}
+      </div>
+    </section>
+  );
+})}

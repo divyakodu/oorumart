@@ -1,0 +1,43 @@
+---
+export interface Props {
+  shopName: string;
+  logoUrl?: string;
+  primaryColor?: string;
+}
+
+const { shopName, logoUrl, primaryColor = '#0F172A' } = Astro.props;
+---
+
+<footer style={`background-color: ${primaryColor}`} class="text-white py-12 px-4 sm:px-6 mt-16">
+  <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
+    <div class="space-y-3 col-span-2 sm:col-span-1">
+      <div class="flex items-center space-x-3">
+        {logoUrl && (
+          <img src={logoUrl} alt={shopName} class="h-9 w-auto object-contain" />
+        )}
+        <h3 class="font-extrabold text-base tracking-wider uppercase font-serif-title">{shopName}</h3>
+      </div>
+      <p class="text-slate-300 leading-relaxed text-[11px]">Curated catalog delivered express to your doorstep.</p>
+    </div>
+    <div class="space-y-2">
+      <h4 class="font-extrabold uppercase tracking-wider text-xs mb-3 text-slate-100">NEED HELP</h4>
+      <p class="hover:underline cursor-pointer text-slate-300">FAQs</p>
+      <p class="hover:underline cursor-pointer text-slate-300" onclick="toggleTrackDrawer(true)">Track Order</p>
+      <p class="hover:underline cursor-pointer text-slate-300">Store Pickup</p>
+    </div>
+    <div class="space-y-2">
+      <h4 class="font-extrabold uppercase tracking-wider text-xs mb-3 text-slate-100">ABOUT US</h4>
+      <p class="hover:underline cursor-pointer text-slate-300">Our Story</p>
+      <p class="hover:underline cursor-pointer text-slate-300">{shopName} Community</p>
+    </div>
+    <div class="space-y-2">
+      <h4 class="font-extrabold uppercase tracking-wider text-xs mb-3 text-slate-100">COMPANY</h4>
+      <p class="hover:underline cursor-pointer text-slate-300">Privacy Policy</p>
+      <p class="hover:underline cursor-pointer text-slate-300">Terms Of Use</p>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto px-6 pt-8 mt-8 border-t border-white/20 text-[11px] text-slate-300 flex justify-between">
+    <p>© 2026 {shopName}</p>
+    <p>Powered by oorumart.in</p>
+  </div>
+</footer>
