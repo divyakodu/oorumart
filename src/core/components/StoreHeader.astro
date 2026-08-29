@@ -25,87 +25,89 @@ const logoText = shop?.logo_text || shop?.name;
   <button class="hover:text-amber-400 cursor-pointer px-2 text-xs font-bold text-amber-400" title="Next">▶</button>
 </div>
 
-<!-- 2. Generic Reusable Header Nav -->
-<header class="sticky top-0 z-40 bg-white border-b border-slate-200 px-4 sm:px-6 py-3 shadow-xs">
-  <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 sm:gap-6 h-14">
-    
-    <!-- Brand Logo -->
-    <a href="/" class="flex items-center space-x-3 shrink-0 no-underline group leading-none my-auto">
-      {logoImg && (
-        <img src={logoImg} alt={shop.name} class="h-10 sm:h-11 w-auto object-contain group-hover:scale-105 transition-transform shrink-0 -translate-y-2" />
-      )}
-      <span class="font-extrabold text-xl sm:text-2xl tracking-[0.15em] text-slate-900 font-serif-title uppercase leading-none my-auto">{logoText}</span>
-    </a>
+<!-- 2. Generic Reusable Header Nav (Logo Row + Embedded Mobile Search Bar) -->
+<header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
+  <div class="px-4 sm:px-6 py-2.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 sm:gap-6 h-12 sm:h-14">
+      
+      <!-- Brand Logo -->
+      <a href="/" class="flex items-center space-x-3 shrink-0 no-underline group leading-none my-auto">
+        {logoImg && (
+          <img src={logoImg} alt={shop.name} class="h-9 sm:h-11 w-auto object-contain group-hover:scale-105 transition-transform shrink-0" />
+        )}
+        <span class="font-extrabold text-xl sm:text-2xl tracking-[0.15em] text-slate-900 font-serif-title uppercase leading-none my-auto">{logoText}</span>
+      </a>
 
-    <!-- Desktop Category Navigation Tabs (Visible ONLY on Desktop ≥ 1024px) -->
-    <nav class="hidden lg:flex items-center space-x-3.5 xl:space-x-5 text-xs text-slate-800 my-auto whitespace-nowrap shrink-0">
-      {categories.map((c: any, index: number) => (
-        <a 
-          href={`/catalog?category=${c.id}`} 
-          class={`cursor-pointer no-underline transition-colors py-1 whitespace-nowrap shrink-0 ${
-            index === 0 || c.label.toLowerCase().includes('all product')
-              ? 'font-extrabold' 
-              : 'text-slate-800 hover:text-purple-900 font-bold'
-          }`}
-          style={index === 0 || c.label.toLowerCase().includes('all product') ? `color: ${primaryColor}` : ''}
-        >
-          {c.label}
-        </a>
-      ))}
-    </nav>
+      <!-- Desktop Category Navigation Tabs (Visible ONLY on Desktop ≥ 1024px) -->
+      <nav class="hidden lg:flex items-center space-x-3.5 xl:space-x-5 text-xs text-slate-800 my-auto whitespace-nowrap shrink-0">
+        {categories.map((c: any, index: number) => (
+          <a 
+            href={`/catalog?category=${c.id}`} 
+            class={`cursor-pointer no-underline transition-colors py-1 whitespace-nowrap shrink-0 ${
+              index === 0 || c.label.toLowerCase().includes('all product')
+                ? 'font-extrabold' 
+                : 'text-slate-800 hover:text-purple-900 font-bold'
+            }`}
+            style={index === 0 || c.label.toLowerCase().includes('all product') ? `color: ${primaryColor}` : ''}
+          >
+            {c.label}
+          </a>
+        ))}
+      </nav>
 
-    <!-- Right Actions: Desktop Search Bar + Track Order + Cart Drawer -->
-    <div class="flex items-center space-x-3 sm:space-x-4 shrink-0 my-auto">
-      <!-- Desktop Search Bar (Visible ONLY on Desktop ≥ 1024px) -->
-      <form action="/catalog" method="GET" class="hidden lg:flex items-center relative">
-        <div class="relative flex items-center">
-          <svg class="w-4 h-4 text-slate-800 absolute left-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input 
-            id="header-animated-search-input"
-            type="text" 
-            name="search" 
-            placeholder="Search For Gift Sets..." 
-            class="w-44 md:w-60 pl-9 pr-3 py-2 bg-white text-xs font-medium text-slate-900 placeholder-slate-500 rounded-none border border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-all shadow-2xs"
-          />
-        </div>
-      </form>
+      <!-- Right Actions: Desktop Search Bar + Track Order + Cart Drawer -->
+      <div class="flex items-center space-x-3 sm:space-x-4 shrink-0 my-auto">
+        <!-- Desktop Search Bar (Visible ONLY on Desktop ≥ 1024px) -->
+        <form action="/catalog" method="GET" class="hidden lg:flex items-center relative">
+          <div class="relative flex items-center">
+            <svg class="w-4 h-4 text-slate-800 absolute left-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input 
+              id="header-animated-search-input"
+              type="text" 
+              name="search" 
+              placeholder="Search For Gift Sets..." 
+              class="w-44 md:w-60 pl-9 pr-3 py-2 bg-white text-xs font-medium text-slate-900 placeholder-slate-500 rounded-none border border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 transition-all shadow-2xs"
+            />
+          </div>
+        </form>
 
-      <!-- Track Order Button -->
-      <button onclick="toggleTrackDrawer(true)" class="text-slate-800 hover:text-slate-900 cursor-pointer p-1.5 hover:bg-slate-100 rounded-full transition-colors" title="Track Your Order">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-      </button>
+        <!-- Track Order Button -->
+        <button onclick="toggleTrackDrawer(true)" class="text-slate-800 hover:text-slate-900 cursor-pointer p-1.5 hover:bg-slate-100 rounded-full transition-colors" title="Track Your Order">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        </button>
 
-      <!-- Cart Drawer Button -->
-      <button onclick="toggleCartDrawer(true)" class="relative text-slate-800 hover:text-slate-900 cursor-pointer p-1.5 hover:bg-slate-100 rounded-full transition-colors">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-        <span id="cart-count-badge" style={`background-color: ${primaryColor}`} class="absolute -top-0.5 -right-0.5 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
-      </button>
+        <!-- Cart Drawer Button -->
+        <button onclick="toggleCartDrawer(true)" class="relative text-slate-800 hover:text-slate-900 cursor-pointer p-1.5 hover:bg-slate-100 rounded-full transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span id="cart-count-badge" style={`background-color: ${primaryColor}`} class="absolute -top-0.5 -right-0.5 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </button>
+      </div>
     </div>
   </div>
-</header>
 
-<!-- 3. Mobile Search Bar Component (Sticky to top below header on Small Screens < 1024px) -->
-<div class="lg:hidden sticky top-[57px] z-30 bg-slate-50 border-b border-slate-200 px-3 sm:px-4 py-2.5 shadow-2xs">
-  <form action="/catalog" method="GET" class="flex items-center space-x-2">
-    <div class="relative flex-1 flex items-center">
-      <svg class="w-4 h-4 text-slate-800 absolute left-3 pointer-events-none shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-      <input 
-        id="mobile-header-search-input"
-        type="text" 
-        name="search" 
-        placeholder="Search For Gift Sets, Home Decor..." 
-        class="w-full pl-9 pr-3 py-2 bg-white text-xs font-medium text-slate-900 placeholder-slate-500 rounded border border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
-      />
-    </div>
-    <button type="submit" style={`background-color: ${primaryColor}`} class="px-4 py-2 text-white font-extrabold text-xs uppercase tracking-wider rounded shrink-0 cursor-pointer hover:opacity-90">
-      SEARCH
-    </button>
-  </form>
-</div>
+  <!-- 3. Mobile Search Bar Component (Inside Sticky Header, Never Truncated or Overlapped!) -->
+  <div class="lg:hidden bg-slate-50 border-t border-slate-200 px-3 sm:px-4 py-2 shadow-2xs">
+    <form action="/catalog" method="GET" class="flex items-center space-x-2">
+      <div class="relative flex-1 flex items-center">
+        <svg class="w-4 h-4 text-slate-800 absolute left-3 pointer-events-none shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input 
+          id="mobile-header-search-input"
+          type="text" 
+          name="search" 
+          placeholder="Search For Gift Sets, Home Decor..." 
+          class="w-full pl-9 pr-3 py-2 bg-white text-xs font-medium text-slate-900 placeholder-slate-500 rounded border border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
+        />
+      </div>
+      <button type="submit" style={`background-color: ${primaryColor}`} class="px-4 py-2 text-white font-extrabold text-xs uppercase tracking-wider rounded shrink-0 cursor-pointer hover:opacity-90">
+        SEARCH
+      </button>
+    </form>
+  </div>
+</header>
 
 <!-- 4. Mobile Sticky Bottom Category Tab Section (Purple Theme Color) -->
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-300 shadow-xl px-3 py-2 overflow-x-auto whitespace-nowrap flex items-center space-x-2">
