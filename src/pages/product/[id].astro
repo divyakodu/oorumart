@@ -156,7 +156,8 @@ const allProducts = products;
         <div class="space-y-3 pt-2">
           <button 
             onclick={`addToCart('${product.id}', '${(product.name || '').replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100}, parseInt(document.getElementById('product-qty-input').value || 1))`}
-            class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-widest rounded-sm flex items-center justify-center space-x-2.5 cursor-pointer shadow-md transition-all"
+            style={`background-color: ${primaryColor}`}
+            class="w-full py-3.5 text-white font-extrabold text-xs uppercase tracking-widest rounded-sm flex items-center justify-center space-x-2.5 cursor-pointer shadow-md hover:opacity-90 transition-all"
           >
             <span class="w-5 h-5 rounded-full bg-white text-slate-900 flex items-center justify-center font-black text-sm shadow-xs shrink-0">+</span>
             <span>ADD TO CART</span>
@@ -164,9 +165,10 @@ const allProducts = products;
           
           <a 
             id="buy-whatsapp-direct"
-            href={`https://wa.me/918197921458?text=${encodeURIComponent(`Hi Yes Fancy, I want to order ${product.name} (Rs. ${product.price}) via Cash on Delivery.`)}`}
+            href={`https://wa.me/918197921458?text=${encodeURIComponent(`Hi ${shop.name}, I want to order ${product.name} (Rs. ${product.price}) via Cash on Delivery.`)}`}
             target="_blank"
-            class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-widest rounded flex items-center justify-center space-x-2 no-underline cursor-pointer shadow-md"
+            style={`background-color: ${primaryColor}`}
+            class="w-full py-3.5 text-white font-extrabold text-xs uppercase tracking-widest rounded flex items-center justify-center space-x-2 no-underline cursor-pointer shadow-md hover:opacity-90 transition-all"
           >
             <span>BUY NOW VIA WHATSAPP (COD)</span>
           </a>
