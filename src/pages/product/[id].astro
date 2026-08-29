@@ -436,16 +436,28 @@ const allProducts = products;
       }
     };
 
+    let cart = [];
+
     window.loadCart = function() {
       try {
-        const saved = localStorage.getItem(`oorumart_cart_${currentShopSlug}`);
-        if (saved) cart = JSON.parse(saved);
-      } catch (e) { cart = {}; }
+        const saved = localStorage.getItem(`yesfancy_cart`) || localStorage.getItem(`oorumart_cart_${currentShopSlug}`);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            cart = parsed;
+          } else {
+            cart = Object.values(parsed);
+          }
+        }
+      } catch (e) { cart = []; }
       window.renderCart();
     };
 
     window.saveCart = function() {
-      try { localStorage.setItem(`oorumart_cart_${currentShopSlug}`, JSON.stringify(cart)); } catch (e) {}
+      try { 
+        localStorage.setItem(`yesfancy_cart`, JSON.stringify(cart));
+        localStorage.setItem(`oorumart_cart_${currentShopSlug}`, JSON.stringify(cart)); 
+      } catch (e) {}
       window.renderCart();
     };
 
@@ -456,32 +468,30 @@ const allProducts = products;
       const targetMrp = mrp || prodMrp;
       const targetImage = image || prodImage;
 
-      if (prodStock !== undefined && Number(prodStock) <= 0) {
-        window.showShopToast('Out of Stock', 'Sorry, this product is currently out of stock!', '📦');
-        return;
-      }
-
-      if (cart[targetId]) { cart[targetId].qty += localQty; }
-      else { cart[targetId] = { id: targetId, name: targetName, price: targetPrice, mrp: targetMrp || targetPrice, image: targetImage, qty: localQty }; }
-      window.saveCart();
-      window.toggleCartDrawer(true);
+      window.addToCart(targetId, targetName, targetPrice, targetMrp, targetImage);
     };
 
     window.addToCart = function(id, name, price, mrp, image, stock) {
       if (stock !== undefined && Number(stock) <= 0) {
-        window.showShopToast('Out of Stock', 'Sorry, this product is currently out of stock!', '📦');
+        alert('Sorry, this product is currently out of stock!');
         return;
       }
-      if (cart[id]) { cart[id].qty += 1; }
-      else { cart[id] = { id, name, price, mrp: mrp || price, image, qty: 1 }; }
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id, name, price, mrp: mrp || price, image, qty: 1 });
+      }
       window.saveCart();
       window.toggleCartDrawer(true);
     };
 
     window.updateCartQty = function(id, delta) {
-      if (cart[id]) {
-        cart[id].qty += delta;
-        if (cart[id].qty <= 0) delete cart[id];
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== id);
       }
       window.saveCart();
     };
@@ -491,38 +501,39 @@ const allProducts = products;
       const badge = document.getElementById('cart-count-badge');
       const headerBadge = document.getElementById('cart-header-badge');
       const totalPriceElem = document.getElementById('cart-total-price');
-      const savingsVal = document.getElementById('cart-savings-val');
 
       let totalQty = 0;
       let totalPrice = 0;
-      let totalSavings = 0;
       if (itemsList) itemsList.innerHTML = '';
 
-      const keys = Object.keys(cart);
-      if (keys.length === 0) {
+      if (cart.length === 0) {
         if (itemsList) {
-          itemsList.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs font-semibold">Your cart for ${currentShopName} is empty. Add items to checkout!</div>`;
+          itemsList.innerHTML = `
+            <div class="text-center py-12 space-y-2">
+              <div class="text-4xl">🛍️</div>
+              <div class="font-bold text-xs text-slate-700 uppercase">Your Cart is Empty</div>
+              <div class="text-[11px] text-slate-400">Explore products and add items to your cart.</div>
+            </div>
+          `;
         }
       } else {
-        keys.forEach(id => {
-          const item = cart[id];
+        cart.forEach(item => {
           totalQty += item.qty;
           totalPrice += item.price * item.qty;
-          totalSavings += (item.mrp - item.price) * item.qty;
 
           if (itemsList) {
             const div = document.createElement('div');
-            div.className = 'border border-slate-200 rounded-lg p-3 flex space-x-3 items-center';
+            div.className = 'border border-slate-200 rounded-lg p-3 flex space-x-3 items-center bg-white';
             div.innerHTML = `
-              <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-md border border-slate-100" />
-              <div class="flex-1 space-y-1">
-                <h4 class="text-xs font-bold text-slate-900 line-clamp-1">${item.name}</h4>
-                <div class="text-xs font-bold text-slate-900">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp}</span></div>
+              <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-contain rounded-md border border-slate-100 bg-slate-50" />
+              <div class="flex-1 min-w-0">
+                <h4 class="text-xs font-bold text-slate-900 truncate">${item.name}</h4>
+                <div class="text-xs font-bold text-rose-600">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp}</span></div>
               </div>
-              <div class="flex items-center space-x-2 border border-slate-300 rounded px-2 py-1 text-xs">
-                <button onclick="updateCartQty('${id}', -1)" class="font-bold cursor-pointer px-1">-</button>
-                <span class="font-bold px-1">${item.qty}</span>
-                <button onclick="updateCartQty('${id}', 1)" class="font-bold cursor-pointer px-1">+</button>
+              <div class="flex items-center space-x-1.5 bg-slate-100 px-2 py-1 rounded text-xs">
+                <button onclick="updateCartQty('${item.id}', -1)" class="text-xs font-bold px-1 hover:text-rose-600 cursor-pointer">-</button>
+                <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                <button onclick="updateCartQty('${item.id}', 1)" class="text-xs font-bold px-1 hover:text-emerald-600 cursor-pointer">+</button>
               </div>
             `;
             itemsList.appendChild(div);
@@ -533,7 +544,6 @@ const allProducts = products;
       if (badge) badge.innerText = totalQty;
       if (headerBadge) headerBadge.innerText = `${totalQty} ${totalQty === 1 ? 'ITEM' : 'ITEMS'}`;
       if (totalPriceElem) totalPriceElem.innerText = `₹ ${totalPrice}`;
-      if (savingsVal) savingsVal.innerText = `₹ ${totalSavings > 0 ? totalSavings : 250}`;
     };
 
     window.placeRealWhatsAppOrder = async function() {
