@@ -17,6 +17,7 @@ const host = Astro.request.headers.get('host') || '';
 const queryShop = url.searchParams.get('shop');
 const tagOrCategoryFilter = url.searchParams.get('tag') || url.searchParams.get('category') || 'all';
 const categoryFilter = tagOrCategoryFilter;
+const searchQuery = (url.searchParams.get('search') || url.searchParams.get('q') || '').trim();
 
 const hostParts = host.split(':')[0].split('.');
 const subdomain = (hostParts.length > 2 && hostParts[0] !== 'www') ? hostParts[0] : null;
@@ -39,16 +40,62 @@ const { products: rawProducts = [], categories = [], theme } = shop || {};
 const products = (rawProducts || []).filter((p: any) => p.is_active !== false);
 const primaryColor = theme?.primary_color || '#581C87';
 
+// Semantic & Keyword Relevance Search Scoring Algorithm
+function computeRelevanceScore(product: any, queryStr: string): number {
+  if (!queryStr) return 1;
+  const q = queryStr.toLowerCase();
+  const tokens = q.split(/\s+/).filter(Boolean);
+  
+  const name = (product.name || '').toLowerCase();
+  const desc = (product.description || '').toLowerCase();
+  const category = (product.category_id || '').toLowerCase();
+  const tags = Array.isArray(product.tags) ? product.tags.map((t: string) => t.toLowerCase()) : [];
+  const tagsStr = tags.join(' ');
+  
+  let score = 0;
+
+  if (name === q) score += 20;
+  else if (name.startsWith(q)) score += 15;
+  else if (name.includes(q)) score += 10;
+
+  for (const token of tokens) {
+    if (name.includes(token)) score += 5;
+    if (tagsStr.includes(token)) score += 4;
+    if (category.includes(token)) score += 3;
+    if (desc.includes(token)) score += 2;
+  }
+
+  const combined = `${name} ${desc} ${category} ${tagsStr}`;
+  const matchesAllTokens = tokens.every(token => combined.includes(token));
+  
+  return matchesAllTokens ? score : 0;
+}
+
 const filterProductFn = (p: any) => {
-  if (tagOrCategoryFilter === 'all') return true;
-  if (p.category_id === tagOrCategoryFilter) return true;
-  if (Array.isArray(p.tags) && p.tags.includes(tagOrCategoryFilter)) return true;
-  return false;
+  if (tagOrCategoryFilter !== 'all') {
+    const matchesCategory = p.category_id === tagOrCategoryFilter;
+    const matchesTag = Array.isArray(p.tags) && p.tags.includes(tagOrCategoryFilter);
+    if (!matchesCategory && !matchesTag) return false;
+  }
+
+  if (searchQuery) {
+    const score = computeRelevanceScore(p, searchQuery);
+    p._relevanceScore = score;
+    return score > 0;
+  }
+
+  return true;
 };
 
-const initialProducts = isGlobalCatalog 
+let matchedProductsList = isGlobalCatalog 
   ? globalProducts.filter(filterProductFn)
   : products.filter(filterProductFn);
+
+if (searchQuery) {
+  matchedProductsList.sort((a: any, b: any) => (b._relevanceScore || 0) - (a._relevanceScore || 0));
+}
+
+const initialProducts = matchedProductsList;
 
 const PAGE_SIZE = 16;
 const currentPageParam = parseInt(url.searchParams.get('page') || '1', 10);
@@ -126,8 +173,12 @@ const paginatedProducts = initialProducts.slice(startIndex, endIndex);
 
       <main class="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div class="text-center space-y-2">
-          <h1 class="font-serif-title text-3xl font-extrabold uppercase text-slate-900">GLOBAL PRODUCT COLLECTION</h1>
-          <p class="text-xs text-slate-500">Explore {initialProducts.length} items from hyperlocal merchants on Oorumart</p>
+          <h1 class="font-serif-title text-3xl font-extrabold uppercase text-slate-900">
+            {searchQuery ? `SEARCH RESULTS FOR "${searchQuery.toUpperCase()}"` : 'GLOBAL PRODUCT COLLECTION'}
+          </h1>
+          <p class="text-xs text-slate-500">
+            {searchQuery ? `Showing ${initialProducts.length} matching products for "${searchQuery}"` : `Explore ${initialProducts.length} items from hyperlocal merchants on Oorumart`}
+          </p>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -193,9 +244,11 @@ const paginatedProducts = initialProducts.slice(startIndex, endIndex);
       <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         <div class="text-center">
           <h1 id="catalog-header-title" class="font-serif-title text-2xl sm:text-3xl font-bold tracking-wider uppercase text-slate-900">
-            {categories.find((c: any) => c.id === categoryFilter)?.label || 'CATALOG & COLLECTION'}
+            {searchQuery ? `SEARCH RESULTS FOR "${searchQuery.toUpperCase()}"` : (categories.find((c: any) => c.id === categoryFilter)?.label || 'CATALOG & COLLECTION')}
           </h1>
-          <p id="catalog-header-sub" class="text-xs text-slate-500 mt-1">Browse all curated products from {shop.name}</p>
+          <p id="catalog-header-sub" class="text-xs text-slate-500 mt-1">
+            {searchQuery ? `Showing ${initialProducts.length} matching products for "${searchQuery}"` : `Browse all curated products from ${shop.name}`}
+          </p>
         </div>
 
         <!-- Catalog Toolbar -->
