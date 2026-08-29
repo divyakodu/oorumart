@@ -133,6 +133,21 @@ const totalPages = Math.max(1, Math.ceil(totalMatching / PAGE_SIZE));
 const startIndex = (currentPage - 1) * PAGE_SIZE;
 const endIndex = Math.min(startIndex + PAGE_SIZE, totalMatching);
 const paginatedProducts = initialProducts.slice(startIndex, endIndex);
+
+function getPaginationRange(current: number, total: number): (number | string)[] {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (current <= 4) {
+    return [1, 2, 3, 4, 5, '...', total];
+  }
+  if (current >= total - 3) {
+    return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+  }
+  return [1, '...', current - 1, current, current + 1, '...', total];
+}
+
+const paginationRange = getPaginationRange(currentPage, totalPages);
 ---
 
 <!DOCTYPE html>
@@ -358,13 +373,17 @@ const paginatedProducts = initialProducts.slice(startIndex, endIndex);
             </a>
 
             <!-- Page Number Links -->
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pNum) => (
-              <a 
-                href={`?shop=${targetSlug || ''}&tag=${tagOrCategoryFilter}&page=${pNum}`}
-                class={`px-3 py-2 text-xs font-bold rounded border no-underline ${pNum === currentPage ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-300 text-slate-700 hover:bg-slate-100'}`}
-              >
-                {pNum}
-              </a>
+            {paginationRange.map((item) => (
+              typeof item === 'number' ? (
+                <a 
+                  href={`?shop=${targetSlug || ''}&tag=${tagOrCategoryFilter}&search=${encodeURIComponent(searchQuery)}&page=${item}`}
+                  class={`px-3 py-2 text-xs font-bold rounded border no-underline ${item === currentPage ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-300 text-slate-700 hover:bg-slate-100'}`}
+                >
+                  {item}
+                </a>
+              ) : (
+                <span class="px-2 py-2 text-xs font-bold text-slate-400 select-none">...</span>
+              )
             ))}
 
             <!-- Next Button -->
@@ -576,16 +595,34 @@ const paginatedProducts = initialProducts.slice(startIndex, endIndex);
               </button>
             `;
 
-            for (let pNum = 1; pNum <= totalPages; pNum++) {
-              btnsHtml += `
-                <button 
-                  onclick="goToCatalogPage(${pNum})" 
-                  class="px-3 py-2 text-xs font-bold rounded border ${pNum === window.catalogCurrentPage ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-300 text-slate-700 hover:bg-slate-100 cursor-pointer'}"
-                >
-                  ${pNum}
-                </button>
-              `;
+            function getPaginationRange(current, total) {
+              if (total <= 7) {
+                return Array.from({ length: total }, (_, i) => i + 1);
+              }
+              if (current <= 4) {
+                return [1, 2, 3, 4, 5, '...', total];
+              }
+              if (current >= total - 3) {
+                return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+              }
+              return [1, '...', current - 1, current, current + 1, '...', total];
             }
+
+            const range = getPaginationRange(window.catalogCurrentPage, totalPages);
+            range.forEach(item => {
+              if (typeof item === 'number') {
+                btnsHtml += `
+                  <button 
+                    onclick="goToCatalogPage(${item})" 
+                    class="px-3 py-2 text-xs font-bold rounded border ${item === window.catalogCurrentPage ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-300 text-slate-700 hover:bg-slate-100 cursor-pointer'}"
+                  >
+                    ${item}
+                  </button>
+                `;
+              } else {
+                btnsHtml += `<span class="px-2 py-2 text-xs font-bold text-slate-400 select-none">...</span>`;
+              }
+            });
 
             btnsHtml += `
               <button 
