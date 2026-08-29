@@ -128,10 +128,10 @@ const allProducts = products;
         <!-- Quantity Selector -->
         <div class="flex items-center space-x-4">
           <span class="text-xs font-bold text-slate-700">Quantity:</span>
-          <div class="flex items-center border border-slate-300 rounded px-3 py-1.5 text-xs font-bold space-x-3">
-            <button onclick="adjustLocalQty(-1)" class="cursor-pointer font-bold px-1">-</button>
-            <span id="product-page-qty">1</span>
-            <button onclick="adjustLocalQty(1)" class="cursor-pointer font-bold px-1">+</button>
+          <div class="flex items-center border border-slate-300 rounded px-3 py-1.5 text-xs font-bold space-x-3 bg-white shadow-xs">
+            <button type="button" onclick="window.adjustLocalQty(-1)" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">-</button>
+            <span id="product-page-qty" class="w-6 text-center text-sm font-extrabold text-slate-900">1</span>
+            <button type="button" onclick="window.adjustLocalQty(1)" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">+</button>
           </div>
         </div>
 
@@ -341,7 +341,7 @@ const allProducts = products;
     </div>
   </footer>
 
-  <script define:vars={{ currentShopSlug: shop.slug, currentShopName: shop.name, currentShopPhone: shop.phone || '918197921458' }}>
+  <script is:inline define:vars={{ currentShopSlug: shop.slug, currentShopName: shop.name, currentShopPhone: shop.phone || '918197921458', prodId: product.id, prodName: (product.name || '').replace(/'/g, "\\'"), prodPrice: product.price, prodMrp: product.mrp || product.price, prodImage: product.image_url }}>
     window.localQty = 1;
     window.adjustLocalQty = function(delta) {
       window.localQty = Math.max(1, (window.localQty || 1) + delta);
