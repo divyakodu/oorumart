@@ -86,8 +86,8 @@ const logoText = shop?.logo_text || shop?.name;
   </div>
 </header>
 
-<!-- 3. Mobile Search Bar Component (Visible ONLY on Small Screens < 1024px, Placed Just Below Header) -->
-<div class="lg:hidden bg-slate-50 border-b border-slate-200 px-3 sm:px-4 py-2.5 shadow-2xs">
+<!-- 3. Mobile Search Bar Component (Sticky to top below header on Small Screens < 1024px) -->
+<div class="lg:hidden sticky top-[57px] z-30 bg-slate-50 border-b border-slate-200 px-3 sm:px-4 py-2.5 shadow-2xs">
   <form action="/catalog" method="GET" class="flex items-center space-x-2">
     <div class="relative flex-1 flex items-center">
       <svg class="w-4 h-4 text-slate-800 absolute left-3 pointer-events-none shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
