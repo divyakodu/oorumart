@@ -342,11 +342,11 @@ const allProducts = products;
   </footer>
 
   <script define:vars={{ currentShopSlug: shop.slug, currentShopName: shop.name, currentShopPhone: shop.phone || '918197921458' }}>
-    let localQty = 1;
+    window.localQty = 1;
     window.adjustLocalQty = function(delta) {
-      localQty = Math.max(1, localQty + delta);
+      window.localQty = Math.max(1, (window.localQty || 1) + delta);
       const elem = document.getElementById('product-page-qty');
-      if (elem) elem.innerText = localQty;
+      if (elem) elem.innerText = window.localQty;
     };
 
     window.showShopToast = function(title, message, icon = '⚠️') {
@@ -467,8 +467,21 @@ const allProducts = products;
       const targetPrice = price || prodPrice;
       const targetMrp = mrp || prodMrp;
       const targetImage = image || prodImage;
+      const qtyToAdd = window.localQty || 1;
 
-      window.addToCart(targetId, targetName, targetPrice, targetMrp, targetImage);
+      window.addToCartWithQty(targetId, targetName, targetPrice, targetMrp, targetImage, qtyToAdd);
+    };
+
+    window.addToCartWithQty = function(id, name, price, mrp, image, qtyToAdd) {
+      const qty = qtyToAdd || 1;
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ id, name, price, mrp: mrp || price, image, qty });
+      }
+      window.saveCart();
+      window.toggleCartDrawer(true);
     };
 
     window.addToCart = function(id, name, price, mrp, image, stock) {
@@ -476,14 +489,7 @@ const allProducts = products;
         alert('Sorry, this product is currently out of stock!');
         return;
       }
-      const existing = cart.find(item => item.id === id);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ id, name, price, mrp: mrp || price, image, qty: 1 });
-      }
-      window.saveCart();
-      window.toggleCartDrawer(true);
+      window.addToCartWithQty(id, name, price, mrp, image, 1);
     };
 
     window.updateCartQty = function(id, delta) {
@@ -696,83 +702,6 @@ const allProducts = products;
     } else {
       window.loadCart();
     }
-
-    function lookupOrderStatus() {
-      const input = document.getElementById('track-input')?.value.trim();
-      const box = document.getElementById('track-status-box');
-      if (!box) return;
-
-      if (!input) {
-        box.innerHTML = `
-          <div class="text-center py-4 text-rose-600 bg-rose-50 border border-rose-200 rounded-lg font-bold text-xs">
-            Please enter your phone number or Order ID.
-          </div>
-        `;
-        return;
-      }
-
-      let orders = [];
-      try {
-        orders = JSON.parse(localStorage.getItem('oorumart_orders') || '[]');
-      } catch (e) {}
-
-      const found = orders.filter(o => o.phone === input || o.order_id === input || input.includes(o.phone));
-
-      if (found.length === 0) {
-        box.innerHTML = `
-          <div class="text-center py-6 border border-dashed border-rose-300 rounded-lg space-y-2 bg-rose-50/50">
-            <div class="text-2xl">⚠️</div>
-            <div class="font-bold text-slate-800 text-xs">No Active Orders Found</div>
-            <div class="text-[11px] text-slate-500">No order matches phone number "${input}". Place an order to track live delivery!</div>
-          </div>
-        `;
-      } else {
-        box.innerHTML = found.map(order => `
-          <div class="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50 mb-3">
-            <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-              <div>
-                <span class="font-extrabold text-slate-900 text-xs">Order #${order.order_id}</span>
-                <span class="text-[11px] text-slate-500 block">${order.customer_name || 'Customer'}</span>
-              </div>
-              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">${order.status}</span>
-            </div>
-            <div class="text-[11px] text-slate-600 space-y-0.5">
-              ${order.items.map(i => `<div>${i}</div>`).join('')}
-            </div>
-            <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs font-bold">
-              <span>Total: ₹ ${order.total}</span>
-              <span class="text-[10px] text-slate-400 font-normal">${order.timestamp}</span>
-            </div>
-          </div>
-        `).join('');
-      }
-    }
-
-    function toggleCartDrawer(open) {
-      const overlay = document.getElementById('cart-overlay');
-      const drawer = document.getElementById('cart-drawer');
-      if (open) {
-        overlay?.classList.remove('opacity-0', 'pointer-events-none');
-        drawer?.classList.remove('translate-x-full');
-      } else {
-        overlay?.classList.add('opacity-0', 'pointer-events-none');
-        drawer?.classList.add('translate-x-full');
-      }
-    }
-
-    function toggleTrackDrawer(open) {
-      const overlay = document.getElementById('track-overlay');
-      const drawer = document.getElementById('track-drawer');
-      if (open) {
-        overlay?.classList.remove('opacity-0', 'pointer-events-none');
-        drawer?.classList.remove('translate-x-full');
-      } else {
-        overlay?.classList.add('opacity-0', 'pointer-events-none');
-        drawer?.classList.add('translate-x-full');
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', loadCart);
   </script>
 
 </body>
