@@ -168,30 +168,9 @@ export async function getShopConfigAsync(slug: string) {
         tags: tagList,
         categories: tagList,
         products: (products || []).map((p: any) => {
-          const categoryImageMap: Record<string, string> = {
-            drinkware: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?q=80&w=800&auto=format&fit=crop',
-            lunchbox: '/images/offer_lunch_boxes.jpg',
-            hasbro: '/images/offer_board_games.jpg',
-            board_games: '/images/offer_board_games.jpg',
-            nerf: '/images/offer_action_toys.jpg',
-            action_toys: '/images/offer_action_toys.jpg',
-            casseroles: '/images/offer_home_decor.jpg',
-            home_decor: '/images/offer_home_decor.jpg',
-            bags_travel: '/images/offer_bags_travel.jpg',
-            gift_store: '/images/offer_gift_store.jpg',
-            novelties: '/images/offer_gift_store.jpg',
-            sarees: '/images/hero_banner.jpg',
-            kurtis: '/images/coasters.jpg',
-            handbags: '/images/offer_bags_travel.jpg',
-            paan: '/images/coasters.jpg',
-            beverages: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop',
-            mouth_fresheners: '/images/keychain.jpg'
-          };
-          const fallbackImage = categoryImageMap[p.category_id] || '/images/offer_gift_store.jpg';
-          const isBrokenLocalExtracted = !p.image_url || p.image_url.includes('/catalog_extracted/');
           return {
             ...p,
-            image_url: isBrokenLocalExtracted ? fallbackImage : p.image_url
+            image_url: p.image_url || '/images/offer_gift_store.jpg'
           };
         }),
         carousels: {
