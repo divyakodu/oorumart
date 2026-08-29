@@ -1,11 +1,11 @@
 ---
 export const prerender = false;
 
-import '../styles/global.css';
-import ProductCard from '../components/ProductCard.astro';
+import '@styles/global.css';
+import ProductCard from '@components/ProductCard.astro';
 import StoreHeader from '@components/StoreHeader.astro';
 import StoreFooter from '@components/StoreFooter.astro';
-import { getShopConfigAsync, getAllShopsConfigAsync } from '../lib/getShopConfig';
+import { getShopConfigAsync, getAllShopsConfigAsync } from '@lib/getShopConfig';
 
 // Prevent serving stale deleted/hidden product lists from browser or CDN cache
 Astro.response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');

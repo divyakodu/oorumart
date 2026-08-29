@@ -1,7 +1,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '@lib/supabase';
 
 export const GET: APIRoute = async ({ url }) => {
   const shopSlug = url.searchParams.get('shop');

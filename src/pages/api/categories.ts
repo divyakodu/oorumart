@@ -1,8 +1,8 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { supabase, isSupabaseConfigured } from '../../lib/supabase';
-import { uploadTenantAsset } from '../../lib/storage';
+import { supabase, isSupabaseConfigured } from '@lib/supabase';
+import { uploadTenantAsset } from '@lib/storage';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
