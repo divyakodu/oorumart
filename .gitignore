@@ -30,3 +30,10 @@ yarn-error.log*
 .DS_Store
 .vscode/
 .idea/
+
+# Wrangler & CLI caches
+.wrangler/
+.gemini/
+/data/
+/experiments/
+
