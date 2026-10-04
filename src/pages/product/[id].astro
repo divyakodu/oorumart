@@ -34,6 +34,10 @@ const primaryColor = theme?.primary_color || '#581C87';
 
 const product = products.find((p: any) => p.id === id) || products[0];
 const allProducts = products;
+
+const isLocal = host.includes('localhost') || host.includes('127.0.0.1');
+const storeHomeUrl = queryShop ? `/?shop=${queryShop}` : (isLocal && shop?.slug ? `/?shop=${shop.slug}` : '/');
+const storeCatalogUrl = queryShop ? `/catalog?shop=${queryShop}` : (isLocal && shop?.slug ? `/catalog?shop=${shop.slug}` : '/catalog');
 ---
 
 <!DOCTYPE html>
@@ -66,6 +70,19 @@ const allProducts = products;
   </style>
 </head>
 <body class="min-h-screen text-slate-800 bg-white relative pb-16 sm:pb-0">
+
+  <!-- Tenant Switcher & Debug Bar -->
+  <div class="bg-slate-900 text-slate-200 text-[11px] font-medium py-1 px-4 flex items-center justify-between border-b border-slate-800 select-none">
+    <div class="flex items-center space-x-2">
+      <span class="bg-emerald-500 w-2 h-2 rounded-full animate-pulse"></span>
+      <span>Storefront | <strong class="text-white uppercase">{shop.name}</strong></span>
+    </div>
+    <div class="flex items-center space-x-3 text-slate-300">
+      <a href={`/catalog?shop=${shop.slug}`} class="hover:text-white no-underline text-purple-300 font-bold">🛍️ View Full Catalog</a>
+      <button onclick="clearFullCart(); alert('Cart has been reset to 0 items!');" class="hover:text-rose-300 text-rose-400 font-bold cursor-pointer bg-transparent border-0">🗑️ Reset Cart</button>
+      <a href={`/?shop=${shop.slug}`} class="hover:text-white no-underline text-slate-300 font-bold">🏠 Store Home</a>
+    </div>
+  </div>
 
   <!-- 100% Generic Reusable Store Header Component -->
   <StoreHeader shop={shop} primaryColor={primaryColor} />
@@ -129,9 +146,9 @@ const allProducts = products;
         <div class="flex items-center space-x-4">
           <span class="text-xs font-bold text-slate-700">Quantity:</span>
           <div class="flex items-center border border-slate-300 rounded px-3 py-1.5 text-xs font-bold space-x-3 bg-white shadow-xs">
-            <button type="button" onclick="const el=document.getElementById('product-qty-input'); el.value = Math.max(1, parseInt(el.value || 1) - 1);" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">-</button>
+            <button type="button" onclick="adjustPageQty(-1)" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">-</button>
             <input id="product-qty-input" type="text" value="1" readonly class="w-8 text-center text-sm font-extrabold text-slate-900 border-none bg-transparent outline-none select-none" />
-            <button type="button" onclick="const el=document.getElementById('product-qty-input'); el.value = parseInt(el.value || 1) + 1;" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">+</button>
+            <button type="button" onclick="adjustPageQty(1)" class="cursor-pointer font-bold px-2 py-0.5 hover:bg-slate-200 rounded text-slate-800 transition-colors text-sm">+</button>
           </div>
         </div>
 
@@ -155,13 +172,20 @@ const allProducts = products;
         <!-- Action Buttons -->
         <div class="space-y-3 pt-2">
           <button 
-            onclick={`addToCart('${product.id}', '${(product.name || '').replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100}, parseInt(document.getElementById('product-qty-input').value || 1))`}
+            id="add-to-cart-btn"
+            type="button"
+            onclick="handleAddToCartClick()"
             style={`background-color: ${primaryColor}`}
-            class="w-full py-3.5 text-white font-extrabold text-xs uppercase tracking-widest rounded-sm flex items-center justify-center space-x-2.5 cursor-pointer shadow-md hover:opacity-90 transition-all"
+            class="w-full py-3.5 text-white font-extrabold text-xs uppercase tracking-widest rounded-sm flex items-center justify-center space-x-2.5 cursor-pointer shadow-md hover:opacity-90 transition-all select-none"
           >
-            <span class="w-5 h-5 rounded-full bg-white text-slate-900 flex items-center justify-center font-black text-sm shadow-xs shrink-0">+</span>
-            <span>ADD TO CART</span>
+            <span id="add-to-cart-icon" class="w-5 h-5 rounded-full bg-white text-slate-900 flex items-center justify-center font-black text-sm shadow-xs shrink-0">+</span>
+            <span id="add-to-cart-label">ADD TO CART</span>
           </button>
+
+          <div id="in-cart-actions" class="hidden flex items-center justify-between text-xs py-1.5 px-3 bg-emerald-50 border border-emerald-200 rounded">
+            <span class="text-emerald-800 font-bold flex items-center gap-1">✓ Item currently in your cart</span>
+            <button type="button" onclick="removeFromCartPage()" class="text-rose-600 hover:text-rose-800 font-bold hover:underline cursor-pointer">Remove from Cart</button>
+          </div>
           
           <a 
             id="buy-whatsapp-direct"
@@ -205,8 +229,8 @@ const allProducts = products;
   <StoreFooter shopName={shop.name} logoUrl={shop.logo_url} primaryColor={primaryColor} />
 
   <!-- Track Order Drawer -->
-  <div id="track-overlay" onclick="toggleTrackDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
-  <aside id="track-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between p-4 sm:p-6">
+  <div id="track-overlay" onclick="toggleTrackDrawer(false)" style="transition: opacity 0.3s ease; opacity: 0; pointer-events: none;" class="fixed inset-0 bg-slate-950/60 z-50"></div>
+  <aside id="track-drawer" style="transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(100%);" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 shadow-2xl flex flex-col justify-between p-4 sm:p-6">
     <div class="space-y-6">
       <div class="flex items-center justify-between border-b border-slate-200 pb-4">
         <div class="flex items-center space-x-2">
@@ -238,8 +262,8 @@ const allProducts = products;
   </aside>
 
   <!-- Cart Drawer -->
-  <div id="cart-overlay" onclick="toggleCartDrawer(false)" class="fixed inset-0 bg-slate-950/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
-  <aside id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col justify-between">
+  <div id="cart-overlay" onclick="toggleCartDrawer(false)" style="transition: opacity 0.3s ease; opacity: 0; pointer-events: none;" class="fixed inset-0 bg-slate-950/60 z-50"></div>
+  <aside id="cart-drawer" style="transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(100%);" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white z-50 shadow-2xl flex flex-col justify-between">
     
     <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
       <div class="flex items-center space-x-2">
@@ -247,7 +271,10 @@ const allProducts = products;
         <span class="font-extrabold text-sm uppercase tracking-wider text-slate-900">Your Cart</span>
         <span id="cart-header-badge" class="bg-slate-900 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">0 ITEMS</span>
       </div>
-      <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center justify-center transition-colors cursor-pointer" title="Close Cart">✕</button>
+      <div class="flex items-center space-x-2">
+        <button onclick="clearFullCart()" class="text-[11px] font-bold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2 py-1 rounded transition-colors cursor-pointer" title="Empty Cart">Clear All</button>
+        <button onclick="toggleCartDrawer(false)" class="w-8 h-8 rounded-full bg-white hover:bg-slate-200 text-slate-700 border border-slate-200 flex items-center justify-center transition-colors cursor-pointer" title="Close Cart">✕</button>
+      </div>
     </div>
 
     <div class="bg-slate-900 text-white text-xs font-semibold py-2 px-4 text-center">
@@ -293,11 +320,11 @@ const allProducts = products;
 
   <!-- Mobile Bottom Sticky Navigation Bar -->
   <div class="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t border-slate-200 z-40 flex items-center justify-around py-2 shadow-lg">
-    <a href="/" class="flex flex-col items-center text-slate-700 no-underline text-[10px] font-bold">
+    <a href={storeHomeUrl} class="flex flex-col items-center text-slate-700 no-underline text-[10px] font-bold">
       <span class="text-base">🏠</span>
       <span>Home</span>
     </a>
-    <a href="/catalog" class="flex flex-col items-center text-slate-700 no-underline text-[10px] font-bold">
+    <a href={storeCatalogUrl} class="flex flex-col items-center text-slate-700 no-underline text-[10px] font-bold">
       <span class="text-base">🛍️</span>
       <span>Catalog</span>
     </a>
@@ -311,161 +338,321 @@ const allProducts = products;
     </button>
   </div>
 
-  <!-- Footer -->
-  <footer class="footer-art-bg text-white pt-12 pb-8 mt-16">
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
-      <div class="space-y-2">
-        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">GET IN TOUCH</h4>
-        <p class="font-semibold">Whatsapp: <span class="underline">+{shop.phone || '918197921458'}</span></p>
-        <p class="text-slate-200">Mon-Sat 10AM - 6PM IST</p>
-        <p class="font-semibold">Email: <span class="underline">support@{shop.slug}.oorumart.in</span></p>
-      </div>
-      <div class="space-y-2">
-        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">NEED HELP</h4>
-        <p class="hover:underline cursor-pointer">FAQs</p>
-        <p class="hover:underline cursor-pointer" onclick="toggleTrackDrawer(true)">Track Order</p>
-        <p class="hover:underline cursor-pointer">Store Pickup</p>
-      </div>
-      <div class="space-y-2">
-        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">ABOUT US</h4>
-        <p class="hover:underline cursor-pointer">Our Story</p>
-        <p class="hover:underline cursor-pointer">{shop.name} Community</p>
-      </div>
-      <div class="space-y-2">
-        <h4 class="font-extrabold uppercase tracking-wider text-sm mb-3">COMPANY</h4>
-        <p class="hover:underline cursor-pointer">Privacy Policy</p>
-        <p class="hover:underline cursor-pointer">Terms Of Use</p>
-      </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-6 pt-8 mt-8 border-t border-white/20 text-[11px] text-slate-200 flex justify-between">
-      <p>© 2026 {shop.name}</p>
-      <p>Powered by oorumart.in</p>
-    </div>
-  </footer>
+  <script is:inline define:vars={{
+    currentShopSlug: shop?.slug || 'yesfancy',
+    currentShopName: shop?.name || 'Yes Fancy',
+    prodId: product?.id || '',
+    prodName: product?.name || '',
+    prodPrice: product?.price || 0,
+    prodMrp: product?.mrp || product?.price || 0,
+    prodImg: product?.image_url || '',
+    prodStock: product?.stock ?? 100,
+    shopPhone: shop?.phone || '918197921458'
+  }}>
+    let cart = {};
 
-  <script is:inline>
-    let cart = [];
+    function updatePageUI() {
+      const el = document.getElementById('product-qty-input');
+      const btnLabel = document.getElementById('add-to-cart-label');
+      const btnIcon = document.getElementById('add-to-cart-icon');
+      const inCartActions = document.getElementById('in-cart-actions');
+      const inCartItem = cart[prodId];
 
-    function initCart() {
+      const currentQty = inCartItem ? inCartItem.qty : (el ? parseInt(el.value || 1) : 1);
+      if (el) el.value = currentQty;
+
+      if (inCartItem) {
+        if (btnLabel) btnLabel.innerText = `✓ IN CART (${inCartItem.qty}) • VIEW CART`;
+        if (btnIcon) btnIcon.innerText = '🛒';
+        if (inCartActions) inCartActions.classList.remove('hidden');
+      } else {
+        if (btnLabel) btnLabel.innerText = 'ADD TO CART';
+        if (btnIcon) btnIcon.innerText = '+';
+        if (inCartActions) inCartActions.classList.add('hidden');
+      }
+
+      const waBtn = document.getElementById('buy-whatsapp-direct');
+      if (waBtn) {
+        const total = currentQty * prodPrice;
+        const msg = `Hi ${currentShopName}, I want to order ${currentQty}x ${prodName} (Total: Rs. ${total}) via Cash on Delivery.`;
+        waBtn.href = `https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`;
+      }
+    }
+
+    window.removeFromCartPage = function() {
+      if (cart[prodId]) {
+        delete cart[prodId];
+        window.saveCart();
+        window.toggleCartDrawer(false);
+      }
+    };
+
+    window.adjustPageQty = function(delta) {
+      const el = document.getElementById('product-qty-input');
+      let currentVal = parseInt(el?.value || (cart[prodId]?.qty || 1));
+      let newVal = Math.max(1, currentVal + delta);
+      if (el) el.value = newVal;
+
+      // Update WhatsApp direct order link
+      const waBtn = document.getElementById('buy-whatsapp-direct');
+      if (waBtn) {
+        const total = newVal * prodPrice;
+        const msg = `Hi ${currentShopName}, I want to order ${newVal}x ${prodName} (Total: Rs. ${total}) via Cash on Delivery.`;
+        waBtn.href = `https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`;
+      }
+
+      // Synchronize immediately to cart and open cart drawer
+      if (cart[prodId]) {
+        cart[prodId].qty = newVal;
+      } else {
+        cart[prodId] = {
+          id: prodId,
+          name: prodName,
+          price: prodPrice,
+          mrp: prodMrp || prodPrice,
+          image: prodImg,
+          image_url: prodImg,
+          qty: newVal
+        };
+      }
+      window.saveCart();
+      window.toggleCartDrawer(true);
+    };
+
+    window.handleAddToCartClick = function() {
+      const el = document.getElementById('product-qty-input');
+      const selectedQty = Math.max(1, parseInt(el?.value || 1));
+
+      if (cart[prodId]) {
+        cart[prodId].qty = selectedQty;
+        window.saveCart();
+        window.toggleCartDrawer(true);
+        return;
+      }
+
+      cart[prodId] = {
+        id: prodId,
+        name: prodName,
+        price: prodPrice,
+        mrp: prodMrp || prodPrice,
+        image: prodImg,
+        image_url: prodImg,
+        qty: selectedQty
+      };
+
+      window.saveCart();
+      window.toggleCartDrawer(true);
+    };
+
+    window.loadCart = function() {
       try {
-        const saved = localStorage.getItem('yesfancy_cart') || localStorage.getItem('oorumart_cart');
+        localStorage.removeItem('yesfancy_cart');
+        localStorage.removeItem('oorumart_cart');
+
+        const saved = localStorage.getItem(`oorumart_cart_${currentShopSlug}`);
         if (saved) {
           const parsed = JSON.parse(saved);
-          cart = Array.isArray(parsed) ? parsed : Object.values(parsed);
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+            cart = parsed;
+          } else {
+            cart = {};
+          }
         }
-      } catch (e) { cart = []; }
-      updateCartUI();
-    }
+      } catch (e) { cart = {}; }
+      window.renderCart();
+      updatePageUI();
+    };
 
-    function saveCart() {
-      try {
-        localStorage.setItem('yesfancy_cart', JSON.stringify(cart));
-        localStorage.setItem('oorumart_cart', JSON.stringify(cart));
-      } catch (e) {}
-      updateCartUI();
-    }
+    window.saveCart = function() {
+      try { localStorage.setItem(`oorumart_cart_${currentShopSlug}`, JSON.stringify(cart)); } catch (e) {}
+      window.renderCart();
+      updatePageUI();
+    };
 
-    function addToCart(id, name, price, mrp, image, stock, qty = 1) {
+    window.addToCart = function(id, name, price, mrp, image, stock = 100, qty = 1) {
       if (stock !== undefined && Number(stock) <= 0) {
         alert('Sorry, this product is currently out of stock!');
         return;
       }
 
-      const qtyToAdd = Number(qty) || 1;
-      const existing = cart.find(item => item.id === id);
-      if (existing) {
-        existing.qty += qtyToAdd;
+      const qtyToAdd = Math.max(1, parseInt(qty || 1));
+      if (cart[id]) {
+        cart[id].qty += qtyToAdd;
       } else {
-        cart.push({ id, name, price, mrp: mrp || price, image, qty: qtyToAdd });
+        cart[id] = { id, name, price, mrp: mrp || price, image, image_url: image, qty: qtyToAdd };
       }
 
-      saveCart();
-      toggleCartDrawer(true);
-    }
+      window.saveCart();
+      window.toggleCartDrawer(true);
+    };
 
-    function updateCartQty(id, delta) {
-      const item = cart.find(i => i.id === id);
-      if (!item) return;
-      item.qty += delta;
-      if (item.qty <= 0) {
-        cart = cart.filter(i => i.id !== id);
+    window.updateCartQty = function(id, delta) {
+      if (cart[id]) {
+        cart[id].qty += delta;
+        if (cart[id].qty <= 0) delete cart[id];
       }
-      saveCart();
-    }
+      window.saveCart();
+    };
 
-    function updateCartUI() {
+    window.clearFullCart = function() {
+      cart = {};
+      window.saveCart();
+    };
+
+    window.renderCart = function() {
+      const itemsList = document.getElementById('cart-items-list');
       const badge = document.getElementById('cart-count-badge');
       const headerBadge = document.getElementById('cart-header-badge');
-      const list = document.getElementById('cart-items-list');
-      const totalEl = document.getElementById('cart-total-price');
+      const totalPriceElem = document.getElementById('cart-total-price');
+      const savingsVal = document.getElementById('cart-savings-val');
 
-      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      let totalQty = 0;
+      let totalPrice = 0;
+      let totalSavings = 0;
+      if (itemsList) itemsList.innerHTML = '';
 
-      if (badge) badge.innerText = totalItems;
-      if (headerBadge) headerBadge.innerText = `${totalItems} ${totalItems === 1 ? 'ITEM' : 'ITEMS'}`;
-      if (totalEl) totalEl.innerText = `₹ ${totalPrice}`;
-
-      if (list) {
-        if (cart.length === 0) {
-          list.innerHTML = `
-            <div class="text-center py-12 space-y-2">
-              <div class="text-4xl">🛍️</div>
-              <div class="font-bold text-xs text-slate-700 uppercase">Your Cart is Empty</div>
-              <div class="text-[11px] text-slate-400">Explore products and add items to your cart.</div>
-            </div>
-          `;
-        } else {
-          list.innerHTML = cart.map(item => `
-            <div class="flex items-center space-x-3 p-2 border border-slate-200 rounded-lg bg-white">
-              <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-contain bg-slate-50 rounded" />
-              <div class="flex-1 min-w-0">
-                <div class="text-xs font-bold text-slate-900 truncate">${item.name}</div>
-                <div class="text-xs font-bold text-rose-600">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp}</span></div>
-              </div>
-              <div class="flex items-center space-x-1.5 bg-slate-100 px-2 py-1 rounded">
-                <button onclick="updateCartQty('${item.id}', -1)" class="text-xs font-bold px-1 hover:text-rose-600 cursor-pointer">-</button>
-                <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                <button onclick="updateCartQty('${item.id}', 1)" class="text-xs font-bold px-1 hover:text-emerald-600 cursor-pointer">+</button>
-              </div>
-            </div>
-          `).join('');
+      const keys = Object.keys(cart);
+      if (keys.length === 0) {
+        if (itemsList) {
+          itemsList.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs font-semibold">Your cart for ${currentShopName} is empty. Add items to checkout!</div>`;
         }
-      }
-    }
+      } else {
+        keys.forEach(id => {
+          const item = cart[id];
+          const imgUrl = item.image || item.image_url || '/images/placeholder.webp';
+          totalQty += item.qty;
+          totalPrice += item.price * item.qty;
+          totalSavings += ((item.mrp || item.price) - item.price) * item.qty;
 
-    function toggleCartDrawer(show) {
+          if (itemsList) {
+            const div = document.createElement('div');
+            div.className = 'border border-slate-200 rounded-lg p-3 flex space-x-3 items-center';
+            div.innerHTML = `
+              <img src="${imgUrl}" alt="${item.name}" class="w-14 h-14 object-contain rounded-md border border-slate-100 bg-slate-50" />
+              <div class="flex-1 space-y-1 min-w-0">
+                <h4 class="text-xs font-bold text-slate-900 truncate">${item.name}</h4>
+                <div class="text-xs font-bold text-rose-600">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp || item.price}</span></div>
+              </div>
+              <div class="flex items-center space-x-2 border border-slate-300 rounded px-2 py-1 text-xs">
+                <button onclick="updateCartQty('${id}', -1)" class="font-bold cursor-pointer px-1 hover:text-rose-600">-</button>
+                <span class="font-bold px-1">${item.qty}</span>
+                <button onclick="updateCartQty('${id}', 1)" class="font-bold cursor-pointer px-1 hover:text-emerald-600">+</button>
+              </div>
+            `;
+            itemsList.appendChild(div);
+          }
+        });
+      }
+
+      if (badge) badge.innerText = totalQty;
+      if (headerBadge) headerBadge.innerText = `${totalQty} ${totalQty === 1 ? 'ITEM' : 'ITEMS'}`;
+      if (totalPriceElem) totalPriceElem.innerText = `₹ ${totalPrice}`;
+      if (savingsVal) savingsVal.innerText = `₹ ${totalSavings > 0 ? totalSavings : 0}`;
+    };
+
+    window.toggleCartDrawer = function(open) {
       const overlay = document.getElementById('cart-overlay');
       const drawer = document.getElementById('cart-drawer');
       if (!overlay || !drawer) return;
-
-      if (show) {
+      if (open) {
         overlay.classList.remove('opacity-0', 'pointer-events-none');
-        drawer.classList.remove('translate-x-full');
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+        drawer.style.transform = 'translateX(0)';
       } else {
         overlay.classList.add('opacity-0', 'pointer-events-none');
-        drawer.classList.add('translate-x-full');
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        drawer.style.transform = 'translateX(100%)';
       }
-    }
+    };
 
-    function toggleTrackDrawer(show) {
+    window.toggleTrackDrawer = function(open) {
       const overlay = document.getElementById('track-overlay');
       const drawer = document.getElementById('track-drawer');
       if (!overlay || !drawer) return;
-
-      if (show) {
+      if (open) {
         overlay.classList.remove('opacity-0', 'pointer-events-none');
-        drawer.classList.remove('translate-x-full');
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+        drawer.style.transform = 'translateX(0)';
       } else {
         overlay.classList.add('opacity-0', 'pointer-events-none');
-        drawer.classList.add('translate-x-full');
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        drawer.style.transform = 'translateX(100%)';
       }
-    }
+    };
+
+    window.placeRealWhatsAppOrder = async function() {
+      const keys = Object.keys(cart);
+      if (keys.length === 0) {
+        alert('Your cart is empty! Please add products to checkout.');
+        return;
+      }
+
+      const nameInput = document.getElementById('checkout-name')?.value.trim() || 'Valued Customer';
+      const phoneInput = document.getElementById('checkout-phone')?.value.trim();
+      const addressInput = document.getElementById('checkout-address')?.value.trim() || 'Store Pickup';
+
+      if (!phoneInput) {
+        alert('Please enter your phone number to place order & track delivery!');
+        return;
+      }
+
+      let totalPrice = 0;
+      let itemLines = [];
+      keys.forEach(id => {
+        const item = cart[id];
+        totalPrice += item.price * item.qty;
+        itemLines.push(`- ${item.name} (Qty: ${item.qty}) = Rs. ${item.price * item.qty}`);
+      });
+
+      const prefix = (currentShopSlug || 'OM').toUpperCase().slice(0, 3);
+      const orderId = `${prefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+      const newOrder = {
+        order_id: orderId,
+        shop_slug: currentShopSlug,
+        customer_name: nameInput,
+        phone: phoneInput,
+        address: addressInput,
+        items: itemLines,
+        total: totalPrice,
+        timestamp: new Date().toLocaleString(),
+        status: 'Order Placed & Processing'
+      };
+
+      try {
+        await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newOrder)
+        });
+      } catch (e) {
+        console.error('Error posting order to API:', e);
+      }
+
+      try {
+        let orders = JSON.parse(localStorage.getItem(`oorumart_orders_${currentShopSlug}`) || '[]');
+        orders.unshift(newOrder);
+        localStorage.setItem(`oorumart_orders_${currentShopSlug}`, JSON.stringify(orders));
+      } catch (e) {}
+
+      cart = {};
+      window.saveCart();
+      window.toggleCartDrawer(false);
+      window.toggleTrackDrawer(true);
+
+      const trackInput = document.getElementById('track-input');
+      if (trackInput) trackInput.value = phoneInput;
+
+      alert(`🎉 Order #${orderId} (₹ ${totalPrice}) has been sent directly to ${currentShopName}!`);
+    };
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCart);
+      document.addEventListener('DOMContentLoaded', window.loadCart);
     } else {
-      initCart();
+      window.loadCart();
     }
   </script>
 

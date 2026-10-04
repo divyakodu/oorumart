@@ -23,11 +23,17 @@ export interface Props {
 const { tagId, title, products = [], shopSlug, initialCount = 4, maxScrollCount = 10 } = Astro.props;
 
 // Filter matching products by tag ID or category ID
-const matchingProducts = products.filter((p: any) => 
-  tagId === 'all' ||
-  p.category_id === tagId || 
-  (Array.isArray(p.tags) && p.tags.includes(tagId))
-);
+const matchingProducts = products.filter((p: any) => {
+  if (tagId === 'all') return true;
+  if (p.category_id === tagId) return true;
+  if (Array.isArray(p.tags)) {
+    return p.tags.includes(tagId);
+  }
+  if (typeof p.tags === 'string') {
+    return p.tags.split(',').map((t: string) => t.trim().toLowerCase()).includes(tagId);
+  }
+  return false;
+});
 
 const displayProducts = matchingProducts.slice(0, maxScrollCount);
 const cleanTitle = (title || '').replace(/^[^\w\s]+\s*/, '');
@@ -61,7 +67,7 @@ const containerId = `tag-row-${tagId.replace(/[^a-z0-9]/gi, '-')}`;
           </button>
         </div>
 
-        <a href={`/catalog?category=${tagId}`} class="text-xs font-bold text-slate-900 uppercase tracking-wider hover:underline no-underline">
+        <a href={shopSlug ? `/catalog?category=${tagId}&shop=${shopSlug}` : `/catalog?category=${tagId}`} class="text-xs font-bold text-slate-900 uppercase tracking-wider hover:underline no-underline">
           SHOW MORE ➔
         </a>
       </div>
@@ -79,7 +85,7 @@ const containerId = `tag-row-${tagId.replace(/[^a-z0-9]/gi, '-')}`;
       ))}
 
       {matchingProducts.length > initialCount && (
-        <a href={`/catalog?category=${tagId}`} class="w-56 sm:w-64 shrink-0 border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center p-6 text-center hover:border-slate-900 hover:bg-slate-50 transition-all no-underline group bg-white">
+        <a href={shopSlug ? `/catalog?category=${tagId}&shop=${shopSlug}` : `/catalog?category=${tagId}`} class="w-56 sm:w-64 shrink-0 border-2 border-dashed border-slate-300 rounded-xl flex flex-col items-center justify-center p-6 text-center hover:border-slate-900 hover:bg-slate-50 transition-all no-underline group bg-white">
           <span class="text-3xl mb-3 group-hover:scale-110 transition-transform">🛍️</span>
           <span class="font-serif-title font-extrabold text-xs text-slate-900 uppercase tracking-wider">
             Explore All {matchingProducts.length} Items

@@ -17,13 +17,12 @@ function getSupabaseClient() {
 
 const tagLabelMap: Record<string, string> = {
   all: 'All Products',
-  gift_store: 'Gift Store',
-  home_decor: 'Home & Decor',
-  bags_travel: 'Bags & Travel',
-  board_games: 'Board Games',
-  action_toys: 'Action Toys',
-  lunch_boxes: 'Lunch Boxes',
-  curated: 'Curated'
+  novelties: 'Gift Store',
+  decor: 'Home & Decor',
+  games: 'Games',
+  toys: 'Toys',
+  lunchbox: 'Lunch Boxes',
+  fashion: 'Fashion'
 };
 
 function formatTagLabel(tag: string): string {
@@ -37,52 +36,62 @@ function formatTagLabel(tag: string): string {
 const defaultOfferSlides = [
   {
     id: "slide_gift_store",
-    title: "FESTIVE GIFT GUIDE",
+    title: "FESTIVE GIFT STORE",
     subtitle: "Curated luxury hampers, fancy boxes & novelties for every occasion.",
-    image_url: "/images/offer_gift_store.jpg",
-    tag_id: "gift_store",
-    link: "/catalog?category=gift_store"
+    image_url: "/images/offer_gift_store.webp",
+    tag_id: "novelties",
+    link: "/catalog?shop=yesfancy&category=novelties"
   },
   {
     id: "slide_home_decor",
     title: "MODERN HOME & DECOR",
     subtitle: "Fancy minimal interiors, designer lamps & contemporary living accents.",
-    image_url: "/images/offer_home_decor.jpg",
-    tag_id: "home_decor",
-    link: "/catalog?category=home_decor"
+    image_url: "/images/offer_home_decor.webp",
+    tag_id: "decor",
+    link: "/catalog?shop=yesfancy&category=decor"
   },
   {
-    id: "slide_bags_travel",
-    title: "MODERN BAGS & TRAVEL",
-    subtitle: "Sleek designer duffels, premium backpacks & modern travel gear.",
-    image_url: "/images/offer_bags_travel.jpg",
-    tag_id: "bags_travel",
-    link: "/catalog?category=bags_travel"
+    id: "slide_games",
+    title: "GAMES & PUZZLES",
+    subtitle: "Interactive arcade labyrinths, marble runs & brain exercising games.",
+    image_url: "/images/offer_games.webp",
+    tag_id: "games",
+    link: "/catalog?shop=yesfancy&category=games"
   },
   {
-    id: "slide_board_games",
-    title: "BOARD GAMES",
-    subtitle: "Sleek contemporary chess sets & modern tabletop board games.",
-    image_url: "/images/offer_board_games.jpg",
-    tag_id: "board_games",
-    link: "/catalog?category=board_games"
+    id: "slide_toys",
+    title: "ACTION TOYS & ROBOTICS",
+    subtitle: "Functional hydraulic crane kits, robotic arms & mechanical dynamic machines.",
+    image_url: "/images/offer_toys.webp",
+    tag_id: "toys",
+    link: "/catalog?shop=yesfancy&category=toys"
   },
   {
-    id: "slide_action_toys",
-    title: "GAMES & TOYS",
-    subtitle: "Modern action figures, sleek gaming gadgets & premium collectibles.",
-    image_url: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?q=80&w=2000&auto=format&fit=crop",
-    tag_id: "action_toys",
-    link: "/catalog?category=action_toys"
+    id: "slide_lunchbox",
+    title: "MODERN LUNCH BOXES",
+    subtitle: "Insulated food carriers, stylish lunch sets & travel containers.",
+    image_url: "/images/offer_lunch_boxes.webp",
+    tag_id: "lunchbox",
+    link: "/catalog?shop=yesfancy&category=lunchbox"
   },
   {
-    id: "slide_lunch_boxes",
-    title: "MODERN FOOD CARRIERS",
-    subtitle: "Sleek double-walled insulated vacuum bento tiffins & smart lunchware.",
-    image_url: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?q=80&w=2000&auto=format&fit=crop",
-    tag_id: "lunch_boxes",
-    link: "/catalog?category=lunch_boxes"
+    id: "slide_fashion",
+    title: "EXCLUSIVE FASHION",
+    subtitle: "Trending personal style, travel accessories & lifestyle fashion.",
+    image_url: "/images/offer_fashion.webp",
+    tag_id: "fashion",
+    link: "/catalog?shop=yesfancy&category=fashion"
   }
+];
+
+export const ORIGINAL_YESFANCY_CATEGORIES = [
+  { id: 'all', label: 'All Products', sort_order: 0 },
+  { id: 'novelties', label: 'Gift Store', sort_order: 1 },
+  { id: 'decor', label: 'Home & Decor', sort_order: 2 },
+  { id: 'games', label: 'Games', sort_order: 3 },
+  { id: 'toys', label: 'Toys', sort_order: 4 },
+  { id: 'lunchbox', label: 'Lunch Boxes', sort_order: 5 },
+  { id: 'fashion', label: 'Fashion', sort_order: 6 }
 ];
 
 export async function getShopConfigAsync(slug: string) {
@@ -104,37 +113,36 @@ export async function getShopConfigAsync(slug: string) {
       .select('*')
       .eq('shop_id', shopRecord.id);
 
-    // Dynamically derive unique tags from product catalog
-    const rawTagsSet = new Set<string>();
-    (products || []).forEach((p: any) => {
-      if (Array.isArray(p.tags)) {
-        p.tags.forEach((t: string) => {
-          if (t && t !== 'curated') rawTagsSet.add(t);
-        });
-      }
-    });
+    // Fetch structured categories from categories table
+    const { data: dbCategories } = await supabase
+      .from('categories')
+      .select('*')
+      .eq('shop_id', shopRecord.id)
+      .order('sort_order', { ascending: true });
 
-    const uniqueTags = Array.from(rawTagsSet);
-    
-    // Sort tags consistently
-    const tagOrder = ['gift_store', 'home_decor', 'bags_travel', 'board_games', 'action_toys', 'lunch_boxes'];
-    uniqueTags.sort((a, b) => {
-      const idxA = tagOrder.indexOf(a);
-      const idxB = tagOrder.indexOf(b);
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-      if (idxA !== -1) return -1;
-      if (idxB !== -1) return 1;
-      return a.localeCompare(b);
-    });
-
-    const tagList = [
-      { id: 'all', label: 'All Products', sort_order: 0 },
-      ...uniqueTags.map((tag: string, index: number) => ({
-        id: tag,
-        label: formatTagLabel(tag),
-        sort_order: index + 1
-      }))
-    ];
+    let tagList = [];
+    if (slug === 'yesfancy') {
+      tagList = ORIGINAL_YESFANCY_CATEGORIES;
+    } else if (dbCategories && dbCategories.length > 0) {
+      tagList = dbCategories.map(c => ({
+        id: c.id,
+        label: c.label,
+        sort_order: c.sort_order
+      }));
+    } else {
+      const categoryMap = new Map<string, string>();
+      categoryMap.set('all', 'All Products');
+      (products || []).forEach((p: any) => {
+        if (p.category_id && p.category_id !== 'all') {
+          categoryMap.set(p.category_id, formatTagLabel(p.category_id));
+        }
+      });
+      tagList = Array.from(categoryMap.entries()).map(([id, label], index) => ({
+        id,
+        label,
+        sort_order: index
+      }));
+    }
 
     const themeObj = shopRecord.theme || {};
 
@@ -167,12 +175,10 @@ export async function getShopConfigAsync(slug: string) {
         },
         tags: tagList,
         categories: tagList,
-        products: (products || []).map((p: any) => {
-          return {
-            ...p,
-            image_url: p.image_url || '/images/offer_gift_store.jpg'
-          };
-        }),
+        products: (products || []).map((p: any) => ({
+          ...p,
+          image_url: p.image_url || ''
+        })),
         carousels: {
           hero: (shopRecord.hero_slides && shopRecord.hero_slides.length > 0) ? shopRecord.hero_slides : defaultOfferSlides
         }
@@ -193,28 +199,37 @@ export async function getAllShopsConfigAsync() {
     if (error || !shops) return [];
 
     const { data: allProducts } = await supabase.from('products').select('*');
+    const { data: allDBCategories } = await supabase.from('categories').select('*').order('sort_order', { ascending: true });
 
     return shops.map(shopRecord => {
       const shopProducts = (allProducts || []).filter(p => p.shop_id === shopRecord.id);
 
-      const rawTagsSet = new Set<string>();
-      shopProducts.forEach((p: any) => {
-        if (Array.isArray(p.tags)) {
-          p.tags.forEach((t: string) => {
-            if (t && t !== 'curated') rawTagsSet.add(t);
+      let tagList = [];
+      if (shopRecord.slug === 'yesfancy') {
+        tagList = ORIGINAL_YESFANCY_CATEGORIES;
+      } else {
+        const shopDBCats = (allDBCategories || []).filter(c => c.shop_id === shopRecord.id);
+        if (shopDBCats.length > 0) {
+          tagList = shopDBCats.map(c => ({
+            id: c.id,
+            label: c.label,
+            sort_order: c.sort_order
+          }));
+        } else {
+          const categoryMap = new Map<string, string>();
+          categoryMap.set('all', 'All Products');
+          shopProducts.forEach((p: any) => {
+            if (p.category_id && p.category_id !== 'all') {
+              categoryMap.set(p.category_id, formatTagLabel(p.category_id));
+            }
           });
+          tagList = Array.from(categoryMap.entries()).map(([id, label], index) => ({
+            id,
+            label,
+            sort_order: index
+          }));
         }
-      });
-
-      const uniqueTags = Array.from(rawTagsSet);
-      const tagList = [
-        { id: 'all', label: 'All Products', sort_order: 0 },
-        ...uniqueTags.map((tag: string, index: number) => ({
-          id: tag,
-          label: formatTagLabel(tag),
-          sort_order: index + 1
-        }))
-      ];
+      }
 
       const themeObj = shopRecord.theme || {};
 
@@ -246,7 +261,10 @@ export async function getAllShopsConfigAsync() {
         },
         tags: tagList,
         categories: tagList,
-        products: shopProducts,
+        products: shopProducts.map((p: any) => ({
+          ...p,
+          image_url: p.image_url || ''
+        })),
         carousels: {
           hero: (shopRecord.hero_slides && shopRecord.hero_slides.length > 0) ? shopRecord.hero_slides : defaultOfferSlides
         }
