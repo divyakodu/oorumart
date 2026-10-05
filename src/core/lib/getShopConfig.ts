@@ -35,6 +35,14 @@ function formatTagLabel(tag: string): string {
 
 const defaultOfferSlides = [
   {
+    id: "slide_beauty_lifestyle",
+    title: "BEAUTY & LIFESTYLE",
+    subtitle: "Curated luxury fragrances, fine jewellery & premium personal care.",
+    image_url: "/images/offer_beauty_lifestyle.webp",
+    tag_id: "fashion",
+    link: "/catalog?shop=yesfancy&category=fashion"
+  },
+  {
     id: "slide_gift_store",
     title: "FESTIVE GIFT STORE",
     subtitle: "Curated luxury hampers, fancy boxes & novelties for every occasion.",
@@ -73,25 +81,17 @@ const defaultOfferSlides = [
     image_url: "/images/offer_lunch_boxes.webp",
     tag_id: "lunchbox",
     link: "/catalog?shop=yesfancy&category=lunchbox"
-  },
-  {
-    id: "slide_beauty_lifestyle",
-    title: "BEAUTY & LIFESTYLE",
-    subtitle: "Curated luxury fragrances, fine jewellery & premium personal care.",
-    image_url: "/images/offer_beauty_lifestyle.webp",
-    tag_id: "fashion",
-    link: "/catalog?shop=yesfancy&category=fashion"
   }
 ];
 
 export const ORIGINAL_YESFANCY_CATEGORIES = [
   { id: 'all', label: 'All Products', sort_order: 0 },
-  { id: 'novelties', label: 'Gift Store', sort_order: 1 },
-  { id: 'decor', label: 'Home & Decor', sort_order: 2 },
-  { id: 'games', label: 'Games', sort_order: 3 },
-  { id: 'toys', label: 'Toys', sort_order: 4 },
-  { id: 'lunchbox', label: 'Lunch Boxes', sort_order: 5 },
-  { id: 'fashion', label: 'Beauty & Lifestyle', sort_order: 6 }
+  { id: 'fashion', label: 'Beauty & Lifestyle', sort_order: 1 },
+  { id: 'novelties', label: 'Gift Store', sort_order: 2 },
+  { id: 'decor', label: 'Home & Decor', sort_order: 3 },
+  { id: 'games', label: 'Games', sort_order: 4 },
+  { id: 'toys', label: 'Toys', sort_order: 5 },
+  { id: 'lunchbox', label: 'Lunch Boxes', sort_order: 6 }
 ];
 
 export async function getShopConfigAsync(slug: string) {
