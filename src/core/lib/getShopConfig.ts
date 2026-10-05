@@ -22,7 +22,7 @@ const tagLabelMap: Record<string, string> = {
   games: 'Games',
   toys: 'Toys',
   lunchbox: 'Lunch Boxes',
-  fashion: 'Fashion'
+  fashion: 'Beauty & Lifestyle'
 };
 
 function formatTagLabel(tag: string): string {
@@ -75,10 +75,10 @@ const defaultOfferSlides = [
     link: "/catalog?shop=yesfancy&category=lunchbox"
   },
   {
-    id: "slide_fashion",
-    title: "EXCLUSIVE FASHION",
-    subtitle: "Trending personal style, travel accessories & lifestyle fashion.",
-    image_url: "/images/offer_fashion.webp",
+    id: "slide_beauty_lifestyle",
+    title: "BEAUTY & LIFESTYLE",
+    subtitle: "Curated luxury fragrances, fine jewellery & premium personal care.",
+    image_url: "/images/offer_beauty_lifestyle.webp",
     tag_id: "fashion",
     link: "/catalog?shop=yesfancy&category=fashion"
   }
@@ -91,7 +91,7 @@ export const ORIGINAL_YESFANCY_CATEGORIES = [
   { id: 'games', label: 'Games', sort_order: 3 },
   { id: 'toys', label: 'Toys', sort_order: 4 },
   { id: 'lunchbox', label: 'Lunch Boxes', sort_order: 5 },
-  { id: 'fashion', label: 'Fashion', sort_order: 6 }
+  { id: 'fashion', label: 'Beauty & Lifestyle', sort_order: 6 }
 ];
 
 export async function getShopConfigAsync(slug: string) {
