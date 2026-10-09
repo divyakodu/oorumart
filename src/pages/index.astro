@@ -173,7 +173,7 @@ const StorefrontTemplate = shop ? await getTemplateComponent(shop.template) : nu
 
       <!-- DYNAMIC STOREFRONT TEMPLATE (0 IF/ELSE LOGIC!) -->
       {StorefrontTemplate && (
-        <StorefrontTemplate shop={shop} products={products} categories={categories} primaryColor={primaryColor} />
+        <StorefrontTemplate shop={{ ...shop, products }} products={products} categories={categories} primaryColor={primaryColor} />
       )}
 
       <!-- 100% Generic Reusable Store Footer Component -->

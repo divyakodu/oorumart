@@ -24,6 +24,7 @@ const { tagId, title, products = [], shopSlug, initialCount = 4, maxScrollCount 
 
 // Filter matching products by tag ID or category ID
 const matchingProducts = products.filter((p: any) => {
+  if (p.is_active === false) return false;
   if (tagId === 'all') return true;
   if (p.category_id === tagId) return true;
   if (Array.isArray(p.tags)) {

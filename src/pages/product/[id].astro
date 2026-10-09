@@ -30,11 +30,27 @@ if (!shopData) {
 }
 
 const { shop } = shopData;
-const { products = [], categories = [], theme } = shop;
+const { products: rawProducts = [], categories = [], theme } = shop;
 const primaryColor = theme?.primary_color || '#581C87';
 
-const product = products.find((p: any) => p.id === id) || products[0];
-const allProducts = products;
+// Strict active products with valid images for customer storefront
+const activeProducts = (rawProducts || []).filter((p: any) => p.is_active !== false && p.image_url);
+
+// Product lookup: strictly prefer active product, fallback to first active product
+const product = activeProducts.find((p: any) => p.id === id) 
+  || rawProducts.find((p: any) => p.id === id && p.is_active !== false)
+  || activeProducts[0] 
+  || rawProducts[0];
+
+// Related suggestions: strictly active products, excluding currently viewed product
+const relatedProducts = activeProducts
+  .filter((p: any) => p.id !== product?.id)
+  .sort((a: any, b: any) => {
+    const aMatch = (a.category_id === product?.category_id || a.brand === product?.brand) ? 1 : 0;
+    const bMatch = (b.category_id === product?.category_id || b.brand === product?.brand) ? 1 : 0;
+    return bMatch - aMatch;
+  })
+  .slice(0, 12);
 
 const productMrp = Number(product?.mrp || product?.price || 0);
 const productDiscount = product?.discount !== undefined ? Number(product.discount) : (product?.price && productMrp > product.price ? Math.round(((productMrp - product.price) / productMrp) * 100) : 0);
@@ -207,26 +223,45 @@ const storeCatalogUrl = queryShop ? `/catalog?shop=${queryShop}` : (isLocal && s
 
     </div>
 
-    <!-- Bottom Hooking Carousel -->
-    <section class="pt-8 space-y-4">
-      <div class="text-center">
-        <span class="bg-slate-900 text-white font-extrabold text-xs sm:text-sm uppercase px-6 sm:px-8 py-2 tracking-widest inline-block shadow-sm">
-          MORE FROM THE COLLECTION
-        </span>
-      </div>
+    <!-- Bottom Hooking Carousel: Related Active Products -->
+    {relatedProducts.length > 0 && (
+      <section class="pt-8 space-y-4">
+        <div class="text-center">
+          <span class="bg-slate-900 text-white font-extrabold text-xs sm:text-sm uppercase px-6 sm:px-8 py-2 tracking-widest inline-block shadow-sm">
+            MORE FROM THE COLLECTION
+          </span>
+        </div>
 
-      <div class="flex space-x-4 overflow-x-auto no-scrollbar py-2">
-        {allProducts.map(p => (
-          <div class="w-44 sm:w-56 shrink-0 space-y-2 group cursor-pointer" onclick={`window.location.href='/product/${p.id}'`}>
-            <div class="relative aspect-square overflow-hidden bg-slate-100 rounded">
-              <img src={p.image_url} alt={p.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-            </div>
-            <h4 class="text-xs font-bold text-slate-900 line-clamp-1">{p.name}</h4>
-            <div class="text-xs font-bold text-rose-600">MRP : ₹ {p.price}</div>
-          </div>
-        ))}
-      </div>
-    </section>
+        <div class="flex space-x-4 overflow-x-auto no-scrollbar py-2">
+          {relatedProducts.map(p => {
+            const pMrp = Number(p.mrp || p.price || 0);
+            const pDisc = p.discount !== undefined ? Number(p.discount) : (p.price && pMrp > p.price ? Math.round(((pMrp - p.price) / pMrp) * 100) : 0);
+            const pPrice = getSellingPrice(pMrp, pDisc);
+            const pShopSlug = shop?.slug || queryShop || '';
+
+            return (
+              <div class="w-44 sm:w-56 shrink-0 space-y-2 group cursor-pointer" onclick={`window.location.href='/product/${p.id}${pShopSlug ? `?shop=${pShopSlug}` : ''}'`}>
+                <div class="relative aspect-square overflow-hidden bg-[#F5F3EE] rounded-lg">
+                  <img src={p.image_url} alt={p.name} class="w-full h-full object-contain p-2 mix-blend-multiply group-hover:scale-105 transition-transform duration-300" />
+                  {pDisc > 0 && (
+                    <span class="absolute top-2 left-2 bg-emerald-700 text-white text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded shadow-xs">
+                      {pDisc}% OFF
+                    </span>
+                  )}
+                </div>
+                <h4 class="text-xs font-bold text-slate-900 line-clamp-1">{p.name}</h4>
+                <div class="flex items-baseline space-x-1.5 text-xs">
+                  <span class="font-extrabold text-rose-600">₹ {pPrice}</span>
+                  {pMrp > pPrice && (
+                    <span class="line-through text-slate-400 text-[10px]">₹ {pMrp}</span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    )}
 
   </main>
 

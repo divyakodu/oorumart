@@ -18,15 +18,16 @@ export interface Props {
 }
 
 const { categories = [], products = [], shopSlug, limitPerCategory = 4 } = Astro.props;
+const activeProducts = (products || []).filter((p: any) => p.is_active !== false);
 ---
 
 {categories.map((c: any) => {
   if (!c || !c.label) return null;
-  const catProducts = products.filter((p: any) => 
+  const catProducts = activeProducts.filter((p: any) => 
     p.category_id === c.id || 
     (Array.isArray(p.tags) && p.tags.includes(c.tag || c.id))
   );
-  const displayProducts = catProducts.length > 0 ? catProducts.slice(0, limitPerCategory) : products.slice(0, limitPerCategory);
+  const displayProducts = catProducts.length > 0 ? catProducts.slice(0, limitPerCategory) : activeProducts.slice(0, limitPerCategory);
 
   return (
     <section class="max-w-7xl mx-auto px-4 sm:px-6 space-y-6 pt-6">
