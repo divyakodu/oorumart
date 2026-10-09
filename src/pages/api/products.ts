@@ -7,7 +7,7 @@ import { uploadTenantAsset } from '@lib/storage';
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { shop_slug, id, name, price, mrp, category_id, badge, tags, image_url, stock } = body;
+    const { shop_slug, id, name, price, discount, mrp, category_id, badge, tags, image_url, stock } = body;
 
     if (!shop_slug) {
       return new Response(JSON.stringify({ error: 'Missing shop_slug' }), { status: 400 });
@@ -22,6 +22,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const stockQty = stock !== undefined ? Number(stock) : 100;
+    const finalMrp = Number(mrp || price || 0);
+    const finalDiscount = discount !== undefined ? Number(discount) : (price && finalMrp > Number(price) ? Math.round(((finalMrp - Number(price)) / finalMrp) * 100) : 0);
+    const finalPrice = Math.round(finalMrp * (1 - finalDiscount / 100));
 
     if (isSupabaseConfigured && supabase) {
       const { data: shopRecord } = await supabase
@@ -38,8 +41,9 @@ export const POST: APIRoute = async ({ request }) => {
             shop_id: shopRecord.id,
             category_id,
             name,
-            price: Number(price),
-            mrp: Number(mrp || price),
+            discount: finalDiscount,
+            price: finalPrice,
+            mrp: finalMrp,
             image_url: publicCloudUrl,
             badge: badge || null,
             tags: Array.isArray(tags) ? tags : [category_id],

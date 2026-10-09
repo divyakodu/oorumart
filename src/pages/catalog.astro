@@ -535,7 +535,10 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
                 : (typeof p.tags === 'string' ? p.tags.split(',').map(t => t.trim().toLowerCase()).includes(categoryVal) : false);
               if (!matchesCat && !matchesTag) return false;
             }
-            const price = Number(p.price || 0);
+            const mrp = Number(p.mrp || p.price || 0);
+            const disc = p.discount !== undefined ? Number(p.discount) : (p.price && mrp > p.price ? Math.round(((mrp - p.price) / mrp) * 100) : 0);
+            const price = Math.round(mrp * (1 - disc / 100));
+
             if (priceVal === 'under_300' && price >= 300) return false;
             if (priceVal === '300_700' && (price < 300 || price > 700)) return false;
             if (priceVal === '700_1500' && (price < 700 || price > 1500)) return false;
@@ -543,10 +546,16 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
             return true;
           });
 
+          const getPrice = (item) => {
+            const m = Number(item.mrp || item.price || 0);
+            const d = item.discount !== undefined ? Number(item.discount) : (item.price && m > item.price ? Math.round(((m - item.price) / m) * 100) : 0);
+            return Math.round(m * (1 - d / 100));
+          };
+
           if (sortVal === 'price_low_high') {
-            filtered.sort((a, b) => Number(a.price) - Number(b.price));
+            filtered.sort((a, b) => getPrice(a) - getPrice(b));
           } else if (sortVal === 'price_high_low') {
-            filtered.sort((a, b) => Number(b.price) - Number(a.price));
+            filtered.sort((a, b) => getPrice(b) - getPrice(a));
           } else if (sortVal === 'name_asc') {
             filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
           } else if (sortVal === 'name_desc') {
@@ -569,7 +578,12 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
             if (totalItems === 0) {
               grid.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-slate-500 bg-slate-50 border border-dashed border-slate-300 rounded-xl">No products match your selected filters. Click "Reset Filters" to clear.</div>`;
             } else {
-              grid.innerHTML = pageItems.map(product => `
+              grid.innerHTML = pageItems.map(product => {
+                const itemMrp = Number(product.mrp || product.price || 0);
+                const itemDisc = product.discount !== undefined ? Number(product.discount) : (product.price && itemMrp > product.price ? Math.round(((itemMrp - product.price) / itemMrp) * 100) : 0);
+                const itemPrice = Math.round(itemMrp * (1 - itemDisc / 100));
+
+                return `
                 <div class="catalog-item space-y-2 sm:space-y-3 group">
                   <div class="relative aspect-square overflow-hidden bg-[#F5F3EE] cursor-pointer rounded-lg">
                     <a href="/product/${product.id}?shop=${product.shopSlug || currentShopSlug}" class="block w-full h-full">
@@ -584,22 +598,24 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
                     </a>
                     <div class="flex items-center justify-between pt-0.5">
                       <div class="text-[11px] sm:text-xs font-medium space-x-1">
-                        <span class="font-bold text-slate-900">MRP:</span>
-                        <span class="font-bold text-rose-600">₹ ${product.price}</span>
-                        ${product.mrp && product.mrp > product.price ? `<span class="line-through text-slate-400">₹ ${product.mrp}</span>` : ''}
+                        <span class="font-bold text-slate-900">Price:</span>
+                        <span class="font-bold text-rose-600">₹ ${itemPrice}</span>
+                        ${itemDisc > 0 && itemMrp > itemPrice ? `<span class="line-through text-slate-400">₹ ${itemMrp}</span>` : ''}
+                        ${itemDisc > 0 ? `<span class="font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded text-[10px] ml-1">${itemDisc}% OFF</span>` : ''}
                       </div>
                       <button 
                         type="button"
                         class="add-btn text-xs font-semibold px-2 py-1 bg-slate-100 hover:bg-slate-900 hover:text-white rounded transition-colors cursor-pointer border border-slate-300"
                         title="Quick Add to Cart"
-                        onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${(product.name || '').replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}')"
+                        onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${(product.name || '').replace(/'/g, "\\'")}', ${itemPrice}, ${itemMrp}, '${product.image_url}', 100, ${itemDisc})"
                       >
                         + Add
                       </button>
                     </div>
                   </div>
                 </div>
-              `).join('');
+              `;
+              }).join('');
             }
           }
 
@@ -719,9 +735,13 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
           window.renderCart();
         };
 
-        window.addToCart = function(id, name, price, mrp, image) {
+        window.addToCart = function(id, name, price, mrp, image, stock = 100, discount = 0) {
+          const finalMrp = Number(mrp || price || 0);
+          const finalDisc = Number(discount || 0);
+          const finalPrice = Math.round(finalMrp * (1 - finalDisc / 100));
+
           if (cart[id]) { cart[id].qty += 1; }
-          else { cart[id] = { id, name, price, mrp: mrp || price, image, qty: 1 }; }
+          else { cart[id] = { id, name, price: finalPrice, mrp: finalMrp, discount: finalDisc, image, qty: 1 }; }
           window.saveCart();
           window.toggleCartDrawer(true);
         };
@@ -759,9 +779,13 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
           } else {
             keys.forEach(id => {
               const item = cart[id];
+              const itemMrp = Number(item.mrp || item.price || 0);
+              const itemDisc = Number(item.discount || 0);
+              const itemPrice = Math.round(itemMrp * (1 - itemDisc / 100));
+
               totalQty += item.qty;
-              totalPrice += item.price * item.qty;
-              totalSavings += (item.mrp - item.price) * item.qty;
+              totalPrice += itemPrice * item.qty;
+              totalSavings += (itemMrp - itemPrice) * item.qty;
 
               if (itemsList) {
                 const div = document.createElement('div');
@@ -770,7 +794,11 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
                   <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-md border border-slate-100" />
                   <div class="flex-1 space-y-1">
                     <h4 class="text-xs font-bold text-slate-900 line-clamp-1">${item.name}</h4>
-                    <div class="text-xs font-bold text-slate-900">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp}</span></div>
+                    <div class="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                      <span>₹ ${itemPrice}</span>
+                      ${itemDisc > 0 ? `<span class="text-slate-400 font-normal line-through text-[11px]">₹ ${itemMrp}</span>
+                      <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded">${itemDisc}% OFF</span>` : ''}
+                    </div>
                   </div>
                   <div class="flex items-center space-x-2 border border-slate-300 rounded px-2 py-1 text-xs">
                     <button onclick="updateCartQty('${id}', -1)" class="font-bold cursor-pointer px-1">-</button>

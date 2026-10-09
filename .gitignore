@@ -36,4 +36,7 @@ yarn-error.log*
 .gemini/
 /data/
 /experiments/
+__pycache__/
+*.pyc
+/scripts/extracted_images/
 

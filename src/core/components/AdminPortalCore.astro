@@ -437,7 +437,9 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
                 <th class="p-3.5">Image</th>
                 <th class="p-3.5">Product Name</th>
                 <th class="p-3.5">Category</th>
-                <th class="p-3.5">Price / MRP</th>
+                <th class="p-3.5">MRP (₹)</th>
+                <th class="p-3.5">Discount (%)</th>
+                <th class="p-3.5">Selling Price (₹)</th>
                 <th class="p-3.5">Tags &amp; Badges</th>
                 <th class="p-3.5">Active Status</th>
                 <th class="p-3.5">Inventory</th>
@@ -467,13 +469,19 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Selling Price (₹)</label>
-            <input id="new-prod-price" type="number" required placeholder="499" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+            <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Catalog MRP (₹)</label>
+            <input id="new-prod-mrp" type="number" required placeholder="999" oninput="updateLiveCalculatedPrice()" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900 font-bold" />
           </div>
           <div>
-            <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Original MRP (₹)</label>
-            <input id="new-prod-mrp" type="number" placeholder="799" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900" />
+            <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1">Trade Discount (%)</label>
+            <input id="new-prod-discount" type="number" min="0" max="99" placeholder="20" oninput="updateLiveCalculatedPrice()" class="w-full px-3.5 py-2.5 border border-slate-300 rounded focus:outline-none focus:border-slate-900 font-bold" />
           </div>
+        </div>
+
+        <!-- Live Computed Price Helper -->
+        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded text-xs flex items-center justify-between">
+          <span class="text-slate-500 font-semibold">Live Calculated Selling Price:</span>
+          <span id="live-calculated-price-label" class="text-rose-600 font-extrabold text-sm">₹ 0</span>
         </div>
 
         <div>
@@ -1002,6 +1010,14 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
       if (submitBtn) submitBtn.innerText = 'Save Category Carousel to Supabase';
     };
 
+    window.updateLiveCalculatedPrice = function() {
+      const mrp = Number(document.getElementById('new-prod-mrp')?.value || 0);
+      const discount = Number(document.getElementById('new-prod-discount')?.value || 0);
+      const sellingPrice = Math.round(mrp * (1 - discount / 100));
+      const label = document.getElementById('live-calculated-price-label');
+      if (label) label.innerText = `₹ ${sellingPrice}`;
+    };
+
     window.editProduct = function(prodId) {
       if (!currentShop) return;
       const prod = (currentShop.products || []).find(p => p.id === prodId);
@@ -1011,11 +1027,15 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
 
       document.getElementById('edit-prod-id').value = prod.id;
       document.getElementById('new-prod-name').value = prod.name;
-      document.getElementById('new-prod-price').value = prod.price;
-      document.getElementById('new-prod-mrp').value = prod.mrp || prod.price;
+      const itemMrp = Number(prod.mrp || prod.price || 0);
+      const itemDisc = prod.discount !== undefined ? Number(prod.discount) : (prod.price && itemMrp > prod.price ? Math.round(((itemMrp - prod.price) / itemMrp) * 100) : 0);
+      document.getElementById('new-prod-mrp').value = itemMrp;
+      document.getElementById('new-prod-discount').value = itemDisc;
       document.getElementById('new-prod-category').value = prod.category_id;
       document.getElementById('new-prod-image-url').value = prod.image_url || '';
       document.getElementById('add-prod-heading').innerText = `EDIT PRODUCT: ${prod.name.toUpperCase()}`;
+
+      window.updateLiveCalculatedPrice();
 
       const preview = document.getElementById('image-upload-preview');
       if (preview && prod.image_url) {
@@ -1199,9 +1219,14 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
       const tbody = document.getElementById('admin-product-table-body');
       if (tbody) {
         if (filtered.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-xs text-slate-500 font-medium">No products match your search or filter criteria.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="11" class="p-6 text-center text-xs text-slate-500 font-medium">No products match your search or filter criteria.</td></tr>`;
         } else {
-          tbody.innerHTML = filtered.map(p => `
+          tbody.innerHTML = filtered.map(p => {
+            const pMrp = Number(p.mrp || p.price || 0);
+            const pDisc = p.discount !== undefined ? Number(p.discount) : (p.price && pMrp > p.price ? Math.round(((pMrp - p.price) / pMrp) * 100) : 0);
+            const pPrice = Math.round(pMrp * (1 - pDisc / 100));
+
+            return `
             <tr class="hover:bg-slate-50 transition-colors">
               <td class="p-3 text-center">
                 <input type="checkbox" value="${p.id}" onchange="updateSelectedProductsState()" class="prod-select-checkbox w-4 h-4 cursor-pointer rounded" />
@@ -1211,10 +1236,11 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
               </td>
               <td class="p-3 font-bold text-slate-900 max-w-xs truncate">${p.name}</td>
               <td class="p-3 text-slate-600 uppercase font-semibold text-[11px]">${p.category_id}</td>
-              <td class="p-3 font-bold">
-                <span class="text-rose-600">₹ ${p.price}</span>
-                ${p.mrp ? `<span class="line-through text-slate-400 text-[11px] ml-1">₹ ${p.mrp}</span>` : ''}
+              <td class="p-3 font-bold text-slate-700">₹ ${pMrp}</td>
+              <td class="p-3">
+                ${pDisc > 0 ? `<span class="bg-emerald-100 text-emerald-800 text-[11px] px-2 py-0.5 rounded font-extrabold">${pDisc}% OFF</span>` : `<span class="text-slate-400 font-medium">0%</span>`}
               </td>
+              <td class="p-3 font-extrabold text-rose-600">₹ ${pPrice}</td>
               <td class="p-3">
                 <div class="flex flex-wrap gap-1">
                   ${p.badge ? `<span class="bg-slate-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">${p.badge}</span>` : ''}
@@ -1242,7 +1268,8 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
                 </div>
               </td>
             </tr>
-          `).join('');
+          `;
+          }).join('');
         }
       }
 
@@ -1767,8 +1794,8 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
 
       const prodId = document.getElementById('edit-prod-id').value;
       const name = document.getElementById('new-prod-name').value;
-      const price = document.getElementById('new-prod-price').value;
-      const mrp = document.getElementById('new-prod-mrp').value;
+      const mrp = Number(document.getElementById('new-prod-mrp').value || 0);
+      const discount = Number(document.getElementById('new-prod-discount').value || 0);
       const category_id = document.getElementById('new-prod-category').value;
       const image_url = document.getElementById('new-prod-image-url').value;
 
@@ -1779,6 +1806,7 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
       }
 
       const tags = [category_id];
+      const sellingPrice = Math.round(mrp * (1 - discount / 100));
 
       try {
         const res = await fetch('/api/products', {
@@ -1788,8 +1816,9 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
             shop_slug: currentShop.slug,
             id: prodId || undefined,
             name,
-            price,
             mrp,
+            discount,
+            price: sellingPrice,
             category_id,
             badge: tags[0] || null,
             tags,
@@ -1805,8 +1834,9 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
           currentShop.products[existingIdx] = {
             id: prodId || data.id,
             name,
-            price: Number(price),
-            mrp: Number(mrp || price),
+            discount,
+            price: sellingPrice,
+            mrp,
             category_id,
             badge: tags[0] || null,
             tags,
@@ -1818,8 +1848,9 @@ const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
           currentShop.products.push({
             id: data.id || `prod_${Date.now()}`,
             name,
-            price: Number(price),
-            mrp: Number(mrp || price),
+            discount,
+            price: sellingPrice,
+            mrp,
             category_id,
             badge: tags[0] || null,
             tags,

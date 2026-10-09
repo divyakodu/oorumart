@@ -1,9 +1,12 @@
 ---
+import { getSellingPrice } from '@core/lib/pricing';
+
 export interface Props {
   product: {
     id: string;
     name: string;
-    price: number;
+    price?: number;
+    discount?: number;
     mrp?: number;
     image_url: string;
     badge?: string;
@@ -14,7 +17,9 @@ export interface Props {
 
 const { product, shopSlug } = Astro.props;
 const isOutOfStock = product.stock !== undefined && Number(product.stock) <= 0;
-const discountPercent = product.mrp && product.mrp > product.price ? Math.round(((product.mrp - product.price) / product.mrp) * 100) : 0;
+const mrp = Number(product.mrp || product.price || 0);
+const discountPercent = product.discount !== undefined ? Number(product.discount) : (product.price && mrp > product.price ? Math.round(((mrp - product.price) / mrp) * 100) : 0);
+const sellingPrice = getSellingPrice(mrp, discountPercent);
 ---
 
 <div class={`catalog-item space-y-2 sm:space-y-3 group ${isOutOfStock ? 'opacity-80' : ''}`}>
@@ -47,13 +52,13 @@ const discountPercent = product.mrp && product.mrp > product.price ? Math.round(
     </a>
     <div class="flex items-center justify-between pt-0.5">
       <div class="text-[11px] sm:text-xs font-medium space-x-1">
-        <span class="font-bold text-slate-900">MRP:</span>
-        <span class="font-bold text-rose-600">₹ {product.price}</span>
-        {product.mrp && product.mrp > product.price && (
-          <span class="line-through text-slate-400">₹ {product.mrp}</span>
+        <span class="font-bold text-slate-900">Price:</span>
+        <span class="font-bold text-rose-600">₹ {sellingPrice}</span>
+        {discountPercent > 0 && mrp > sellingPrice && (
+          <span class="line-through text-slate-400">₹ {mrp}</span>
         )}
         {discountPercent > 0 && (
-          <span class="font-bold text-rose-600 text-[11px] ml-1">{discountPercent}% OFF</span>
+          <span class="font-bold text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded text-[10px] ml-1">{discountPercent}% OFF</span>
         )}
       </div>
       {!isOutOfStock && (
@@ -61,7 +66,7 @@ const discountPercent = product.mrp && product.mrp > product.price ? Math.round(
           type="button"
           class="bg-white hover:bg-slate-900 text-slate-900 hover:text-white border border-slate-300 hover:border-slate-900 text-[11px] font-extrabold px-2.5 py-1 rounded transition-colors cursor-pointer shadow-2xs shrink-0"
           title="Add to Cart"
-          onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100})`}
+          onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${sellingPrice}, ${mrp}, '${product.image_url}', ${product.stock ?? 100}, ${discountPercent})`}
         >
           + Add
         </button>

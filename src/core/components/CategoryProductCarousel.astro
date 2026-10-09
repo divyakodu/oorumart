@@ -1,9 +1,12 @@
 ---
+import { getSellingPrice } from '@core/lib/pricing';
+
 interface Product {
   id: string;
   name: string;
   category_id: string;
-  price: number;
+  price?: number;
+  discount?: number;
   mrp?: number;
   badge?: string;
   tags?: string[];
@@ -135,16 +138,28 @@ const catalogLink = seeMoreUrl || `/catalog?shop=${shopSlug}&category=${catId}`;
 
               <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px] sm:text-xs">
                 <div>
-                  <span class="font-extrabold text-slate-900">₹ {product.price}</span>
-                  {product.mrp && product.mrp > product.price && (
-                    <span class="line-through text-slate-400 text-[10px] sm:text-[11px] ml-1">₹ {product.mrp}</span>
-                  )}
+                  {(() => {
+                    const itemMrp = Number(product.mrp || product.price || 0);
+                    const itemDisc = product.discount !== undefined ? Number(product.discount) : (product.price && itemMrp > product.price ? Math.round(((itemMrp - product.price) / itemMrp) * 100) : 0);
+                    const itemPrice = getSellingPrice(itemMrp, itemDisc);
+                    return (
+                      <div class="flex items-center gap-1">
+                        <span class="font-extrabold text-slate-900">₹ {itemPrice}</span>
+                        {itemDisc > 0 && itemMrp > itemPrice && (
+                          <span class="line-through text-slate-400 text-[10px] ml-0.5">₹ {itemMrp}</span>
+                        )}
+                        {itemDisc > 0 && (
+                          <span class="text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded text-[9px] font-bold">{itemDisc}% OFF</span>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
                 {!isOutOfStock ? (
                   <button 
                     type="button"
                     class="text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:px-2 sm:py-1 bg-slate-100 hover:bg-slate-900 hover:text-white rounded transition-colors cursor-pointer border border-slate-300"
-                    onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.mrp || product.price}, '${product.image_url}', ${product.stock ?? 100})`}
+                    onclick={`event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${getSellingPrice(product.mrp || product.price || 0, product.discount || 0)}, ${product.mrp || product.price || 0}, '${product.image_url}', ${product.stock ?? 100}, ${product.discount || 0})`}
                     title="Quick Add to Cart"
                   >
                     + Add
