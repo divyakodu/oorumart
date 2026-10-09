@@ -10,8 +10,8 @@ export interface Props {
 
 const { shopSlug } = Astro.props;
 const allShops = await getAllShopsConfigAsync();
-const supabaseUrl = process.env.PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || (typeof process !== 'undefined' ? process.env?.PUBLIC_SUPABASE_URL : '') || '';
+const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || (typeof process !== 'undefined' ? process.env?.PUBLIC_SUPABASE_ANON_KEY : '') || '';
 ---
 
 <!DOCTYPE html>
