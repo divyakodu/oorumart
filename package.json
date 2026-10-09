@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "astro dev --host 0.0.0.0",
-    "build": "astro build",
+    "build": "astro build && cp -r dist/client/* dist/",
+    "deploy:pages": "npm run build && npx wrangler pages deploy dist --project-name yesfancy",
+    "deploy": "npm run build && npx wrangler deploy",
     "preview": "astro preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
