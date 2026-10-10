@@ -289,7 +289,7 @@ const StorefrontTemplate = shop ? await getTemplateComponent(shop.template) : nu
               cart[id].qty += 1;
             }
           } else {
-            cart[id] = { id, name, price: finalPrice, mrp: finalMrp, discount: finalDiscount, image_url, qty: 1, stock };
+            cart[id] = { id, name, price: finalPrice, mrp: finalMrp, discount: finalDiscount, image: image_url, image_url, qty: 1, stock };
           }
           window.saveCart();
           window.toggleCartDrawer(true);
@@ -314,6 +314,7 @@ const StorefrontTemplate = shop ? await getTemplateComponent(shop.template) : nu
             const itemMrp = Number(item.mrp || item.price || 0);
             const itemDiscount = Number(item.discount || 0);
             const itemPrice = Math.round(itemMrp * (1 - itemDiscount / 100));
+            const imgUrl = item.image_url || item.image || item.imageUrl || '/images/placeholder.webp';
 
             totalItems += item.qty;
             totalPrice += itemPrice * item.qty;
@@ -322,7 +323,7 @@ const StorefrontTemplate = shop ? await getTemplateComponent(shop.template) : nu
             html += `
               <div class="flex items-center justify-between py-3">
                 <div class="flex items-center space-x-3">
-                  <img src="${item.image_url}" class="w-12 h-12 object-contain p-1 bg-white border border-slate-200 rounded" />
+                  <img src="${imgUrl}" onerror="this.onerror=null;this.src='/images/placeholder.webp';" class="w-12 h-12 object-contain p-1 bg-white border border-slate-200 rounded" alt="${item.name || 'Product'}" />
                   <div>
                     <h4 class="font-bold text-xs text-slate-900 line-clamp-1">${item.name}</h4>
                     <div class="flex items-center gap-1.5 pt-0.5">

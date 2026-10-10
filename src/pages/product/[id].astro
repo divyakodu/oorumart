@@ -334,26 +334,29 @@ const storeCatalogUrl = queryShop ? `/catalog?shop=${queryShop}` : (isLocal && s
       </div>
     </div>
 
-    <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
-      <div id="coupon-feedback" class="hidden text-xs text-center font-bold py-1 bg-emerald-100 text-emerald-800 rounded"></div>
-      
-      <div class="bg-emerald-100 text-emerald-800 text-xs font-bold py-1.5 px-3 rounded-lg text-center">
-        🎉 You're saving <span id="cart-savings-val">₹ 0</span>!
-      </div>
-
-      <div class="pt-2 space-y-2">
-        <div class="flex items-center justify-between font-bold text-slate-900 text-sm">
-          <span>Estimated Total</span>
-          <span id="cart-total-price">₹ 0</span>
+    <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-2.5">
+      <div class="space-y-1 text-xs border-b border-slate-200 pb-2">
+        <div class="flex justify-between items-center text-slate-500">
+          <span>Total MRP:</span>
+          <span id="cart-total-mrp" class="font-bold text-slate-700">₹ 0</span>
         </div>
-
-        <button 
-          onclick="placeRealWhatsAppOrder()"
-          class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded flex items-center justify-center space-x-2 cursor-pointer shadow-md"
-        >
-          <span>Place Order & Open WhatsApp (COD)</span>
-        </button>
+        <div id="cart-savings-row" class="hidden flex justify-between items-center text-emerald-700 font-bold">
+          <span>Total Savings:</span>
+          <span id="cart-savings-val">- ₹ 0</span>
+        </div>
       </div>
+
+      <div class="flex items-center justify-between font-bold text-slate-900 text-sm">
+        <span>Total Payable (COD):</span>
+        <span id="cart-total-price" class="text-rose-600 font-extrabold text-base">₹ 0</span>
+      </div>
+
+      <button 
+        onclick="placeRealWhatsAppOrder()"
+        class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+      >
+        <span>Place Order & Open WhatsApp (COD)</span>
+      </button>
     </div>
 
   </aside>
@@ -512,17 +515,30 @@ const storeCatalogUrl = queryShop ? `/catalog?shop=${queryShop}` : (isLocal && s
       updatePageUI();
     };
 
-    window.addToCart = function(id, name, price, mrp, image, stock = 100, qty = 1) {
+    window.addToCart = function(id, name, price, mrp, image, stock = 100, qtyOrDiscount = 1, maybeDiscount = 0) {
       if (stock !== undefined && Number(stock) <= 0) {
         alert('Sorry, this product is currently out of stock!');
         return;
       }
 
-      const qtyToAdd = Math.max(1, parseInt(qty || 1));
+      // If called with (id, name, price, mrp, image, stock, discount) from cards vs (id, name, price, mrp, image, stock, qty)
+      let qtyToAdd = 1;
+      let disc = 0;
+      if (maybeDiscount !== undefined && maybeDiscount !== 0) {
+        disc = Number(maybeDiscount || 0);
+        qtyToAdd = Math.max(1, parseInt(qtyOrDiscount || 1));
+      } else {
+        qtyToAdd = Math.max(1, parseInt(qtyOrDiscount || 1));
+      }
+
+      const img = image || '/images/placeholder.webp';
+
       if (cart[id]) {
         cart[id].qty += qtyToAdd;
+        if (!cart[id].image) cart[id].image = img;
+        if (!cart[id].image_url) cart[id].image_url = img;
       } else {
-        cart[id] = { id, name, price, mrp: mrp || price, image, image_url: image, qty: qtyToAdd };
+        cart[id] = { id, name, price, mrp: mrp || price, discount: disc, image: img, image_url: img, qty: qtyToAdd };
       }
 
       window.saveCart();
@@ -547,11 +563,13 @@ const storeCatalogUrl = queryShop ? `/catalog?shop=${queryShop}` : (isLocal && s
       const badge = document.getElementById('cart-count-badge');
       const headerBadge = document.getElementById('cart-header-badge');
       const totalPriceElem = document.getElementById('cart-total-price');
+      const totalMrpElem = document.getElementById('cart-total-mrp');
       const savingsVal = document.getElementById('cart-savings-val');
+      const savingsRow = document.getElementById('cart-savings-row');
 
       let totalQty = 0;
       let totalPrice = 0;
-      let totalSavings = 0;
+      let totalMrp = 0;
       if (itemsList) itemsList.innerHTML = '';
 
       const keys = Object.keys(cart);
@@ -562,19 +580,27 @@ const storeCatalogUrl = queryShop ? `/catalog?shop=${queryShop}` : (isLocal && s
       } else {
         keys.forEach(id => {
           const item = cart[id];
-          const imgUrl = item.image || item.image_url || '/images/placeholder.webp';
+          const itemMrp = Number(item.mrp || item.price || 0);
+          const itemDisc = Number(item.discount || 0);
+          const itemPrice = Math.round(itemMrp * (1 - itemDisc / 100));
+          const imgUrl = item.image_url || item.image || item.imageUrl || '/images/placeholder.webp';
+
           totalQty += item.qty;
-          totalPrice += item.price * item.qty;
-          totalSavings += ((item.mrp || item.price) - item.price) * item.qty;
+          totalPrice += itemPrice * item.qty;
+          totalMrp += itemMrp * item.qty;
 
           if (itemsList) {
             const div = document.createElement('div');
             div.className = 'border border-slate-200 rounded-lg p-3 flex space-x-3 items-center';
             div.innerHTML = `
-              <img src="${imgUrl}" alt="${item.name}" class="w-14 h-14 object-contain rounded-md border border-slate-100 bg-slate-50" />
+              <img src="${imgUrl}" onerror="this.onerror=null;this.src='/images/placeholder.webp';" alt="${item.name || 'Product'}" class="w-14 h-14 object-contain rounded-md border border-slate-100 bg-slate-50 p-1" />
               <div class="flex-1 space-y-1 min-w-0">
                 <h4 class="text-xs font-bold text-slate-900 truncate">${item.name}</h4>
-                <div class="text-xs font-bold text-rose-600">₹ ${item.price} <span class="text-slate-400 font-normal line-through text-[11px]">₹ ${item.mrp || item.price}</span></div>
+                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                  <span class="text-rose-600">₹ ${itemPrice}</span>
+                  ${itemDisc > 0 ? `<span class="text-slate-400 font-normal line-through text-[11px]">₹ ${itemMrp}</span>
+                  <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded">${itemDisc}% OFF</span>` : ''}
+                </div>
               </div>
               <div class="flex items-center space-x-2 border border-slate-300 rounded px-2 py-1 text-xs">
                 <button onclick="updateCartQty('${id}', -1)" class="font-bold cursor-pointer px-1 hover:text-rose-600">-</button>
@@ -587,10 +613,17 @@ const storeCatalogUrl = queryShop ? `/catalog?shop=${queryShop}` : (isLocal && s
         });
       }
 
+      const totalSavings = Math.max(0, totalMrp - totalPrice);
+
       if (badge) badge.innerText = totalQty;
       if (headerBadge) headerBadge.innerText = `${totalQty} ${totalQty === 1 ? 'ITEM' : 'ITEMS'}`;
       if (totalPriceElem) totalPriceElem.innerText = `₹ ${totalPrice}`;
-      if (savingsVal) savingsVal.innerText = `₹ ${totalSavings > 0 ? totalSavings : 0}`;
+      if (totalMrpElem) totalMrpElem.innerText = `₹ ${totalMrp}`;
+      if (savingsVal) savingsVal.innerText = `- ₹ ${totalSavings}`;
+      if (savingsRow) {
+        if (totalSavings > 0) savingsRow.classList.remove('hidden');
+        else savingsRow.classList.add('hidden');
+      }
     };
 
     window.toggleCartDrawer = function(open) {

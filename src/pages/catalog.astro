@@ -439,10 +439,21 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
           </div>
         </div>
 
-        <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+        <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-2.5">
+          <div class="space-y-1 text-xs border-b border-slate-200 pb-2">
+            <div class="flex justify-between items-center text-slate-500">
+              <span>Total MRP:</span>
+              <span id="cart-total-mrp" class="font-bold text-slate-700">₹ 0</span>
+            </div>
+            <div id="cart-savings-row" class="hidden flex justify-between items-center text-emerald-700 font-bold">
+              <span>Total Savings:</span>
+              <span id="cart-savings-val">- ₹ 0</span>
+            </div>
+          </div>
+
           <div class="flex items-center justify-between font-bold text-slate-900 text-sm">
-            <span>Estimated Total</span>
-            <span id="cart-total-price">₹ 0</span>
+            <span>Total Payable (COD):</span>
+            <span id="cart-total-price" class="text-rose-600 font-extrabold text-base">₹ 0</span>
           </div>
           <button onclick="placeRealWhatsAppOrder()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs uppercase tracking-wider rounded flex items-center justify-center space-x-2 cursor-pointer shadow-md">
             <span>Place Order & Open WhatsApp (COD)</span>
@@ -741,7 +752,7 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
           const finalPrice = Math.round(finalMrp * (1 - finalDisc / 100));
 
           if (cart[id]) { cart[id].qty += 1; }
-          else { cart[id] = { id, name, price: finalPrice, mrp: finalMrp, discount: finalDisc, image, qty: 1 }; }
+          else { cart[id] = { id, name, price: finalPrice, mrp: finalMrp, discount: finalDisc, image, image_url: image, qty: 1 }; }
           window.saveCart();
           window.toggleCartDrawer(true);
         };
@@ -764,11 +775,13 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
           const badge = document.getElementById('cart-count-badge');
           const headerBadge = document.getElementById('cart-header-badge');
           const totalPriceElem = document.getElementById('cart-total-price');
+          const totalMrpElem = document.getElementById('cart-total-mrp');
           const savingsVal = document.getElementById('cart-savings-val');
+          const savingsRow = document.getElementById('cart-savings-row');
 
           let totalQty = 0;
           let totalPrice = 0;
-          let totalSavings = 0;
+          let totalMrp = 0;
           if (itemsList) itemsList.innerHTML = '';
 
           const keys = Object.keys(cart);
@@ -782,28 +795,29 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
               const itemMrp = Number(item.mrp || item.price || 0);
               const itemDisc = Number(item.discount || 0);
               const itemPrice = Math.round(itemMrp * (1 - itemDisc / 100));
+              const imgUrl = item.image_url || item.image || item.imageUrl || '/images/placeholder.webp';
 
               totalQty += item.qty;
               totalPrice += itemPrice * item.qty;
-              totalSavings += (itemMrp - itemPrice) * item.qty;
+              totalMrp += itemMrp * item.qty;
 
               if (itemsList) {
                 const div = document.createElement('div');
                 div.className = 'border border-slate-200 rounded-lg p-3 flex space-x-3 items-center';
                 div.innerHTML = `
-                  <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-md border border-slate-100" />
+                  <img src="${imgUrl}" onerror="this.onerror=null;this.src='/images/placeholder.webp';" alt="${item.name || 'Product'}" class="w-14 h-14 object-contain rounded-md border border-slate-100 bg-slate-50 p-1" />
                   <div class="flex-1 space-y-1">
                     <h4 class="text-xs font-bold text-slate-900 line-clamp-1">${item.name}</h4>
                     <div class="flex items-center gap-1.5 text-xs font-bold text-slate-900">
-                      <span>₹ ${itemPrice}</span>
+                      <span class="text-rose-600">₹ ${itemPrice}</span>
                       ${itemDisc > 0 ? `<span class="text-slate-400 font-normal line-through text-[11px]">₹ ${itemMrp}</span>
                       <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded">${itemDisc}% OFF</span>` : ''}
                     </div>
                   </div>
                   <div class="flex items-center space-x-2 border border-slate-300 rounded px-2 py-1 text-xs">
-                    <button onclick="updateCartQty('${id}', -1)" class="font-bold cursor-pointer px-1">-</button>
+                    <button onclick="updateCartQty('${id}', -1)" class="font-bold cursor-pointer px-1 hover:text-rose-600">-</button>
                     <span class="font-bold px-1">${item.qty}</span>
-                    <button onclick="updateCartQty('${id}', 1)" class="font-bold cursor-pointer px-1">+</button>
+                    <button onclick="updateCartQty('${id}', 1)" class="font-bold cursor-pointer px-1 hover:text-emerald-600">+</button>
                   </div>
                 `;
                 itemsList.appendChild(div);
@@ -811,10 +825,17 @@ const paginationRange = getPaginationRange(currentPage, totalPages);
             });
           }
 
+          const totalSavings = Math.max(0, totalMrp - totalPrice);
+
           if (badge) badge.innerText = totalQty;
           if (headerBadge) headerBadge.innerText = `${totalQty} ${totalQty === 1 ? 'ITEM' : 'ITEMS'}`;
           if (totalPriceElem) totalPriceElem.innerText = `₹ ${totalPrice}`;
-          if (savingsVal) savingsVal.innerText = `₹ ${totalSavings > 0 ? totalSavings : 250}`;
+          if (totalMrpElem) totalMrpElem.innerText = `₹ ${totalMrp}`;
+          if (savingsVal) savingsVal.innerText = `- ₹ ${totalSavings}`;
+          if (savingsRow) {
+            if (totalSavings > 0) savingsRow.classList.remove('hidden');
+            else savingsRow.classList.add('hidden');
+          }
         };
 
         window.placeRealWhatsAppOrder = async function() {
